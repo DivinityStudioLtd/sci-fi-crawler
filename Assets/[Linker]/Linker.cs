@@ -64,9 +64,10 @@ public class Linker : MonoBehaviour {
 	static public ManagerMap managerMap { get { return (ManagerMap) GetManager ("ManagerMap"); } }
 	static public ManagerCharacter managerCharacter { get { return (ManagerCharacter) GetManager ("ManagerCharacter"); } }
 	static public ManagerPlayer managerPlayer { get { return (ManagerPlayer) GetManager ("ManagerPlayer"); } }
+	static public ManagerPrefab managerPrefab { get { return (ManagerPrefab) GetManager ("ManagerPrefab"); } }
 	
 	
 	//static public Factory factory { get { return (Factory) GetFactory ("Factory"); } }
 	static public FactoryMap factoryMap { get { return (FactoryMap) GetFactory ("FactoryMap"); } }
-	static public FactoryCharacter factoryMech { get { return (FactoryCharacter) GetFactory ("FactoryMech"); } }
+	static public FactoryCharacter factoryCharacter { get { return (FactoryCharacter) GetFactory ("FactoryCharacter"); } }
 }

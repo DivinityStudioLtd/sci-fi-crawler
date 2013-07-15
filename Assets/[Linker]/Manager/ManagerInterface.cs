@@ -8,7 +8,6 @@ public class ManagerInterface : Manager {
 	public bool changed;
 	
 	public override void ManagerStart () {
-		SetInterface (interfaceLogin);
 		base.ManagerStart ();
 	}
 	public override void ManagerWorking () {

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+	<ProductVersion>10.0.20506</ProductVersion>
+	<SchemaVersion>2.0</SchemaVersion>
+	<ProjectGuid>{26226C5E-ABA2-2C8D-1C66-2C2757EDF120}</ProjectGuid>
+	<OutputType>Library</OutputType>
+	<AppDesignerFolder>Properties</AppDesignerFolder>
+	<RootNamespace></RootNamespace>
+	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+	<FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+	<DebugSymbols>true</DebugSymbols>
+	<DebugType>full</DebugType>
+	<Optimize>false</Optimize>
+	<OutputPath>Temp\bin\Debug\</OutputPath>
+	<DefineConstants>DEBUG;TRACE;UNITY_STANDALONE_WIN;ENABLE_MICROPHONE;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;ENABLE_AUDIO_FMOD;UNITY_STANDALONE;ENABLE_NETWORK;ENABLE_MONO;ENABLE_PHYSICS;ENABLE_TERRAIN;ENABLE_CACHING;ENABLE_SUBSTANCE;ENABLE_GENERICS;ENABLE_CLOTH;ENABLE_MOVIES;ENABLE_AUDIO;ENABLE_WWW;ENABLE_SHADOWS;ENABLE_DUCK_TYPING;UNITY_4_1_5;UNITY_4_1;ENABLE_PROFILER;UNITY_EDITOR;Display;Data;Lighting</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+	<DebugType>pdbonly</DebugType>
+	<Optimize>true</Optimize>
+	<OutputPath>Temp\bin\Release\</OutputPath>
+	<DefineConstants>TRACE</DefineConstants>
+	<ErrorReport>prompt</ErrorReport>
+	<WarningLevel>4</WarningLevel>
+	<NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+	<Reference Include="System" />
+    <Reference Include="System.XML" />
+	<Reference Include="System.Core" />
+	<Reference Include="UnityEngine">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	</Reference>
+	<Reference Include="UnityEditor">
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	</Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\PositionRecord.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\3D HUD\HUD3D.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\AI.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\AnimationController.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\Character.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\CharacterMotor.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\Controller.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Character\Script\CurrentTile.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Firearm\Script\Attack.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Firearm\Script\Firearm.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Firearm\Script\Projectile.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Map\Script\Door.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Map\Script\Map.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Map\Script\SlidingArea.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Map\Script\Tile.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Power\Script\Power.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Power\Script\PowerDisableCameras.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Power\Script\PowerIncreaseCurrentHealth.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Power\Script\PowerRemoveFire.cs" />
+     <Compile Include="Assets\Sci Fi Crawler\Power\Script\PowerResistEnergy.cs" />
+     <Compile Include="Assets\[Helper]\Entity.cs" />
+     <Compile Include="Assets\[Helper]\LookAtCamera.cs" />
+     <Compile Include="Assets\[Linker]\Factory\Factory.cs" />
+     <Compile Include="Assets\[Linker]\Factory\FactoryCharacter.cs" />
+     <Compile Include="Assets\[Linker]\Factory\FactoryMap.cs" />
+     <Compile Include="Assets\[Linker]\Interface\Interface.cs" />
+     <Compile Include="Assets\[Linker]\Interface\InterfaceLogin.cs" />
+     <Compile Include="Assets\[Linker]\Interface\InterfaceMainMenu.cs" />
+     <Compile Include="Assets\[Linker]\Interface\InterfaceTDS.cs" />
+     <Compile Include="Assets\[Linker]\Linker.cs" />
+     <Compile Include="Assets\[Linker]\Manager\Manager.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerCharacter.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerEnvironment.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerGame.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerInterface.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerMap.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerPlayer.cs" />
+     <Compile Include="Assets\[Linker]\Manager\ManagerPrefab.cs" />
+     <Compile Include="Assets\[Linker]\Utility\AccountUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\EnumUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\FindUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\InterfaceUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\LightUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\MathUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\MessageUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\NetworkUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\PreferenceUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\SoundUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\StringUtility.cs" />
+     <Compile Include="Assets\[Linker]\Utility\Utility.cs" />
+     <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>Library\ScriptAssemblies\Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>

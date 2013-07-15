@@ -23,9 +23,8 @@ public class InterfaceTDS : Interface {
 	public void KeyboardMouse () {
 		managerPlayer.controller.characterMotor.moveDirection = new Vector3 (Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
 		
-		if (managerPlayer.controller.characterMotor.moveDirection != Vector3.zero)
-			managerPlayer.controller.animationController.LookRotation (managerPlayer.controller.characterMotor.moveDirection);
-		
+		//if (managerPlayer.controller.characterMotor.moveDirection != Vector3.zero)
+		//	managerPlayer.controller.animationController.LookRotation (managerPlayer.controller.characterMotor.moveDirection);
 		
 		if (Input.GetButtonDown ("Fire1"))
 			managerPlayer.controller.CurrentFirearm.SetTrigger (true);//, true);
@@ -38,7 +37,7 @@ public class InterfaceTDS : Interface {
 		if (Input.GetButtonUp ("Fire2"))
 			managerPlayer.controller.CurrentFirearm.SetTrigger (false);//, false);
 		*/
-		if (Input.GetButton ("Fire1") || Input.GetButton ("Fire2"))
+		//if (Input.GetButton ("Fire1") || Input.GetButton ("Fire2"))
 			foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.main.ScreenPointToRay (Input.mousePosition)))
 				if (r_c_h.collider.CompareTag ("Mouse Plane"))
 					managerPlayer.controller.animationController.LookAt (r_c_h.point);

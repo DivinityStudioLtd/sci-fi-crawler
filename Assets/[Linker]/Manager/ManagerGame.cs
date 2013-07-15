@@ -10,9 +10,14 @@ public class ManagerGame : Manager {
 	}
 	
 	public override void ManagerStart () {
+		managerInterface.SetInterface (interfaceLogin);
 		base.ManagerStart ();
 	}
 	
 	public override void ManagerWorking () {
+		if (managerPlayer.controller == null) {
+			factoryCharacter.SpawnPlayerCharacter ();
+			managerInterface.SetInterface (interfaceTDS);
+		}
 	}
 }
