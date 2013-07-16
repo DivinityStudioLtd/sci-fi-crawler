@@ -148,8 +148,8 @@ public class StatBlock {
 
 [System.Serializable]
 public class SkillBlock {
-	public float software;
-	public float hardware;
+	public int software;
+	public int hardware;
 }
 
 [System.Serializable]

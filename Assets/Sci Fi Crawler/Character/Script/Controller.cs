@@ -12,6 +12,7 @@ public class Controller : Entity {
 	public List<Firearm> firearms;
 	public Transform firearmTransform;
 	public CurrentTile currentTile;
+	public SkillInteractor skillInteractor;
 	
 	public List<Power> powers;
 	
@@ -20,6 +21,7 @@ public class Controller : Entity {
 	void Start () {
 		SetupFirearms();	
 		SetupPowers();	
+		skillInteractor.controller = this;
 	}
 	
 	public Firearm CurrentFirearm {
