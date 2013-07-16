@@ -9,6 +9,7 @@ public class Character : Entity {
 	public List<ResistanceBlock> resistances;
 	public List<ChangeOverTimeBlock> changesOverTime;
 	
+	#region Health Energy
 	public float maxHealth {
 		get {
 			return (stats.endurance + (stats.strength / 0.5f));	
@@ -31,6 +32,8 @@ public class Character : Entity {
 		currentEnergy += change;
 		currentEnergy = Mathf.Clamp (currentEnergy, 0.0f, maxEnergy);
 	}
+	#endregion
+	
 	public int maxSpeed {
 		get {
 			return stats.agility + 5;	
@@ -112,6 +115,26 @@ public class Character : Entity {
 		changesOverTime.Add (newCOT);
 		return true;
 	}
+	
+	public bool HasResistanceBlock (string name) {
+		foreach (ResistanceBlock resistance in resistances)
+			if (StringUtility.Compare (resistance.name, name))
+				return true;
+		return false;
+	}
+	
+	public bool AddResistanceBlock (ResistanceBlock template) {
+		if (HasResistanceBlock (template.name))
+			return false;
+		ResistanceBlock newResistance = new ResistanceBlock ();
+		newResistance.damageTypeResisted = template.damageTypeResisted;
+		newResistance.resistanceAmount = template.resistanceAmount;
+		newResistance.isPermenant = template.isPermenant;
+		newResistance.timeRemaining = template.timeRemaining;
+		
+		resistances.Add (newResistance);
+		return true;
+	}
 }
 [System.Serializable]
 public class StatBlock {
@@ -131,6 +154,7 @@ public class SkillBlock {
 
 [System.Serializable]
 public class ResistanceBlock {
+	public string name;
 	public DamageType damageTypeResisted;
 	public int resistanceAmount;
 	public bool isPermenant;

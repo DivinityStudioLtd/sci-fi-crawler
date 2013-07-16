@@ -12,7 +12,8 @@ abstract public class Power : MonoBehaviour {
 	void Update () {
 		if (!CanUse ())
 			currentCoolDown = Mathf.Clamp (currentCoolDown - Time.deltaTime, 0.0f, coolDown);
-		popup.transform.localScale = new Vector3 (1.0f, currentCoolDown / coolDown, 1.0f);
+		transform.localScale = new Vector3 (1.0f, 1.0f, (coolDown - currentCoolDown) / coolDown);
+		popup.renderer.materials[0].mainTextureScale = new Vector2 (1.0f, (coolDown - currentCoolDown) / coolDown);
 	}
 	
 	public void SetLocal (Transform local) {

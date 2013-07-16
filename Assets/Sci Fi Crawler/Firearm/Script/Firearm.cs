@@ -50,10 +50,10 @@ public class Firearm : MonoBehaviour {
 		
 		if (firingMode.currentFireRate <= 0.0f) {
 			firingMode.currentFireRate += firingMode.fireRate;
-			//if (!firingMode.isAutomatic)
-			//	firingMode.currentBurstSize--;
-			Projectile p = ((GameObject) Instantiate (firingMode.projectile, firingTransform.position, firingTransform.rotation)).GetComponent<Projectile> ();
-			p.team = controller.team;
+			for (int i = 0; i < firingMode.burstSize; i++) {
+				Projectile p = ((GameObject) Instantiate (firingMode.projectile, firingTransform.position, firingTransform.rotation)).GetComponent<Projectile> ();
+				p.team = controller.team;
+			}
 		}
 	}
 }
@@ -62,7 +62,7 @@ public class FiringMode {
 	public bool triggerPulled;
 	public float fireRate;
 	//public bool isAutomatic;
-	//public int burstSize;
+	public int burstSize;
 	
 	public float currentFireRate;
 	//public int currentBurstSize;
