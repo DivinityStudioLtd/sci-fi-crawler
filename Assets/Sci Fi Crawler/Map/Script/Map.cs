@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class Map : MonoBehaviour {
-	public MapTile[,] tiles;
+public class Map : Entity {
+	public int seed;
+	public bool generated;
+	public MapState mapState = MapState.PlaceHolder;
 }
 
-[System.Serializable]
-public class MapTile {
-	public Tile tile;
+public enum MapState {
+	PlaceHolder,
+	Generated,
+	Spawned,
+	Completed
 }

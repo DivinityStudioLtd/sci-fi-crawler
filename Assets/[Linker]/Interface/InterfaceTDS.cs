@@ -39,8 +39,15 @@ public class InterfaceTDS : Interface {
 		*/
 		//if (Input.GetButton ("Fire1") || Input.GetButton ("Fire2"))
 			foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.main.ScreenPointToRay (Input.mousePosition)))
-				if (r_c_h.collider.CompareTag ("Mouse Plane"))
+				if (r_c_h.collider.CompareTag ("Mouse Plane")) {
 					managerPlayer.controller.animationController.LookAt (r_c_h.point);
+			
+					Camera.main.transform.localPosition = new Vector3 (
+						(Input.mousePosition.x - (Screen.width / 2)) / (Screen.width / 2) * 2.0f,
+						(Input.mousePosition.y - (Screen.height / 2)) / (Screen.height / 2) * 2.0f,
+						0.0f
+						);
+					}
 		
 		if (Input.GetButtonUp ("Swap Weapon")) {
 			managerPlayer.controller.CurrentFirearm.SetTrigger (false);//, true);

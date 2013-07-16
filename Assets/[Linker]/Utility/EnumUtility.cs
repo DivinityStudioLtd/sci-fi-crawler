@@ -17,44 +17,6 @@ public enum ManagerStateEnum {
 	Finish
 }
 
-public enum GameManagerSyncState {
-	StartingUp,
-	MapGenerating,
-	MapGenerated,
-	MapSpawned,
-	MapSpawning,
-	ActorsSpawning,
-	ActorsSpawned,
-	PreGameCharacterSpawning,
-	PreGameCharacterSpawned,
-	PreGame,
-	PreGameTransitionGame,
-	Game,
-	GameTransitionPostGame,
-	PostGame
-}
-
-public enum AttributeEnum {
-	Base,
-	Derived,
-	Pool,
-	Skill
-}
-
-public enum InterfaceEnum {
-	None,
-	Developer,
-	Dialogue,
-	Equipment,
-	FPS,
-	Goal,
-	Help,
-	MainMenu,
-	Spectator,
-	SplashScreen
-	
-}
-
 public enum MainMenuEnum {
 	MainMenu,
 	Gameplay,
@@ -101,12 +63,6 @@ public enum AIState {
 	FleetMovement
 }
 
-public enum TileEnum {
-	Room,
-	Hallway,
-	Closed
-}
-
 public enum PickupType {
 	Health,
 	Ammo
@@ -130,15 +86,6 @@ public enum AnimationType {
 	Blend
 }
 
-public enum EntertainerFactoryState {
-	Idle,
-	SetupGeneration,
-	DoorsGenerating,
-	DoorsGenerated,
-	PropsGenerating,
-	PropsGenerated
-}
-
 public enum SlidingAreaState {
 	Opening,
 	Opened,
@@ -152,4 +99,10 @@ public enum DamageType {
 	Pierce,
 	Energy,
 	Fire
+}
+
+public enum TileTpe {
+	None,
+	Hallway,
+	Room
 }

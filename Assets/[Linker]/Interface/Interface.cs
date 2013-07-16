@@ -12,8 +12,6 @@ abstract public class Interface : Linker {
 	
 	protected List<Vector2> scrollPositions = new List<Vector2> ();
 	
-	public InterfaceEnum interfaceEnum;
-	
 	public Transform cameraPosition;
 	
 	#region Linker Setup
