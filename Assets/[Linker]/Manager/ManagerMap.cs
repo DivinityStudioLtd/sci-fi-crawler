@@ -17,6 +17,7 @@ public class ManagerMap : Manager {
 	
 	public override void ManagerWorking () {
 		switch (managerMapState) {
+		#region ManagerWorking Universe Map Generation
 		case ManagerMapState.SpawnUniverse:
 			factoryMap.SpawnUniverse ();
 			if (universe != null)
@@ -30,7 +31,7 @@ public class ManagerMap : Manager {
 			break;
 		case ManagerMapState.GeneratePlaceHolderMissions:
 			if (missions.Count == 0)
-				GeneratePlaceHolderMissions (Random.Range (5,10));
+				GeneratePlaceHolderMissions (1);//(Random.Range (5,10));
 			if (ungeneratedMissions > 0) {
 				factoryMap.GeneratePlaceHolderMission ();
 				ungeneratedMissions--;
@@ -38,10 +39,49 @@ public class ManagerMap : Manager {
 				managerMapState = ManagerMapState.Waiting;
 			}
 			break;
+		#endregion
+		
+		#region ManagerWorking Mission Map Generation
+		case ManagerMapState.RoomRects:
+			factoryMap.RoomRects (currentMission);
+			managerMapState = ManagerMapState.RoomRectsToCompressed;
+			break;
+		case ManagerMapState.RoomRectsToCompressed:
+			managerMapState = ManagerMapState.HallwaysFromRoomRects;
+			break;
+		case ManagerMapState.HallwaysFromRoomRects:
+			managerMapState = ManagerMapState.GenerateMissionFromMissionType;
+			break;
+		case ManagerMapState.GenerateMissionFromMissionType:
+			managerMapState = ManagerMapState.GenerateRewards;
+			break;
+		case ManagerMapState.GenerateRewards:
+			managerMapState = ManagerMapState.GenerateChallenges;
+			break;
+		case ManagerMapState.GenerateChallenges:
+			managerMapState = ManagerMapState.GenerateRoaming;
+			break;
+		case ManagerMapState.GenerateRoaming:
+			managerMapState = ManagerMapState.SpawnTiles;
+			break;
+		case ManagerMapState.SpawnTiles:
+			managerMapState = ManagerMapState.SpawnMission;
+			break;
+		case ManagerMapState.SpawnMission:
+			managerMapState = ManagerMapState.SpawnRewards;
+			break;
+		case ManagerMapState.SpawnRewards:
+			managerMapState = ManagerMapState.SpawnChallenges;
+			break;
+		case ManagerMapState.SpawnChallenges:
+			managerMapState = ManagerMapState.SpawnRoaming;
+			break;
+		case ManagerMapState.SpawnRoaming:
+			managerMapState = ManagerMapState.Waiting;
+			break;	
+		#endregion
 		}
 	}
-	
-	
 	
 	public void GenerateUniverse () {
 		managerMapState = ManagerMapState.SpawnUniverse;
@@ -55,6 +95,7 @@ public class ManagerMap : Manager {
 	public void SpawnMapMission (MapMission mission) {
 		currentMission = mission;
 		missions.Remove (currentMission);
+		managerMapState = ManagerMapState.RoomRects;
 	}
 	
 	public void UnspawnCurrentMapMission () {
@@ -65,17 +106,25 @@ public class ManagerMap : Manager {
 public enum ManagerMapState {
 	None,
 	Waiting,
-	#region Universe Map Generation
+	#region ManagerMapState Universe Map Generation
 	SpawnUniverse,
 	GenerateLocations,
 	SpawnLocations,
 	GeneratePlaceHolderMissions,
 	#endregion
 	
-	#region Mission Map Generation
+	#region ManagerMapState Mission Map Generation
 	RoomRects,
 	RoomRectsToCompressed,
 	HallwaysFromRoomRects,
-	MissionDetailsFromMissionType
+	GenerateMissionFromMissionType,
+	GenerateRewards,
+	GenerateChallenges,
+	GenerateRoaming,
+	SpawnTiles,
+	SpawnMission,
+	SpawnRewards,
+	SpawnChallenges,
+	SpawnRoaming
 	#endregion
 }
