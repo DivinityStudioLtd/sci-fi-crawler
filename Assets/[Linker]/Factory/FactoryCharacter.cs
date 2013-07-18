@@ -6,10 +6,10 @@ public class FactoryCharacter : Factory {
 	public void SpawnCharacter (string character) {
 		
 	}
-	public void SpawnPlayerCharacter () {
+	public void SpawnPlayerCharacter (Vector3 startPosition) {
 		List<GameObject> players = managerPrefab.players;
 		
-		managerPlayer.controller = (Instantiate (players [Random.Range (0, players.Count)], new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
+		managerPlayer.controller = (Instantiate (players [Random.Range (0, players.Count)], startPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
 	
 		List<GameObject> firearms = managerPrefab.firearms;
 		

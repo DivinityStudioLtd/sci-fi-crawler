@@ -13,9 +13,13 @@ public class ManagerGame : Manager {
 		if (managerMap.managerMapState == ManagerMapState.Waiting && managerMap.universe == null) {
 			managerMap.GenerateUniverse ();
 		}
-		if (managerMap.managerMapState == ManagerMapState.Waiting && managerMap.universe != null) {
+		if (managerMap.managerMapState == ManagerMapState.Waiting && managerMap.universe != null && managerMap.currentMission == null) {
 			managerMap.SpawnMapMission (managerMap.missions [0]);
-			base.ManagerWorking ();
+		} 
+		if (managerMap.managerMapState == ManagerMapState.Waiting && managerMap.currentMission != null && managerPlayer.controller == null) {
+			RectRoom startingRoom = managerMap.currentMission.compressedMap.StartingRoom ();
+			factoryCharacter.SpawnPlayerCharacter (new Vector3 (startingRoom.left, 0, startingRoom.top) * CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE);
+			managerInterface.SetInterface (interfaceTDS);
 		}
 		/*
 		if (managerPlayer.controller == null) {

@@ -101,7 +101,7 @@ public enum DamageType {
 	Fire
 }
 
-public enum TileTpe {
+public enum TileType {
 	None,
 	Hallway,
 	Room

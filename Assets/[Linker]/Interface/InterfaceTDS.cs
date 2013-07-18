@@ -6,6 +6,7 @@ public class InterfaceTDS : Interface {
 		managerPlayer.controller.SetMainCameraToTDS  ();
 		return base.SetDisplay (newDisplay);
 	}
+	public float maxCameraOffset;
 	
 	public void Update () {
 		if (!display)
@@ -43,8 +44,8 @@ public class InterfaceTDS : Interface {
 					managerPlayer.controller.animationController.LookAt (r_c_h.point);
 			
 					Camera.main.transform.localPosition = new Vector3 (
-						(Input.mousePosition.x - (Screen.width / 2)) / (Screen.width / 2) * 2.0f,
-						(Input.mousePosition.y - (Screen.height / 2)) / (Screen.height / 2) * 2.0f,
+						(Input.mousePosition.x - (Screen.width / 2)) / (Screen.width / 2) * maxCameraOffset,
+						(Input.mousePosition.y - (Screen.height / 2)) / (Screen.height / 2) * maxCameraOffset,
 						0.0f
 						);
 					}

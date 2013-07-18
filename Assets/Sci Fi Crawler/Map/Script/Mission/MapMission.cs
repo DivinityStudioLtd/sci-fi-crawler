@@ -15,13 +15,13 @@ public class MapMission : Map {
 	
 	public int width {
 		get {
-			return compressedMap.ratio * compressedMap.compressedX; 	
+			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedX; 	
 		}
 	}
 	
 	public int height {
 		get {
-			return compressedMap.ratio * compressedMap.compressedY;	
+			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedY;	
 		}
 	}
 }

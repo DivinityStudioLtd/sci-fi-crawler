@@ -18,18 +18,18 @@ public class ManagerMap : Manager {
 	public override void ManagerWorking () {
 		switch (managerMapState) {
 		#region ManagerWorking Universe Map Generation
-		case ManagerMapState.SpawnUniverse:
+		case ManagerMapState.SpawnUniverse :
 			factoryMap.SpawnUniverse ();
 			if (universe != null)
-				managerMapState = ManagerMapState.GenerateLocations;
+				managerMapState = ManagerMapState.GenerateLocations ;
 			break;
-		case ManagerMapState.GenerateLocations:
+		case ManagerMapState.GenerateLocations :
 			managerMapState = ManagerMapState.SpawnLocations;
 			break;
-		case ManagerMapState.SpawnLocations:
+		case ManagerMapState.SpawnLocations :
 			managerMapState = ManagerMapState.GeneratePlaceHolderMissions;
 			break;
-		case ManagerMapState.GeneratePlaceHolderMissions:
+		case ManagerMapState.GeneratePlaceHolderMissions :
 			if (missions.Count == 0)
 				GeneratePlaceHolderMissions (1);//(Random.Range (5,10));
 			if (ungeneratedMissions > 0) {
@@ -42,41 +42,49 @@ public class ManagerMap : Manager {
 		#endregion
 		
 		#region ManagerWorking Mission Map Generation
-		case ManagerMapState.RoomRects:
-			factoryMap.RoomRects (currentMission);
-			managerMapState = ManagerMapState.RoomRectsToCompressed;
+		case ManagerMapState.RoomRects :
+			factoryMap.GenerateRectRooms (currentMission);
+			managerMapState = ManagerMapState.HallwaysFromRectRooms;
 			break;
-		case ManagerMapState.RoomRectsToCompressed:
-			managerMapState = ManagerMapState.HallwaysFromRoomRects;
+			
+		case ManagerMapState.HallwaysFromRectRooms :
+			factoryMap.HallwaysFromRectRooms (currentMission); 
+			managerMapState = ManagerMapState.RectRoomsToCompressed;
 			break;
-		case ManagerMapState.HallwaysFromRoomRects:
+			
+		case ManagerMapState.RectRoomsToCompressed :
+			factoryMap.RectRoomsToCompressed (currentMission);
 			managerMapState = ManagerMapState.GenerateMissionFromMissionType;
 			break;
-		case ManagerMapState.GenerateMissionFromMissionType:
+			
+		case ManagerMapState.GenerateMissionFromMissionType :
+			
 			managerMapState = ManagerMapState.GenerateRewards;
 			break;
-		case ManagerMapState.GenerateRewards:
+		case ManagerMapState.GenerateRewards :
 			managerMapState = ManagerMapState.GenerateChallenges;
 			break;
-		case ManagerMapState.GenerateChallenges:
+		case ManagerMapState.GenerateChallenges :
 			managerMapState = ManagerMapState.GenerateRoaming;
 			break;
-		case ManagerMapState.GenerateRoaming:
+		case ManagerMapState.GenerateRoaming :
 			managerMapState = ManagerMapState.SpawnTiles;
 			break;
-		case ManagerMapState.SpawnTiles:
-			managerMapState = ManagerMapState.SpawnMission;
+			
+		case ManagerMapState.SpawnTiles :
+			if (factoryMap.SpawnTiles (currentMission))
+				managerMapState = ManagerMapState.SpawnMission;
 			break;
-		case ManagerMapState.SpawnMission:
+		case ManagerMapState.SpawnMission :
 			managerMapState = ManagerMapState.SpawnRewards;
 			break;
-		case ManagerMapState.SpawnRewards:
+		case ManagerMapState.SpawnRewards :
 			managerMapState = ManagerMapState.SpawnChallenges;
 			break;
-		case ManagerMapState.SpawnChallenges:
+		case ManagerMapState.SpawnChallenges :
 			managerMapState = ManagerMapState.SpawnRoaming;
 			break;
-		case ManagerMapState.SpawnRoaming:
+		case ManagerMapState.SpawnRoaming :
 			managerMapState = ManagerMapState.Waiting;
 			break;	
 		#endregion
@@ -115,12 +123,14 @@ public enum ManagerMapState {
 	
 	#region ManagerMapState Mission Map Generation
 	RoomRects,
-	RoomRectsToCompressed,
-	HallwaysFromRoomRects,
+	HallwaysFromRectRooms,
+	RectRoomsToCompressed,
+	
 	GenerateMissionFromMissionType,
 	GenerateRewards,
 	GenerateChallenges,
 	GenerateRoaming,
+	
 	SpawnTiles,
 	SpawnMission,
 	SpawnRewards,
