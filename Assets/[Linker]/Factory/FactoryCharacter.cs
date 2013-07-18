@@ -30,4 +30,54 @@ public class FactoryCharacter : Factory {
 		
 		managerPlayer.controller.SetupPowers ();
 	}
+	
+	public ItemBucket GenerateReward (int points) {
+		ItemBucket ib = new ItemBucket ();
+		while (points > 0){
+			int ran = (int) (100.0f * Random.Range (0.0f,1.0f));
+			if (points >= 8) {
+				if (ran == Mathf.Clamp (ran, 100, 90)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 89, 70)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 69, 40)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 39, 0)) {
+					
+				}
+			} else if (points >= 4) {
+				if (ran == Mathf.Clamp (ran, 100, 90)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 89, 43)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 42, 0)) {
+					
+				}
+				
+			} else if (points >= 2) {
+				if (ran == Mathf.Clamp (ran, 100, 90)) {
+					
+				} else if (ran == Mathf.Clamp (ran, 89, 70)) {
+					
+				}
+			} else if (points >= 1) {
+				
+			}
+		}
+		return ib;
+	}
+}
+[System.Serializable]
+public class ItemBucket {
+	public List<Firearm> firearms;
+	public List<Power> powers;
+	public List<Controller> bodies;
+	public int credit;
+	
+	public ItemBucket () {
+		firearms = new List<Firearm> ();
+		powers = new List<Power> ();
+		bodies = new List<Controller> ();
+		credit = 0;
+	}
 }
