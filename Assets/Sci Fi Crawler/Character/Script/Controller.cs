@@ -13,6 +13,7 @@ public class Controller : Entity {
 	public Transform firearmTransform;
 	public CurrentTile currentTile;
 	public SkillInteractor skillInteractor;
+	public PickUpInteractor pickUpInteractor;
 	public PositionRecord positionRecord;
 	
 	public List<ItemBucket> missionsInventory;
@@ -24,7 +25,10 @@ public class Controller : Entity {
 	void Start () {
 		SetupFirearms();	
 		SetupPowers();	
-		skillInteractor.controller = this;
+		if (skillInteractor != null)
+			skillInteractor.controller = this;
+		if (pickUpInteractor != null)
+			pickUpInteractor.controller = this;
 	}
 	
 	public Firearm CurrentFirearm {

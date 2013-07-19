@@ -165,22 +165,130 @@ public class FactoryMap : Factory {
 		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 			if (rr.startingRoom)
 				continue;
-			Challenge c = factoryCharacter.GenerateChallenge (rr.width * rr.height * mission.level);
+			Challenge c = GenerateChallenge (rr.width * rr.height * mission.level);
 			c.room = rr;
 			mission.challenges.Add (c);
 		}
+	}
+	
+	public Challenge GenerateChallenge (int difficulty) {
+		Challenge c = new Challenge ();
+		//c.difficulty = difficulty;
+		
+		int level1 = 0;
+		int level2 = 0;
+		int level3 = 0;
+		
+		while (difficulty > 0) {
+			int ran = (int) (100.0f * Random.Range (0.0f,1.0f));
+			
+			if (difficulty >= 4) {
+				if (ran == Mathf.Clamp (ran, 63, 100)) {
+					level3++;
+					difficulty -= 4;
+				} else if (ran == Mathf.Clamp (ran, 43, 62)) {
+					level2++;
+					difficulty -= 2;
+				} else {
+					level1++;
+					difficulty -= 1;
+				}
+			} else if (difficulty >= 2) {
+				if (ran == Mathf.Clamp (ran, 65, 100)) {
+					level2++;
+					difficulty -= 2;
+				} else {
+					level1++;
+					difficulty -= 1;
+				}
+			} else {
+				level1++;
+				difficulty -= 1;
+			}
+		}
+		
+		for (int i = 0; i < level3; i++)
+			c.enemies.Add (managerPrefab.enemies (3) [Random.Range (0, managerPrefab.enemies (3).Count)]);
+		for (int i = 0; i < level2; i++)
+			c.enemies.Add (managerPrefab.enemies (2) [Random.Range (0, managerPrefab.enemies (2).Count)]);
+		for (int i = 0; i < level1; i++)
+			c.enemies.Add (managerPrefab.enemies (1) [Random.Range (0, managerPrefab.enemies (1).Count)]);
+		return c;
 	}
 	
 	public void GenerateRewards (MapMission mission) {
 		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 			if (rr.startingRoom)
 				continue;
-			Reward r = factoryCharacter.GenerateReward (rr.width * rr.height);
+			Reward r = GenerateReward (rr.width * rr.height + mission.level);
 			r.room = rr;
 			mission.rewards.Add (r);
 		}
 	}
 	
+	public Reward GenerateReward (int points) {
+		ItemBucket ib = new ItemBucket ();
+		int bodiesToAdd = 0;
+		int firearmsToAdd = 0;
+		int powersToAdd = 0;
+		int creditsToAdd = 0;
+		
+		while (points > 0) {
+			int ran = (int) (100.0f * Random.Range (0.0f,1.0f));
+			//print (ran + " " + points);
+			if (points >= 8) {
+				if (ran == Mathf.Clamp (ran, 90, 100)) {
+					bodiesToAdd++;
+					points -= 8;
+				} else if (ran == Mathf.Clamp (ran, 70, 89)) {
+					firearmsToAdd++;
+					points -= 4;
+				} else if (ran == Mathf.Clamp (ran, 40, 69)) {
+					powersToAdd++;
+					points -= 2;
+				} else {
+					creditsToAdd++;
+					points -= 1;
+				}
+			} else if (points >= 4) {
+				if (ran == Mathf.Clamp (ran, 73, 100)) {
+					firearmsToAdd++;
+					points -= 4;
+				} else if (ran == Mathf.Clamp (ran, 43, 72)) {
+					powersToAdd++;
+					points -= 2;
+				} else {
+					creditsToAdd++;
+					points -= 1;
+				}
+			} else if (points >= 2) {
+				if (ran == Mathf.Clamp (ran, 55, 100)) {
+					powersToAdd++;
+					points -= 2;
+				} else {
+					creditsToAdd++;
+					points -= 1;
+				}
+			} else {
+				creditsToAdd++;
+				points -= 1;
+			}
+		}
+		//print (bodiesToAdd + " " + firearmsToAdd + " " + powersToAdd + " " + creditsToAdd);
+		for (int i = 0; i < bodiesToAdd; i++)
+			ib.bodies.Add (managerPrefab.bodies[Random.Range (0,managerPrefab.bodies.Count)]);
+		for (int i = 0; i < firearmsToAdd; i++)
+			ib.firearms.Add (managerPrefab.firearms[Random.Range (0,managerPrefab.firearms.Count)]);
+		for (int i = 0; i < powersToAdd; i++)
+			ib.powers.Add (managerPrefab.powers[Random.Range (0,managerPrefab.powers.Count)]);
+		for (int i = 0; i < creditsToAdd; i++)
+			ib.credit += Random.Range (2000,4000);
+		
+		Reward r = new Reward ();
+		r.reward = ib;
+		return r;
+	}
+
 	public void GenerateRoaming (MapMission mission) {
 		
 	}
@@ -303,8 +411,19 @@ public class FactoryMap : Factory {
 	
 	int staggerSpawnCounter = 0;
 	public bool SpawnRewards (MapMission mission) {
-		//if (staggerSpawnCounter < mission.rewards.Count)
-		//	return false;
+		RectRoom rr = mission.rewards [staggerSpawnCounter].room;
+		
+		float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
+		float tileOffset = CompressedMap.TILE_SIZE;
+		Vector3 spawnPosition = new Vector3 (Random.Range ((rr.left * scale) - tileOffset, ((rr.right - 1) * scale) + tileOffset), 0, Random.Range ((rr.top * scale) - tileOffset, ((rr.bottom - 1) * scale) + tileOffset));
+		
+		GameObject go = Instantiate (managerPrefab.containers [Random.Range (0, managerPrefab.containers.Count)], spawnPosition, Quaternion.identity) as GameObject;
+		
+		go.GetComponent<Container> ().reward = mission.rewards [staggerSpawnCounter].reward;
+		
+		staggerSpawnCounter++;
+		if (staggerSpawnCounter < mission.rewards.Count)
+			return false;
 		staggerSpawnCounter = 0;
 		return true;
 	}

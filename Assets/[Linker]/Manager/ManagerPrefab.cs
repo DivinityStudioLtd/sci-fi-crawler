@@ -18,6 +18,11 @@ public class ManagerPrefab : Manager {
 			return ListedResourceFolder ("Player");
 		}
 	}
+	public List<GameObject> containers {
+		get {
+			return ListedResourceFolder ("Container");
+		}
+	}
 	
 	public List<GameObject> enemies (int level) {
 		return ListedResourceFolder ("Enemy/"+level);

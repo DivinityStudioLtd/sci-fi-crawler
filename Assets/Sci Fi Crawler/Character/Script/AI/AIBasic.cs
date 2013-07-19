@@ -4,7 +4,7 @@ using System.Collections;
 public class AIBasic : AI {
 	
 	protected override void SenseTargets () {
-		foreach (Collider c in Physics.OverlapSphere (transform.position, senseRadius * CompressedMap.TILE_SIZE)) {
+		foreach (Collider c in Physics.OverlapSphere (transform.position, (senseRadius + (controller.character.currentHealth == controller.character.maxHealth ? 0 : 3)) * CompressedMap.TILE_SIZE)) {
 			if (c.CompareTag("Mouse Plane"))
 				continue;
 			Entity e = FindUtility.FindEntity (c);
