@@ -51,7 +51,11 @@ public class Firearm : MonoBehaviour {
 		if (firingMode.currentFireRate <= 0.0f) {
 			firingMode.currentFireRate += firingMode.fireRate;
 			for (int i = 0; i < firingMode.burstSize; i++) {
-				Projectile p = ((GameObject) Instantiate (firingMode.projectile, firingTransform.position, firingTransform.rotation)).GetComponent<Projectile> ();
+				Projectile p = ((GameObject) Instantiate (
+					firingMode.projectile, 
+					firingTransform.position, 
+					Quaternion.Euler (firingTransform.eulerAngles + new Vector3 (0.0f, Random.Range(-firingMode.accuracy, firingMode.accuracy),0.0f)))
+					).GetComponent<Projectile> ();
 				p.team = controller.team;
 			}
 		}
@@ -63,6 +67,8 @@ public class FiringMode {
 	public float fireRate;
 	//public bool isAutomatic;
 	public int burstSize;
+	
+	public float accuracy;
 	
 	public float currentFireRate;
 	//public int currentBurstSize;

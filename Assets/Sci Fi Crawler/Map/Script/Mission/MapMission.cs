@@ -7,6 +7,8 @@ public class MapMission : Map {
 		managerMap.missions.Add (this);
 	}
 	
+	public int level;
+	
 	public CompressedMap compressedMap;
 	public Mission mission;
 	public List<Challenge> challenges;

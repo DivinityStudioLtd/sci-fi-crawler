@@ -20,7 +20,7 @@ public class HUD3D : MonoBehaviour {
 	}
 	
 	public void SetPowerPositions (List<Power> powers) {
-		for (int i = 0; i < powerPositions.Count; i++) {
+		for (int i = 0; i < powers.Count; i++) {
 			powers [i].SetLocal (powerPositions [i]);	
 		}
 	}

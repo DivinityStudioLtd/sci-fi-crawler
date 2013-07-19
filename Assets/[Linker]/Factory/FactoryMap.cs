@@ -13,6 +13,7 @@ public class FactoryMap : Factory {
 		MapMission mm = (Instantiate (Resources.Load ("Map/Mission") as GameObject, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
 		mm.missionType = (MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
+		mm.level = 3;
 	}
 	#endregion
 	
@@ -160,12 +161,24 @@ public class FactoryMap : Factory {
 		
 	}
 	
-	public void GenerateRewards (MapMission mission) {
-		
+	public void GenerateChallenges (MapMission mission) {
+		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
+			if (rr.startingRoom)
+				continue;
+			Challenge c = factoryCharacter.GenerateChallenge (rr.width * rr.height * mission.level);
+			c.room = rr;
+			mission.challenges.Add (c);
+		}
 	}
 	
-	public void GenerateChallenges (MapMission mission) {
-		
+	public void GenerateRewards (MapMission mission) {
+		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
+			if (rr.startingRoom)
+				continue;
+			Reward r = factoryCharacter.GenerateReward (rr.width * rr.height);
+			r.room = rr;
+			mission.rewards.Add (r);
+		}
 	}
 	
 	public void GenerateRoaming (MapMission mission) {
@@ -240,23 +253,10 @@ public class FactoryMap : Factory {
 				else 
 					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
 				
-				if (mts.left != TileType.None || mts.above != TileType.None)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.left != TileType.None || mts.below != TileType.None)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.right != TileType.None || mts.above != TileType.None)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.right != TileType.None || mts.below != TileType.None)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
-			
-				if (mts.leftAbove == TileType.None)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.leftBelow == TileType.None)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.rightAbove == TileType.None)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				if (mts.rightBelow == TileType.None)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+				Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+				Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+				Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+				Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
 			
 				break;
 			
@@ -301,12 +301,28 @@ public class FactoryMap : Factory {
 	public void SpawnMission (MapMission mission) {
 	}
 	
-	public void SpawnRewards (MapMission mission) {
-		
+	int staggerSpawnCounter = 0;
+	public bool SpawnRewards (MapMission mission) {
+		//if (staggerSpawnCounter < mission.rewards.Count)
+		//	return false;
+		staggerSpawnCounter = 0;
+		return true;
 	}
 	
-	public void SpawnChallenges (MapMission mission) {
-		
+	public bool SpawnChallenges (MapMission mission) {
+		RectRoom rr = mission.challenges [staggerSpawnCounter].room;
+		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
+			float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
+			float tileOffset = CompressedMap.TILE_SIZE;
+			Vector3 spawnPosition = new Vector3 (Random.Range ((rr.left * scale) - tileOffset, ((rr.right - 1) * scale) + tileOffset), 0, Random.Range ((rr.top * scale) - tileOffset, ((rr.bottom - 1) * scale) + tileOffset));
+			
+			factoryCharacter.SpawnCharacter (go, spawnPosition);
+		}
+		staggerSpawnCounter++;
+		if (staggerSpawnCounter < mission.challenges.Count)
+			return false;
+		staggerSpawnCounter = 0;
+		return true;
 	}
 	
 	public void SpawnRoaming (MapMission mission) {
@@ -401,15 +417,26 @@ public class Mission {
 public class Challenge {
 	public List<GameObject> enemies;
 	public List<GameObject> environment;
-	public int room;
+	public RectRoom room;
+	public int difficulty;
+	
+	public Challenge () {
+		enemies = new List<GameObject> ();
+		environment = new List<GameObject> ();
+		room = new RectRoom (0,0,1,1);
+		difficulty = 0;
+	}
 }
 
 [System.Serializable]
 public class Reward {
-	public List<Power> powers;
-	public List<Firearm> firearms;
-	public int credits;
-	public int room;
+	public ItemBucket reward;
+	public RectRoom room;
+	
+	public Reward () {
+		reward = new ItemBucket ();
+		room = new RectRoom (0,0,1,1);
+	}
 }
 
 public enum MissionType {

@@ -13,10 +13,14 @@ public class ManagerPrefab : Manager {
 			return ListedResourceFolder ("Power");
 		}
 	}
-	public List<GameObject> players {
+	public List<GameObject> bodies {
 		get {
 			return ListedResourceFolder ("Player");
 		}
+	}
+	
+	public List<GameObject> enemies (int level) {
+		return ListedResourceFolder ("Enemy/"+level);
 	}
 	
 	List<GameObject> ListedResourceFolder (string folder) {

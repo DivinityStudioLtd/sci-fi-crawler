@@ -58,13 +58,17 @@ public class ManagerMap : Manager {
 			break;
 			
 		case ManagerMapState.GenerateMissionFromMissionType :
-			
-			managerMapState = ManagerMapState.GenerateRewards;
-			break;
-		case ManagerMapState.GenerateRewards :
+			factoryMap.GenerateMissionFromMissionType (currentMission);
 			managerMapState = ManagerMapState.GenerateChallenges;
 			break;
+			
 		case ManagerMapState.GenerateChallenges :
+			factoryMap.GenerateChallenges (currentMission);
+			managerMapState = ManagerMapState.GenerateRewards;
+			break;
+			
+		case ManagerMapState.GenerateRewards :
+			factoryMap.GenerateRewards (currentMission);
 			managerMapState = ManagerMapState.GenerateRoaming;
 			break;
 		case ManagerMapState.GenerateRoaming :
@@ -79,10 +83,12 @@ public class ManagerMap : Manager {
 			managerMapState = ManagerMapState.SpawnRewards;
 			break;
 		case ManagerMapState.SpawnRewards :
-			managerMapState = ManagerMapState.SpawnChallenges;
+			if (factoryMap.SpawnRewards (currentMission))
+				managerMapState = ManagerMapState.SpawnChallenges;
 			break;
 		case ManagerMapState.SpawnChallenges :
-			managerMapState = ManagerMapState.SpawnRoaming;
+			if (factoryMap.SpawnChallenges (currentMission))
+				managerMapState = ManagerMapState.SpawnRoaming;
 			break;
 		case ManagerMapState.SpawnRoaming :
 			managerMapState = ManagerMapState.Waiting;

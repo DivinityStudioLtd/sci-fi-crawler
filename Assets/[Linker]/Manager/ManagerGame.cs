@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ManagerGame : Manager {
 	public string gameName;
@@ -18,14 +19,14 @@ public class ManagerGame : Manager {
 		} 
 		if (managerMap.managerMapState == ManagerMapState.Waiting && managerMap.currentMission != null && managerPlayer.controller == null) {
 			RectRoom startingRoom = managerMap.currentMission.compressedMap.StartingRoom ();
-			factoryCharacter.SpawnPlayerCharacter (new Vector3 (startingRoom.left, 0, startingRoom.top) * CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE);
+			Vector3 spawnPosition = new Vector3 (startingRoom.left, 0, startingRoom.top) * CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
+			factoryCharacter.SpawnPlayerCharacter (spawnPosition);
 			managerInterface.SetInterface (interfaceTDS);
+			//factoryCharacter.SpawnCharacter (
+			//	managerPrefab.enemies (1) [Random.Range (0, managerPrefab.enemies (1).Count)], 
+			//	spawnPosition + new Vector3 (CompressedMap.TILE_SIZE, 0.0f, 0.0f)
+			//	);
 		}
-		/*
-		if (managerPlayer.controller == null) {
-			factoryCharacter.SpawnPlayerCharacter ();
-			managerInterface.SetInterface (interfaceTDS);
-		}*/
 	}
 }
 public enum ManagerGameState {

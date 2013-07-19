@@ -13,6 +13,9 @@ public class Controller : Entity {
 	public Transform firearmTransform;
 	public CurrentTile currentTile;
 	public SkillInteractor skillInteractor;
+	public PositionRecord positionRecord;
+	
+	public List<ItemBucket> missionsInventory;
 	
 	public List<Power> powers;
 	
