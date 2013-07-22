@@ -53,10 +53,12 @@ public class Linker : MonoBehaviour {
 	static public void AddFactory (Factory f) { factories.Add(f); }
 	#endregion
 	//static public Interface interface { get { return (Interface) GetInterface ("Interface"); } }
+	static public InterfaceInventory interfaceInventory { get { return (InterfaceInventory) GetInterface ("InterfaceInventory"); } }
 	static public InterfaceLogin interfaceLogin { get { return (InterfaceLogin) GetInterface ("InterfaceLogin"); } }
 	static public InterfaceMainMenu interfaceMainMenu { get { return (InterfaceMainMenu) GetInterface ("InterfaceMainMenu"); } }
-	static public InterfaceTDS interfaceTDS { get { return (InterfaceTDS) GetInterface ("InterfaceTDS"); } }
+	static public InterfaceShop interfaceShop { get { return (InterfaceShop) GetInterface ("InterfaceShop"); } }
 	static public InterfaceSolar interfaceSolar { get { return (InterfaceSolar) GetInterface ("InterfaceSolar"); } }
+	static public InterfaceTDS interfaceTDS { get { return (InterfaceTDS) GetInterface ("InterfaceTDS"); } }
 	
 	//static public Manager manager { get { return (Manager) GetManager ("Manager"); } }
 	static public ManagerEnvironment managerEnvironment { get { return (ManagerEnvironment) GetManager ("ManagerEnvironment"); } }

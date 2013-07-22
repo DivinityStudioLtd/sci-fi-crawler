@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Firearm : MonoBehaviour {
+public class Firearm : Entity {
 	public Controller controller;
 	public void SetActive (bool active, Transform parent = null) {
 		gameObject.SetActive (active);

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-abstract public class Power : MonoBehaviour {
+abstract public class Power : Entity {
 	public Transform popup;
 	
 	float currentCoolDown;

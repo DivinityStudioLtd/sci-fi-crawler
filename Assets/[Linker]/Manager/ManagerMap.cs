@@ -31,8 +31,8 @@ public class ManagerMap : Manager {
 			if (missions.Count == 0)
 				GeneratePlaceHolderMissions (10);//(Random.Range (5,10));
 			if (ungeneratedMissions > 0) {
-				factoryMap.GeneratePlaceHolderMission (universe);
 				ungeneratedMissions--;
+				factoryMap.GeneratePlaceHolderMission (universe);
 			} else {
 				managerMapState = ManagerMapState.Waiting;
 			}

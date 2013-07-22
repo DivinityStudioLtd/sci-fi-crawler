@@ -11,36 +11,58 @@ public class FactoryCharacter : Factory {
 		ec.SetupFirearms ();
 	}
 	public void SpawnPlayerCharacter (Vector3 spawnPosition) {
-		List<GameObject> bodies = managerPrefab.bodies;
-		
-		managerPlayer.currentBody = (Instantiate (bodies [Random.Range (0, bodies.Count)], spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
+		managerPlayer.currentBody = (Instantiate (managerPlayer.selected.bodies[0], spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
 	
-		List<GameObject> firearms = managerPrefab.firearms;
-		
-		foreach (GameObject go in firearms) {
+		foreach (GameObject go in managerPlayer.selected.firearms) {
 			Firearm f = (Instantiate (go) as GameObject).GetComponent<Firearm> ();
 			managerPlayer.currentBody.firearms.Add (f);
 		}
 		managerPlayer.currentBody.SetupFirearms ();
 		
-		List<GameObject> powers = managerPrefab.powers;
-		
-		for (int i = 0; i < 3; i++) {
-			int ran = Random.Range (0, powers.Count);
-			Power p = (Instantiate (powers [ran]) as GameObject).GetComponent<Power> ();
-			powers.RemoveAt (ran);
+		foreach (GameObject go in managerPlayer.selected.powers) {
+			Power p = (Instantiate (go) as GameObject).GetComponent<Power> ();
 			managerPlayer.currentBody.powers.Add (p);
 		}
-		
 		managerPlayer.currentBody.SetupPowers ();
 	}
+	
 	public void SpawnPlayerShip () {
 		Vector3 spawnPosition = new Vector3 (0.0f, 0.0f, (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 2) * FactoryMap.PLANET_SPACING);
 		Ship s = (Instantiate (managerPrefab.ships [Random.Range (0, managerPrefab.ships.Count)], spawnPosition, Quaternion.identity) as GameObject).GetComponent<Ship> ();
 		
 		managerPlayer.ship = s;
 	}
+	
+	public void SetupPlayer () {
+		ItemBucket ib = new ItemBucket ();
+		ib.bodies.Add (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]);
+		for (int i = 0; i < 2; i++)
+			ib.firearms.Add (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]);
+		for (int i = 0; i < 3; i++)
+			ib.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
+		managerPlayer.selected = ib;
+	}
+	
+	public void SpawnInventory (InventoryPosition ip) {
+		GameObject go;
+		
+		go = (Instantiate (managerPlayer.selected.bodies [0]) as GameObject);
+		go.GetComponent<Entity> ().SetParent (ip.bodyPosition, true);
+		go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
+		
+		for (int i = 0; i < managerPlayer.selected.firearms.Count; i++) {
+			go = (Instantiate (managerPlayer.selected.firearms [i]) as GameObject);
+			go.GetComponent<Entity> ().SetParent (ip.firearmPositions [i], true);
+		}
+		
+		for (int i = 0; i < managerPlayer.selected.powers.Count; i++) {
+			go = (Instantiate (managerPlayer.selected.powers [i]) as GameObject);
+			go.GetComponent<Entity> ().SetParent (ip.powerPositions [i], true);
+			
+		}
+	}
 }
+
 [System.Serializable]
 public class ItemBucket {
 	public List<GameObject> firearms;

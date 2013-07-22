@@ -10,7 +10,7 @@ public class FactoryMap : Factory {
 	public void SpawnUniverse () {
 		GameObject uni = Instantiate (managerPrefab.universeMap, Vector3.zero, Quaternion.identity) as GameObject;
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
-		universe.numberOfSolarBodies = Random.Range (4, 8);
+		universe.numberOfSolarBodies = Random.Range (8, 12);
 	}
 	
 	static public float PLANET_SPACING = 15.0f;
@@ -80,16 +80,21 @@ public class FactoryMap : Factory {
 		mm.missionType = (MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
 		mm.level = Random.Range (0, 5);
-		while (true) {
+		
+		int numberOfTries = 10;
+		while (numberOfTries > 0) {
 			SolarBody sb = universe.solarbodies [Random.Range (0, universe.solarbodies.Count)];
-			if (sb.solarBodyType == SolarBodyType.Sun)
+			if (sb.solarBodyType == SolarBodyType.Sun || sb.mapMission != null) {
+				numberOfTries--;
 				continue;
-			if (sb.mapMission != null)
-				continue;
+			}
 			sb.mapMission = mm;
 			mm.solarBody = sb;
 			break;
 		}
+		
+		if (numberOfTries == 0)
+			Destroy (mm.gameObject);
 	}
 	#endregion
 	

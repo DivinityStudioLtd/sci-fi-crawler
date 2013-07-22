@@ -3,7 +3,10 @@ using System.Collections;
 
 public class InterfaceSolar : Interface {
 	public override bool SetDisplay (bool newDisplay) {
-		managerPlayer.ship.SetMainCameraToCP ();
+		if (pa != null)
+			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
+		else
+			managerPlayer.ship.SetMainCameraToCP ();
 		return base.SetDisplay (newDisplay);
 	}
 	
@@ -13,6 +16,20 @@ public class InterfaceSolar : Interface {
 		if (!display)
 			return;
 		
+		SolerViewPositioning ();
+		
+		if (Vector3.Distance (managerPlayer.ship.transform.position, managerMap.universe.transform.position) > (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING)
+			managerPlayer.ship.transform.position = (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING * (managerPlayer.ship.transform.position - managerMap.universe.transform.position).normalized;
+		
+		if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.LinuxPlayer
+			|| Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
+			KeyboardMouse ();
+		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+			TouchScreen ();
+			managerInterface.SetInterface (interfaceInventory);
+	}
+	
+	void SolerViewPositioning () {
 		if (pa == null && managerPlayer.ship.currentPlanetArm != null) {
 			pa = managerPlayer.ship.currentPlanetArm;
 			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
@@ -31,19 +48,6 @@ public class InterfaceSolar : Interface {
 			
 			managerPlayer.ship.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
 		}
-		
-		if (Vector3.Distance (managerPlayer.ship.transform.position, managerMap.universe.transform.position) > (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING)
-			managerPlayer.ship.transform.position = (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING * (managerPlayer.ship.transform.position - managerMap.universe.transform.position).normalized;
-		
-		if (Application.platform == RuntimePlatform.WindowsPlayer
-			|| Application.platform == RuntimePlatform.OSXPlayer
-			|| Application.platform == RuntimePlatform.LinuxPlayer
-			|| Application.platform == RuntimePlatform.WindowsEditor
-			|| Application.platform == RuntimePlatform.OSXEditor)
-			KeyboardMouse ();
-		if (Application.platform == RuntimePlatform.Android 
-			|| Application.platform == RuntimePlatform.IPhonePlayer)
-			TouchScreen ();
 	}
 	
 	SolarBody selectedSolarBody;
@@ -83,6 +87,8 @@ public class InterfaceSolar : Interface {
 	}
 	
 	void OnGUI () {
+		if (!display) 
+			return;
 		MenuGame ();
 		
 		if (selectedSolarBody != null) {
@@ -90,16 +96,16 @@ public class InterfaceSolar : Interface {
 		}
 	}
 	
-	void MenuGame () {
+	public void MenuGame () {
         GUILayout.BeginArea (new Rect (10,10,200,100));
-		if (GUILayout.Button ("Solar View")) {
-		}
-        if (GUILayout.Button ("Inventory")) {
-		}
-        if (GUILayout.Button ("Shop")) {
-		}
-        if (GUILayout.Button ("Option")) {
-		}
+		if (GUILayout.Button ("Solar View"))
+			managerInterface.SetInterface (interfaceSolar);
+        if (GUILayout.Button ("Inventory"))
+			managerInterface.SetInterface (interfaceInventory);
+        if (GUILayout.Button ("Shop"))
+			managerInterface.SetInterface (interfaceShop);
+        if (GUILayout.Button ("Option"))
+			managerInterface.SetInterface (interfaceMainMenu);
         GUILayout.EndArea ();
 	}
 	void MenuSolarBody () {
