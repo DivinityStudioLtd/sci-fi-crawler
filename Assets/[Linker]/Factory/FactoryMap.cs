@@ -34,7 +34,7 @@ public class FactoryMap : Factory {
 			
 			SolarBody planet = (Instantiate (managerPrefab.planet) as GameObject).GetComponent<SolarBody> ();
 			planet.SetParent (pa.planetPosition, true);
-			pa.planetPosition.GetComponent<Rotate> ().SetRotationTime (Random.Range (15.0f, 25.0f));
+			pa.planetPosition.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.50f, 2.50f + staggerSpawnCounter));
 			
 			float planetRadius = Random.Range (5.0f, 10.0f);
 			planet.transform.localScale = new Vector3 (planetRadius, planetRadius, planetRadius);
@@ -55,7 +55,7 @@ public class FactoryMap : Factory {
 					pT = PlanetTexture.General;
 					sb.renderer.materials [0].mainTexture = managerPrefab.planetTextures (pT) [Random.Range (0, managerPrefab.planetTextures (pT).Count)];
 					
-					sbp.GetComponent<Rotate> ().SetRotationTime (Random.Range (10.0f, 15.0f));
+					sbp.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.00f, 1.50f));
 					sb.solarBodyType = SolarBodyType.Moon;
 				} else {
 					sb = (Instantiate (managerPrefab.stations [Random.Range (0, managerPrefab.stations.Count)]) as GameObject).GetComponent<SolarBody> ();
@@ -79,7 +79,17 @@ public class FactoryMap : Factory {
 		MapMission mm = (Instantiate (managerPrefab.missionMap, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
 		mm.missionType = (MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
-		mm.level = 3;
+		mm.level = Random.Range (0, 5);
+		while (true) {
+			SolarBody sb = universe.solarbodies [Random.Range (0, universe.solarbodies.Count)];
+			if (sb.solarBodyType == SolarBodyType.Sun)
+				continue;
+			if (sb.mapMission != null)
+				continue;
+			sb.mapMission = mm;
+			mm.solarBody = sb;
+			break;
+		}
 	}
 	#endregion
 	

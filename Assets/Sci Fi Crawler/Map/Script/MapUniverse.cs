@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class MapUniverse : Map {
-	static public float MAX_DISTANCE = 250.0f;
 	public void Awake () {
 		managerMap.universe = this;
 	}

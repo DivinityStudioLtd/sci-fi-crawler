@@ -8,5 +8,8 @@ public class PlanetArm : Entity {
 	
 	public Transform planetPosition;
 	public List<Transform> planetSolarBodyPositions;
+	
+	public Transform cameraPosition;
+	public Transform shipPosition;
 }
 

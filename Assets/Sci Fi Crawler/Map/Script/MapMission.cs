@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class MapMission : Map {
 	public void Start () {
 		managerMap.missions.Add (this);
+		SetParent (managerMap.transform, false);
 	}
 	
 	public int level;
@@ -17,6 +18,8 @@ public class MapMission : Map {
 	public List<Reward> rewards;
 	public MissionType missionType;
 	
+	public GameObject warning;
+	
 	public int width {
 		get {
 			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedX; 	
@@ -27,5 +30,9 @@ public class MapMission : Map {
 		get {
 			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedY;	
 		}
+	}
+	
+	public void Update () {
+		warning.transform.position = solarBody.transform.position;
 	}
 }

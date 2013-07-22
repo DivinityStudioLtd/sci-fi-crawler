@@ -14,7 +14,8 @@ public class InterfaceTDS : Interface {
 		if (Application.platform == RuntimePlatform.WindowsPlayer
 			|| Application.platform == RuntimePlatform.OSXPlayer
 			|| Application.platform == RuntimePlatform.LinuxPlayer
-			|| Application.platform == RuntimePlatform.WindowsEditor)
+			|| Application.platform == RuntimePlatform.WindowsEditor
+			|| Application.platform == RuntimePlatform.OSXEditor)
 			KeyboardMouse ();
 		if (Application.platform == RuntimePlatform.Android 
 			|| Application.platform == RuntimePlatform.IPhonePlayer)
