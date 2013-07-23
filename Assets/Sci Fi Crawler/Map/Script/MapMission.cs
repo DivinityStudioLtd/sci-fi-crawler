@@ -33,6 +33,7 @@ public class MapMission : Map {
 	}
 	
 	public void Update () {
-		warning.transform.position = solarBody.transform.position;
+		if (solarBody != null)
+			warning.transform.position = solarBody.transform.position;
 	}
 }

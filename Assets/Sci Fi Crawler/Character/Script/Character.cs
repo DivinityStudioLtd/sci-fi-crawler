@@ -8,7 +8,7 @@ public class Character : Entity {
 	
 	public List<ResistanceBlock> resistances;
 	public List<ChangeOverTimeBlock> changesOverTime;
-	
+
 	#region Health Energy
 	public float maxHealth {
 		get {

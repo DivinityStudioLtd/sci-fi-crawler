@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class Firearm : Entity {
+	public string description;
+	
 	public Controller controller;
 	public void SetActive (bool active, Transform parent = null) {
 		gameObject.SetActive (active);
@@ -59,6 +61,16 @@ public class Firearm : Entity {
 				p.team = controller.team;
 			}
 		}
+	}
+	public string ToString () {
+		string returnString = "";
+		returnString += "Name: " + entityName + "\n";
+		returnString += "Fire Rate: " + primary.fireRate + "\n";
+		returnString += "Burst Size: " + primary.burstSize + "\n";
+		returnString += "Accuracy: " + primary.accuracy + "\n";
+		returnString += "Damage: " + primary.projectile.GetComponent<Projectile> ().attack.damage + "\n";
+		returnString += "Damage Type: " + primary.projectile.GetComponent<Projectile> ().attack.damageType.ToString ();
+		return returnString;
 	}
 }
 [System.Serializable]

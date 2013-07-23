@@ -79,7 +79,7 @@ public class FactoryMap : Factory {
 		MapMission mm = (Instantiate (managerPrefab.missionMap, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
 		mm.missionType = (MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
-		mm.level = Random.Range (0, 5);
+		mm.level = Random.Range (1, 5);
 		
 		int numberOfTries = 10;
 		while (numberOfTries > 0) {

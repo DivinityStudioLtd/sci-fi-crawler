@@ -26,7 +26,6 @@ public class InterfaceSolar : Interface {
 			KeyboardMouse ();
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
 			TouchScreen ();
-			managerInterface.SetInterface (interfaceInventory);
 	}
 	
 	void SolerViewPositioning () {
@@ -117,6 +116,7 @@ public class InterfaceSolar : Interface {
 		        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
 		        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
 		        if (GUILayout.Button ("Take Mission")) {
+					managerGame.UniverseToMission (selectedSolarBody.mapMission);
 				}
 			}
         GUILayout.EndArea ();

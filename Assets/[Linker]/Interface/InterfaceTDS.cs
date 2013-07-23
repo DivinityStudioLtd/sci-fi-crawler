@@ -97,6 +97,9 @@ public class InterfaceTDS : Interface {
 		if (Input.GetButtonDown ("Reload")) {
 			playerManager.firearmController.CurrentFirearm ().Reload ();
 		}*/
+		
+		if (Input.GetKeyDown (KeyCode.Backspace))
+			managerGame.MissionToUniverse ();
 	}
 	
 	public void TouchScreen () {

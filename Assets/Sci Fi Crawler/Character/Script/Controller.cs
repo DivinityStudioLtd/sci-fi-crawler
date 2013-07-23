@@ -23,6 +23,7 @@ public class Controller : Entity {
 	int currentFirearm;
 	
 	void Start () {
+		managerCharacter.AddEntity (this);
 		SetupFirearms();	
 		SetupPowers();	
 		if (skillInteractor != null)
@@ -86,5 +87,9 @@ public class Controller : Entity {
 		characterMotor.maxSpeed = character.maxSpeed;
 		hUD3D.SetHealthBar (character.currentHealth, character.maxHealth);
 		hUD3D.SetEnergyBar (character.currentEnergy, character.maxEnergy);
+	}
+	
+	public string ToString () {
+		return "";
 	}
 }

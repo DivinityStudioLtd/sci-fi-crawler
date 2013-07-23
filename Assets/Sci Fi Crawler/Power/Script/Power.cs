@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 abstract public class Power : Entity {
+	public string description;
+	
 	public Transform popup;
 	
 	float currentCoolDown;
@@ -44,4 +46,12 @@ abstract public class Power : Entity {
 			SetUsed (user);
 	}
 	public abstract bool Effect (Controller user);
+	public string ToString () {
+		string returnString ="";
+		returnString += "Name: " + entityName + "\n";
+		returnString += "Description: " + description + "\n";
+		returnString += "Energy Cost " + energyCost + "\n";
+		returnString += "Cool Down: " + coolDown;
+		return returnString;
+	}
 }
