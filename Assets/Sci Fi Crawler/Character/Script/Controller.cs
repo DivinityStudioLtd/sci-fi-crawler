@@ -40,7 +40,7 @@ public class Controller : Entity {
 	
 	public void SetupFirearms () {
 		foreach (Firearm f in firearms) {
-			f.SetActive (false);
+			f.SetActive (false, firearmTransform);
 			f.controller = this;
 		}
 		if (firearms.Count > 0)
@@ -56,7 +56,7 @@ public class Controller : Entity {
 	}
 	
 	public void NextWeapon () {
-		firearms [currentFirearm].SetActive (false);
+		firearms [currentFirearm].SetActive (false, firearmTransform);
 		currentFirearm++;
 		if (currentFirearm >= firearms.Count)
 			currentFirearm = 0;

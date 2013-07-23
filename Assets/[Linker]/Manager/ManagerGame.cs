@@ -46,6 +46,7 @@ public class ManagerGame : Manager {
 		managerMap.UnspawnCurrentMapMission ();
 		managerMap.universe.transform.position = new Vector3 (0, 0, 0);
 		managerCharacter.DestoryNonPlayer ();
+		managerCharacter.PlayerCleanUp ();
 		managerInterface.SetInterface (interfaceSolar);
 	}
 }

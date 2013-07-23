@@ -12,7 +12,9 @@ public class InterfaceSolar : Interface {
 	
 	public PlanetArm pa;
 	
+	int buttonBar;
 	public void Update () {
+		buttonBar = (Screen.width - 60) / 5;
 		if (!display)
 			return;
 		
@@ -71,6 +73,7 @@ public class InterfaceSolar : Interface {
 							t = t.parent;	
 						}
 					}
+					
 					Ship s = e.GetComponent<Ship> ();
 					if (s != null) {
 						s.currentPlanetArm = null;
@@ -90,34 +93,38 @@ public class InterfaceSolar : Interface {
 			return;
 		MenuGame ();
 		
-		if (selectedSolarBody != null) {
+		if (selectedSolarBody != null)
 			MenuSolarBody ();
-		}
 	}
 	
 	public void MenuGame () {
-        GUILayout.BeginArea (new Rect (10,10,200,100));
-		if (GUILayout.Button ("Solar View"))
+        GUILayout.BeginArea (new Rect (10,10,Screen.width - 20,100));
+		GUILayout.BeginHorizontal ();
+		if (GUILayout.Button ("Solar View", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceSolar);
-        if (GUILayout.Button ("Inventory"))
+        if (GUILayout.Button ("Inventory", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceInventory);
-        if (GUILayout.Button ("Shop"))
+		
+		GUILayout.FlexibleSpace ();
+		GUILayout.Label (managerPlayer.playerInventory.credit.ToString ());
+		GUILayout.FlexibleSpace ();
+        if (GUILayout.Button ("Shop", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceShop);
-        if (GUILayout.Button ("Option"))
+        if (GUILayout.Button ("Option", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceMainMenu);
+		GUILayout.EndHorizontal ();
         GUILayout.EndArea ();
 	}
 	void MenuSolarBody () {
-        GUILayout.BeginArea (new Rect (Screen.width-210,10,200,100));
+        GUILayout.BeginArea (new Rect (Screen.width-210,60,200,100));
 	        GUILayout.Label("Location: " + selectedSolarBody.solarBodyType.ToString ());
 			if (selectedSolarBody.mapMission == null) {
 				GUILayout.Label("No mission at this location");
 			} else {
 		        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
 		        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
-		        if (GUILayout.Button ("Take Mission")) {
+		        if (GUILayout.Button ("Take Mission"))
 					managerGame.UniverseToMission (selectedSolarBody.mapMission);
-				}
 			}
         GUILayout.EndArea ();
 	}

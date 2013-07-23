@@ -114,7 +114,6 @@ public class ManagerMap : Manager {
 	
 	public void UnspawnCurrentMapMission () {
 		Destroy (currentMission.gameObject);
-		
 	}
 }
 

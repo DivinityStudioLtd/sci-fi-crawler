@@ -42,13 +42,13 @@ public class FactoryCharacter : Factory {
 			ib.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
 		managerPlayer.selected = ib;
 		
-		/*
+		
 		for (int i = 0; i < 5; i++)
 			managerPlayer.playerInventory.bodies.Add (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]);
 		for (int i = 0; i < 5; i++)
 			managerPlayer.playerInventory.firearms.Add (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]);
 		for (int i = 0; i < 5; i++)
-			managerPlayer.playerInventory.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);*/
+			managerPlayer.playerInventory.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
 	}
 	
 	public void SpawnInventory (InventoryPosition ip) {

@@ -7,12 +7,9 @@ public class Firearm : Entity {
 	public Controller controller;
 	public void SetActive (bool active, Transform parent = null) {
 		gameObject.SetActive (active);
-		if (active) {
-			transform.parent = parent;
-			transform.position = parent.position;
-			transform.rotation = parent.rotation;
-		} else {
-		}
+		transform.parent = parent;
+		transform.position = parent.position;
+		transform.rotation = parent.rotation;
 	} 
 	
 	public FiringMode primary;
