@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public class Controller : Entity {
 	public int team;
 	
+	public int credits;
+	
 	public CharacterMotor characterMotor;
 	public Character character;
 	public AnimationController animationController;

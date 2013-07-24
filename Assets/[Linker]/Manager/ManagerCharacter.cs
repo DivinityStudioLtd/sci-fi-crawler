@@ -20,5 +20,6 @@ public class ManagerCharacter : Manager {
 				managerPlayer.playerInventory.bodies.Add (go);
 			managerPlayer.playerInventory.credit += p_ib.credit;
 		}
+		Destroy (managerPlayer.currentBody.gameObject);
 	}
 }

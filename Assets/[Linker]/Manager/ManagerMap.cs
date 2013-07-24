@@ -52,11 +52,6 @@ public class ManagerMap : Manager {
 			
 		case ManagerMapState.RectRoomsToCompressed :
 			factoryMap.RectRoomsToCompressed (currentMission);
-			managerMapState = ManagerMapState.GenerateMissionFromMissionType;
-			break;
-			
-		case ManagerMapState.GenerateMissionFromMissionType :
-			factoryMap.GenerateMissionFromMissionType (currentMission);
 			managerMapState = ManagerMapState.GenerateChallenges;
 			break;
 			
@@ -75,9 +70,10 @@ public class ManagerMap : Manager {
 			
 		case ManagerMapState.SpawnTiles :
 			if (factoryMap.SpawnTiles (currentMission))
-				managerMapState = ManagerMapState.SpawnMission;
+				managerMapState = ManagerMapState.GenerateSpawnMission;
 			break;
-		case ManagerMapState.SpawnMission :
+		case ManagerMapState.GenerateSpawnMission :
+			factoryMap.GenerateSpawnMission (currentMission);
 			managerMapState = ManagerMapState.SpawnRewards;
 			break;
 		case ManagerMapState.SpawnRewards :
@@ -131,13 +127,12 @@ public enum ManagerMapState {
 	HallwaysFromRectRooms,
 	RectRoomsToCompressed,
 	
-	GenerateMissionFromMissionType,
 	GenerateRewards,
 	GenerateChallenges,
 	GenerateRoaming,
 	
 	SpawnTiles,
-	SpawnMission,
+	GenerateSpawnMission,
 	SpawnRewards,
 	SpawnChallenges,
 	SpawnRoaming

@@ -10,10 +10,13 @@ public class PickUpInteractor : MonoBehaviour {
 			if (e == null)
 				continue;
 			Container c = e.GetComponent<Container> ();
-			if (c == null)
-				continue;	
-			controller.missionsInventory.Add (c.reward);
-			Destroy (collider.gameObject);
+			if (c != null) {	
+				controller.missionsInventory.Add (c.reward);
+				Destroy (collider.gameObject);
+			}
+			Intel i = e.GetComponent<Intel> ();
+			if (i != null)
+				i.Collect ();
 		}
 	}
 }

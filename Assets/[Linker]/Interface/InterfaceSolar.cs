@@ -116,13 +116,14 @@ public class InterfaceSolar : Interface {
         GUILayout.EndArea ();
 	}
 	void MenuSolarBody () {
-        GUILayout.BeginArea (new Rect (Screen.width-210,60,200,100));
+        GUILayout.BeginArea (new Rect (Screen.width-210,40,200,140));
 	        GUILayout.Label("Location: " + selectedSolarBody.solarBodyType.ToString ());
 			if (selectedSolarBody.mapMission == null) {
 				GUILayout.Label("No mission at this location");
 			} else {
 		        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
 		        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
+		        GUILayout.Label("Reward: " + selectedSolarBody.mapMission.credits);
 		        if (GUILayout.Button ("Take Mission"))
 					managerGame.UniverseToMission (selectedSolarBody.mapMission);
 			}

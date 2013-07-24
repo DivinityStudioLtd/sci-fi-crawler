@@ -4,6 +4,8 @@ using System.Collections;
 public class Firearm : Entity {
 	public string description;
 	
+	public int credits;
+	
 	public Controller controller;
 	public void SetActive (bool active, Transform parent = null) {
 		gameObject.SetActive (active);

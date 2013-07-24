@@ -4,6 +4,8 @@ using System.Collections;
 abstract public class Power : Entity {
 	public string description;
 	
+	public int credits;
+	
 	public Transform popup;
 	
 	float currentCoolDown;

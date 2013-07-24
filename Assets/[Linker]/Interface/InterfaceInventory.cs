@@ -81,15 +81,15 @@ public class InterfaceInventory : Interface {
 			
 			GUILayout.BeginVertical ();
 			if (GUILayout.Button ("Slot 1",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.powers, i, managerPlayer.playerInventory.powers, 0);
+				Swap (managerPlayer.selected.powers, 0, managerPlayer.playerInventory.powers, i);
 				i--;
 			}
 			if (GUILayout.Button ("Slot 2",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.powers, i, managerPlayer.playerInventory.powers, 1);
+				Swap (managerPlayer.selected.powers, 1, managerPlayer.playerInventory.powers, i);
 				i--;
 			}
 			if (GUILayout.Button ("Slot 3",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.powers, i, managerPlayer.playerInventory.powers, 2);
+				Swap (managerPlayer.selected.powers, 2, managerPlayer.playerInventory.powers, i);
 				i--;
 			}
 			GUILayout.EndVertical ();
@@ -122,11 +122,11 @@ public class InterfaceInventory : Interface {
 			
 			GUILayout.BeginVertical ();
 			if (GUILayout.Button ("Slot 1",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.firearms, i, managerPlayer.playerInventory.firearms, 0);
+				Swap (managerPlayer.selected.firearms, 0, managerPlayer.playerInventory.firearms, i);
 				i--;
 			}
 			if (GUILayout.Button ("Slot 2",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.firearms, i, managerPlayer.playerInventory.firearms, 1);
+				Swap (managerPlayer.selected.firearms, 1, managerPlayer.playerInventory.firearms, i);
 				i--;
 			}
 			GUILayout.EndVertical ();
@@ -158,7 +158,7 @@ public class InterfaceInventory : Interface {
 			GUILayout.FlexibleSpace();
 			
 			if (GUILayout.Button ("Equip",GUILayout.Width (EQUIP_WIDTH))) {
-				Swap (managerPlayer.selected.bodies, i, managerPlayer.playerInventory.bodies, 0);
+				Swap (managerPlayer.selected.bodies, 0, managerPlayer.playerInventory.bodies, i);
 				i--;
 			}
 			GUILayout.EndHorizontal ();
@@ -169,15 +169,15 @@ public class InterfaceInventory : Interface {
 		GUILayout.Label (managerPlayer.selected.bodies [0].GetComponent <Controller> ().ToString ());
 	}
 	
-	void Swap (List<GameObject> toList, int fro, List<GameObject> fromList, int to) {
+	void Swap (List<GameObject> toList, int to, List<GameObject> fromList, int fro) {
 		GameObject tempTo = toList [to];
 		GameObject tempFrom = fromList [fro];
 		
-		toList.Remove (tempTo);
-		fromList.Remove (tempFrom);
+		toList.RemoveAt (to);
+		fromList.RemoveAt (fro);
 		
 		toList.Insert (to, tempFrom); 
-		fromList.Add (tempFrom);
+		fromList.Add (tempTo);
 		
 		CleanUp ();	
 		factoryCharacter.SpawnInventory (inventoryPosition);

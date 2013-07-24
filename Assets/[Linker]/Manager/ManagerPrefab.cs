@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public class ManagerPrefab : Manager {
 	#region Container
-	public List<GameObject> containers {
-		get {
-			return ListedGameObjectResourceFolder ("Container");
-		}
-	}
 	#endregion
 	
 	#region Enemy
@@ -47,6 +42,28 @@ public class ManagerPrefab : Manager {
 	public GameObject missionMap {
 		get {
 			return GameObjectResource ("Map/Mission");
+		}
+	}
+	
+	public GameObject mission (MissionType missionType) {
+		return GameObjectResource ("Map/Mission/Mission"+missionType.ToString());
+	}
+	
+	public GameObject shop {
+		get {
+			return GameObjectResource ("Map/Shop");
+		}
+	}
+	
+	public GameObject intel {
+		get {
+			return GameObjectResource ("Prop/Intel/Intel");
+		}
+	}
+	
+	public List<GameObject> containers {
+		get {
+			return ListedGameObjectResourceFolder ("Map/Container");
 		}
 	}
 	#endregion

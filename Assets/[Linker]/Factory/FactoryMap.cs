@@ -11,10 +11,10 @@ public class FactoryMap : Factory {
 		GameObject uni = Instantiate (managerPrefab.universeMap, Vector3.zero, Quaternion.identity) as GameObject;
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
 		universe.numberOfSolarBodies = Random.Range (8, 12);
+		Shop s = (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
 	}
 	
 	static public float PLANET_SPACING = 15.0f;
-	
 	public bool GenerateSpawnSolarBody (MapUniverse universe) {
 		if (staggerSpawnCounter == 0) {
 			SolarBody sun = (Instantiate (managerPrefab.suns [Random.Range (0, managerPrefab.suns.Count)]) as GameObject).GetComponent<SolarBody> ();
@@ -23,6 +23,8 @@ public class FactoryMap : Factory {
 			sun.transform.localPosition = Vector3.zero;
 			sun.transform.localRotation = Quaternion.identity;
 			sun.solarBodyType = SolarBodyType.Sun;
+			
+			
 		} else {
 			PlanetArm pa = (Instantiate (managerPrefab.planetArm) as GameObject).GetComponent<PlanetArm> ();
 			pa.SetParent (universe.transform, true);
@@ -77,9 +79,13 @@ public class FactoryMap : Factory {
 	
 	public void GeneratePlaceHolderMission (MapUniverse universe) {
 		MapMission mm = (Instantiate (managerPrefab.missionMap, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
-		mm.missionType = (MissionType) Random.Range (0, (int) MissionType.Capture);
+		mm.missionType = MissionType.Steal;//(MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
 		mm.level = Random.Range (1, 5);
+		
+		mm.credits = 0;
+		for (int i = 0; i < mm.level; i++)
+			mm.credits += Random.Range (1000,2000);
 		
 		int numberOfTries = 10;
 		while (numberOfTries > 0) {
@@ -235,10 +241,6 @@ public class FactoryMap : Factory {
 					mission.compressedMap.compressedTiles [i,j] = TileType.Room;
 	}
 	
-	public void GenerateMissionFromMissionType (MapMission mission) {
-		
-	}
-	
 	public void GenerateChallenges (MapMission mission) {
 		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 			if (rr.startingRoom)
@@ -350,7 +352,7 @@ public class FactoryMap : Factory {
 				points -= 1;
 			}
 		}
-		//print (bodiesToAdd + " " + firearmsToAdd + " " + powersToAdd + " " + creditsToAdd);
+		
 		for (int i = 0; i < bodiesToAdd; i++)
 			ib.bodies.Add (managerPrefab.bodies[Random.Range (0,managerPrefab.bodies.Count)]);
 		for (int i = 0; i < firearmsToAdd; i++)
@@ -358,7 +360,7 @@ public class FactoryMap : Factory {
 		for (int i = 0; i < powersToAdd; i++)
 			ib.powers.Add (managerPrefab.powers[Random.Range (0,managerPrefab.powers.Count)]);
 		for (int i = 0; i < creditsToAdd; i++)
-			ib.credit += Random.Range (2000,4000);
+			ib.credit += Random.Range (20,40);
 		
 		Reward r = new Reward ();
 		r.reward = ib;
@@ -480,17 +482,55 @@ public class FactoryMap : Factory {
 		return returnMTS;
 	}
 	
-	public void SpawnMission (MapMission mission) {
+	RectRoom NotSpawnRoom (MapMission mission) {
+		while (true) {
+			RectRoom rr = mission.compressedMap.rectRooms [Random.Range (0, mission.compressedMap.rectRooms.Count)];	
+			
+			if (!rr.startingRoom)
+				return rr;
+		}
+	}
+	public void GenerateSpawnMission (MapMission mission) {
+		switch (mission.missionType) {
+		case MissionType.Assualt:
+			GenerateSpawnMissionAssualt (mission);
+			break;
+		case MissionType.Capture:
+			GenerateSpawnMissionCapture (mission);
+			break;
+		case MissionType.Destroy:
+			GenerateSpawnMissionDestroy (mission);
+			break;
+		case MissionType.Recover:
+			GenerateSpawnMissionRecover (mission);
+			break;
+		case MissionType.Steal:
+			GenerateSpawnMissionSteal (mission);
+			break;
+		}
+	}
+	void GenerateSpawnMissionAssualt (MapMission mission) {
+		
+	}
+	void GenerateSpawnMissionCapture (MapMission mission) {
+		
+	}
+	void GenerateSpawnMissionDestroy (MapMission mission) {
+		
+	}
+	void GenerateSpawnMissionRecover (MapMission mission) {
+		
+	}
+	void GenerateSpawnMissionSteal (MapMission mission) {
+		MissionSteal miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionSteal> ();
+		
+		Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
+		
+		miss.intel = i;
 	}
 	
 	public bool SpawnRewards (MapMission mission) {
-		RectRoom rr = mission.rewards [staggerSpawnCounter].room;
-		
-		float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
-		float tileOffset = CompressedMap.TILE_SIZE;
-		Vector3 spawnPosition = new Vector3 (Random.Range ((rr.left * scale) - tileOffset, ((rr.right - 1) * scale) + tileOffset), 0, Random.Range ((rr.top * scale) - tileOffset, ((rr.bottom - 1) * scale) + tileOffset));
-		
-		GameObject go = Instantiate (managerPrefab.containers [Random.Range (0, managerPrefab.containers.Count)], spawnPosition, Quaternion.identity) as GameObject;
+		GameObject go = Instantiate (managerPrefab.containers [Random.Range (0, managerPrefab.containers.Count)], MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room), Quaternion.identity) as GameObject;
 		
 		go.GetComponent<Container> ().reward = mission.rewards [staggerSpawnCounter].reward;
 		
@@ -504,11 +544,8 @@ public class FactoryMap : Factory {
 	public bool SpawnChallenges (MapMission mission) {
 		RectRoom rr = mission.challenges [staggerSpawnCounter].room;
 		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
-			float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
-			float tileOffset = CompressedMap.TILE_SIZE;
-			Vector3 spawnPosition = new Vector3 (Random.Range ((rr.left * scale) - tileOffset, ((rr.right - 1) * scale) + tileOffset), 0, Random.Range ((rr.top * scale) - tileOffset, ((rr.bottom - 1) * scale) + tileOffset));
 			
-			factoryCharacter.SpawnCharacter (go, spawnPosition);
+			factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
 		}
 		staggerSpawnCounter++;
 		if (staggerSpawnCounter < mission.challenges.Count)
@@ -597,12 +634,6 @@ public class RectRoom {
 	public string ToString () {
 		return "left|"+left+" top|"+top+" width|"+width+" height|"+height;
 	}
-}
-
-[System.Serializable]
-public class Mission {
-	public List<GameObject> enemies;
-	public int room;
 }
 
 [System.Serializable]

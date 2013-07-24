@@ -7,8 +7,9 @@ public class MapUniverse : Map {
 		managerMap.universe = this;
 	}
 	
-	public List<SolarBody> solarbodies;
+	public Shop shop;
 	
+	public List<SolarBody> solarbodies;
 	
 	public int SolarBodiesOfType (SolarBodyType sbt) {
 		int count = 0;
@@ -17,7 +18,6 @@ public class MapUniverse : Map {
 				count++;
 		return count;
 	}
-	
 	
 	public int numberOfSolarBodies;
 }

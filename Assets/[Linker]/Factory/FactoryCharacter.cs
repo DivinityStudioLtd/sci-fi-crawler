@@ -41,14 +41,6 @@ public class FactoryCharacter : Factory {
 		for (int i = 0; i < 3; i++)
 			ib.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
 		managerPlayer.selected = ib;
-		
-		
-		for (int i = 0; i < 5; i++)
-			managerPlayer.playerInventory.bodies.Add (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]);
-		for (int i = 0; i < 5; i++)
-			managerPlayer.playerInventory.firearms.Add (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]);
-		for (int i = 0; i < 5; i++)
-			managerPlayer.playerInventory.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
 	}
 	
 	public void SpawnInventory (InventoryPosition ip) {
@@ -66,7 +58,23 @@ public class FactoryCharacter : Factory {
 		for (int i = 0; i < managerPlayer.selected.powers.Count; i++) {
 			go = (Instantiate (managerPlayer.selected.powers [i]) as GameObject);
 			go.GetComponent<Entity> ().SetParent (ip.powerPositions [i], true);
-			
+		}
+	}
+	
+	public void SpawnShop (ShopPositions shopPosition, GameObject buy, GameObject sell) {
+		
+		GameObject go;
+		if (buy != null) {
+			go = (Instantiate (buy) as GameObject);
+			go.GetComponent <Entity> ().SetParent (shopPosition.buy, true);
+			if (go.GetComponent<Controller> () != null)
+				go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
+		}
+		if (sell != null) {
+			go = (Instantiate (sell) as GameObject);
+			go.GetComponent <Entity> ().SetParent (shopPosition.sell, true);
+			if (go.GetComponent<Controller> () != null)
+				go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
 		}
 	}
 }

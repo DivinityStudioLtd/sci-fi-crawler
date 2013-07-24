@@ -25,6 +25,10 @@ public class ManagerGame : Manager {
 					managerPlayer.setup = true;
 				}
 			}
+			if (managerMap.currentMission != null && managerMap.currentMission.mission != null) {
+				print (managerMap.currentMission.mission.Completed ());
+			}
+			
 			if (managerMap.currentMission != null && managerPlayer.currentBody == null) {
 				RectRoom startingRoom = managerMap.currentMission.compressedMap.StartingRoom ();
 				Vector3 spawnPosition = new Vector3 (startingRoom.left, 0, startingRoom.top) * CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
@@ -32,7 +36,6 @@ public class ManagerGame : Manager {
 				managerInterface.SetInterface (interfaceTDS);
 			}
 		}
-		
 	}
 	
 	public void UniverseToMission (MapMission mission) {
@@ -43,6 +46,8 @@ public class ManagerGame : Manager {
 	}
 	
 	public void MissionToUniverse () {
+		if (managerMap.currentMission.mission.Completed ())
+			managerPlayer.playerInventory.credit += managerMap.currentMission.credits;
 		managerMap.UnspawnCurrentMapMission ();
 		managerMap.universe.transform.position = new Vector3 (0, 0, 0);
 		managerCharacter.DestoryNonPlayer ();
