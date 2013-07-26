@@ -25,9 +25,6 @@ public class ManagerGame : Manager {
 					managerPlayer.setup = true;
 				}
 			}
-			if (managerMap.currentMission != null && managerMap.currentMission.mission != null) {
-				print (managerMap.currentMission.mission.Completed ());
-			}
 			
 			if (managerMap.currentMission != null && managerPlayer.currentBody == null) {
 				RectRoom startingRoom = managerMap.currentMission.compressedMap.StartingRoom ();
@@ -46,8 +43,13 @@ public class ManagerGame : Manager {
 	}
 	
 	public void MissionToUniverse () {
-		if (managerMap.currentMission.mission.Completed ())
+		if (managerMap.currentMission.mission.Completed ()) {
 			managerPlayer.playerInventory.credit += managerMap.currentMission.credits;
+			managerMap.GeneratePlaceHolderMissions (2);	
+		} else {
+			managerMap.GeneratePlaceHolderMissions (1);	
+		}
+		managerMap.universe.shop.Shuffle ();
 		managerMap.UnspawnCurrentMapMission ();
 		managerMap.universe.transform.position = new Vector3 (0, 0, 0);
 		managerCharacter.DestoryNonPlayer ();

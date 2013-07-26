@@ -7,7 +7,7 @@ public class Rotate : MonoBehaviour {
 	
 	public void SetRotationTime (float newTime) {
 		rotationTime = newTime;
-		currentRotationTime = Random.Range (0, 1);//rotationTime);
+		currentRotationTime = Random.Range (0, rotationTime);
 	}
 	
 	void FixedUpdate () {
