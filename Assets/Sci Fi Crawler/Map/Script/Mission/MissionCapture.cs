@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class MissionCapture : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+public class MissionCapture : Mission {
+	public override bool Completed () {
+		return true;	
+		
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	public override string MissionStatus () {
+		return "";
 	}
 }

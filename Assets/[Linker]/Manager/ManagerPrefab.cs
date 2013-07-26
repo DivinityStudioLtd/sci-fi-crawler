@@ -10,18 +10,6 @@ public class ManagerPrefab : Manager {
 	public List<GameObject> enemies (int level) {
 		return ListedGameObjectResourceFolder ("Enemy/"+level);
 	}
-	
-	List<GameObject> ListedGameObjectResourceFolder (string folder) {
-		Object[] objectArray = Resources.LoadAll (folder);
-		
-		List<GameObject> gameObjectList = new List<GameObject> ();
-		
-		for (int i = 0; i < objectArray.Length; i++) {
-			gameObjectList.Add (objectArray [i] as GameObject);
-		}
-		
-		return gameObjectList;
-	}
 	#endregion
 	
 	#region Firearm
@@ -36,6 +24,12 @@ public class ManagerPrefab : Manager {
 	public GameObject universeMap {
 		get {
 			return GameObjectResource ("Map/Universe");
+		}
+	}
+	
+	public List<Material> skybox {
+		get {
+			return ListedMaterialResourceFolder ("Universe Skybox");
 		}
 	}
 	
@@ -91,9 +85,19 @@ public class ManagerPrefab : Manager {
 	#endregion
 	
 	#region Ship
-	public List<GameObject> ships {
+	public GameObject ship {
 		get {
-			return ListedGameObjectResourceFolder ("Ship");
+			return GameObjectResource ("Ship/Ship");
+		}
+	}
+	public List<GameObject> shipGraphics {
+		get {
+			return ListedGameObjectResourceFolder ("Ship/Graphics");
+		}
+	}
+	public List<Material> shipsTrails {
+		get {
+			return ListedMaterialResourceFolder ("Ship/Trail");
 		}
 	}
 	#endregion
@@ -131,13 +135,40 @@ public class ManagerPrefab : Manager {
 	#region Tile
 	#endregion
 	
-	List<Texture2D>  ListedTexture2DResourceFolder (string folder) {
+	List<GameObject> ListedGameObjectResourceFolder (string folder) {
+		Object[] objectArray = Resources.LoadAll (folder);
+		
+		List<GameObject> gameObjectList = new List<GameObject> ();
+		
+		for (int i = 0; i < objectArray.Length; i++) {
+			if (objectArray [i] as GameObject != null) 
+				gameObjectList.Add (objectArray [i] as GameObject);
+		}
+		
+		return gameObjectList;
+	}
+	
+	List<Texture2D> ListedTexture2DResourceFolder (string folder) {
 		Object[] objectArray = Resources.LoadAll (folder);
 		
 		List<Texture2D> gameObjectList = new List<Texture2D> ();
 		
 		for (int i = 0; i < objectArray.Length; i++) {
-			gameObjectList.Add (objectArray [i] as Texture2D);
+			if (objectArray [i] as Texture2D != null) 
+				gameObjectList.Add (objectArray [i] as Texture2D);
+		}
+		
+		return gameObjectList;
+	}
+	
+	List<Material> ListedMaterialResourceFolder (string folder) {
+		Object[] objectArray = Resources.LoadAll (folder);
+		
+		List<Material> gameObjectList = new List<Material> ();
+		
+		for (int i = 0; i < objectArray.Length; i++) {
+			if (objectArray [i] as Material != null) 
+				gameObjectList.Add (objectArray [i] as Material);
 		}
 		
 		return gameObjectList;

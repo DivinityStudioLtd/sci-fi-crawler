@@ -20,7 +20,8 @@ public class MapMission : Map {
 	
 	public int credits;
 	
-	public GameObject warning;
+	public GameObject warning3D;
+	public GameObject warningMap;
 	
 	public int width {
 		get {
@@ -42,7 +43,9 @@ public class MapMission : Map {
 	}
 	
 	public void Update () {
-		if (solarBody != null)
-			warning.transform.position = solarBody.transform.position;
+		if (solarBody != null) {
+			warning3D.transform.position = solarBody.transform.position;
+			warningMap.transform.position = solarBody.transform.position;
+		}
 	}
 }

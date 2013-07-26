@@ -5,6 +5,10 @@ using System.Collections.Generic;
 public class ManagerGame : Manager {
 	public string gameName;
 	
+	public Camera main;
+	public Camera gUI3D;
+	public Camera mapGUI;
+	
 	public override void ManagerStart () {
 		managerInterface.SetInterface (interfaceLogin);
 		base.ManagerStart ();
@@ -39,7 +43,7 @@ public class ManagerGame : Manager {
 		managerMap.SpawnMapMission (mission);
 		InterfaceUtility.SetCameraToTransform (null, true);
 		Camera.main.farClipPlane = 0.02f;
-		managerMap.universe.transform.position = new Vector3 (0, 100, 0);
+		managerMap.universe.transform.position = new Vector3 (0, 10000, 0);
 	}
 	
 	public void MissionToUniverse () {

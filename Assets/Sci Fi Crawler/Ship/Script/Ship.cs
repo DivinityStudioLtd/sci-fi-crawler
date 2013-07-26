@@ -2,6 +2,10 @@ using UnityEngine;
 using System.Collections;
 
 public class Ship : Entity {
+	public static float TRAIL_LENGTH = 2.0f;
+	
+	public TrailRenderer trailRenderer;
+	
 	public Transform cameraPosition;
 	public void SetMainCameraToCP () {
 		InterfaceUtility.SetCameraToTransform (cameraPosition, true);

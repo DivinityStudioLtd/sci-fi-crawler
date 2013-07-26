@@ -11,13 +11,19 @@ public class FactoryMap : Factory {
 		GameObject uni = Instantiate (managerPrefab.universeMap, Vector3.zero, Quaternion.identity) as GameObject;
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
 		universe.numberOfSolarBodies = Random.Range (8, 12);
+		RenderSettings.skybox = managerPrefab.skybox [Random.Range (0, managerPrefab.skybox.Count)];
 		Shop s = (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
 	}
 	
 	static public float PLANET_SPACING = 15.0f;
 	public bool GenerateSpawnSolarBody (MapUniverse universe) {
 		if (staggerSpawnCounter == 0) {
-			SolarBody sun = (Instantiate (managerPrefab.suns [Random.Range (0, managerPrefab.suns.Count)]) as GameObject).GetComponent<SolarBody> ();
+			GameObject sunGO;
+			if (Random.Range (0, 3) == 0)
+				sunGO = managerPrefab.suns [1];
+			else
+				sunGO = managerPrefab.suns [0];
+			SolarBody sun = (Instantiate (sunGO) as GameObject).GetComponent<SolarBody> ();
 			
 			sun.transform.parent = universe.transform;
 			sun.transform.localPosition = Vector3.zero;
@@ -30,9 +36,7 @@ public class FactoryMap : Factory {
 			pa.SetParent (universe.transform, true);
 			pa.edge.localPosition = new Vector3 (0.0f, 0.0f, Random.Range ((PLANET_SPACING * (staggerSpawnCounter+1)) - 1.0f, (PLANET_SPACING * (staggerSpawnCounter+1)) + 1.0f)); 
 			
-			
 			pa.armRotate.SetRotationTime (staggerSpawnCounter * staggerSpawnCounter * staggerSpawnCounter * Random.Range (10,20)); 
-			
 			
 			SolarBody planet = (Instantiate (managerPrefab.planet) as GameObject).GetComponent<SolarBody> ();
 			planet.SetParent (pa.planetPosition, true);
@@ -107,8 +111,13 @@ public class FactoryMap : Factory {
 	#region Mission Map Generation
 	static int ROOM_BORDER = 1;
 	public void GenerateRectRooms (MapMission mission) { // completed
-		mission.compressedMap.compressedX = 10;
-		mission.compressedMap.compressedY = 10;
+		int xMap;
+		int yMap;
+		int spread = Random.Range (0, mission.level + 1);
+		xMap = 1 + spread;
+		yMap = 1 + (mission.level - spread);
+		mission.compressedMap.compressedX = 2 + xMap*4;
+		mission.compressedMap.compressedY = 2 + yMap*4;
 		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
 		
 		int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;

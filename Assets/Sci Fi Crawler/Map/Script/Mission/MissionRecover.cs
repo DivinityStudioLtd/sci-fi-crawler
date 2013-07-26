@@ -9,4 +9,8 @@ public class MissionRecover : Mission {
 	public override bool Completed () {
 		return enemies.Count == 0 && intel.collected;
 	}
+	
+	public override string MissionStatus () {
+		return "";
+	}
 }

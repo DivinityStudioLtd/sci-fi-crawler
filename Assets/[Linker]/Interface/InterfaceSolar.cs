@@ -7,6 +7,8 @@ public class InterfaceSolar : Interface {
 			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
 		else
 			managerPlayer.ship.SetMainCameraToCP ();
+		managerPlayer.ship.moveDirection = Vector3.zero;
+		managerGame.mapGUI.gameObject.SetActive (newDisplay);
 		return base.SetDisplay (newDisplay);
 	}
 	
@@ -17,6 +19,8 @@ public class InterfaceSolar : Interface {
 		buttonBar = (Screen.width - 60) / 5;
 		if (!display)
 			return;
+		
+		managerGame.mapGUI.transform.position = managerPlayer.ship.transform.position + new Vector3 (0, 40.0f, 0);
 		
 		SolerViewPositioning ();
 		
@@ -40,6 +44,7 @@ public class InterfaceSolar : Interface {
 			managerPlayer.ship.graphic.rotation = Quaternion.identity;
 			
 			managerPlayer.ship.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+			managerPlayer.ship.trailRenderer.time = 0.0f;
 		}
 		if (pa != null && managerPlayer.ship.currentPlanetArm == null) {
 			pa = null;
@@ -48,6 +53,7 @@ public class InterfaceSolar : Interface {
 			managerPlayer.ship.transform.position = new Vector3 (managerPlayer.ship.transform.position.x, 0.0f, managerPlayer.ship.transform.position.z);
 			
 			managerPlayer.ship.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+			managerPlayer.ship.trailRenderer.time = Ship.TRAIL_LENGTH;
 		}
 	}
 	
@@ -98,8 +104,8 @@ public class InterfaceSolar : Interface {
 	}
 	
 	public void MenuGame () {
-        GUILayout.BeginArea (new Rect (10,10,Screen.width - 20,100));
-		GUILayout.BeginHorizontal ();
+        GUILayout.BeginArea (new Rect (10,10,Screen.width - 20,100), "box");
+		GUILayout.BeginHorizontal ("box");
 		if (GUILayout.Button ("Solar View", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceSolar);
         if (GUILayout.Button ("Inventory", GUILayout.Width (buttonBar)))
@@ -117,6 +123,7 @@ public class InterfaceSolar : Interface {
 	}
 	void MenuSolarBody () {
         GUILayout.BeginArea (new Rect (Screen.width-210,40,200,140));
+		GUILayout.BeginVertical ("box");
 	        GUILayout.Label("Location: " + selectedSolarBody.solarBodyType.ToString ());
 			if (selectedSolarBody.mapMission == null) {
 				GUILayout.Label("No mission at this location");
@@ -127,6 +134,7 @@ public class InterfaceSolar : Interface {
 		        if (GUILayout.Button ("Take Mission"))
 					managerGame.UniverseToMission (selectedSolarBody.mapMission);
 			}
+		GUILayout.EndVertical ();
         GUILayout.EndArea ();
 	}
 }

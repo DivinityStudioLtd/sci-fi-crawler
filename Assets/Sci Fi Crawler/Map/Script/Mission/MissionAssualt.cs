@@ -8,4 +8,8 @@ public class MissionAssualt : Mission {
 	public override bool Completed () {
 		return enemies.Count == 0;	
 	}
+	
+	public override string MissionStatus () {
+		return "";
+	}
 }

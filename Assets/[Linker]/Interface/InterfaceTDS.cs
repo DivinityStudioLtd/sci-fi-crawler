@@ -105,4 +105,14 @@ public class InterfaceTDS : Interface {
 	public void TouchScreen () {
 		
 	}
+	
+	void OnGUI () {
+		if (!display) 
+			return;
+		GUILayout.BeginArea (new Rect (10, 10, 200,100));
+		GUILayout.BeginVertical ("box");
+		GUILayout.Label (managerMap.currentMission.mission.MissionStatus ());
+		GUILayout.EndVertical ();
+		GUILayout.EndArea ();
+	}
 }

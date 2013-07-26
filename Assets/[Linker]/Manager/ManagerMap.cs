@@ -106,6 +106,8 @@ public class ManagerMap : Manager {
 		mission.solarBody.mapMission = null;
 		mission.solarBody = null;
 		managerMapState = ManagerMapState.RoomRects;
+		Destroy (currentMission.warning3D);
+		Destroy (currentMission.warningMap);
 	}
 	
 	public void UnspawnCurrentMapMission () {

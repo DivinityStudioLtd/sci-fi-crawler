@@ -8,4 +8,5 @@ abstract public class Mission: Entity {
 	}
 	
 	public abstract bool Completed ();
+	public abstract string MissionStatus ();
 }

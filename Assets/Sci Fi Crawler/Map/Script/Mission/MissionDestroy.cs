@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections;
 
-public class MissionDestroy : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
+public class MissionDestroy : Mission {
+	public override bool Completed () {
+		return true;	
+		
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	public override string MissionStatus () {
+		return "";
 	}
 }
