@@ -104,5 +104,6 @@ public enum DamageType {
 public enum TileType {
 	None,
 	Hallway,
-	Room
+	Room,
+	Door
 }

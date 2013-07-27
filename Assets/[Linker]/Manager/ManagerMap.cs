@@ -113,6 +113,54 @@ public class ManagerMap : Manager {
 	public void UnspawnCurrentMapMission () {
 		Destroy (currentMission.gameObject);
 	}
+
+	public List<Tile> Path (Tile startTile, Tile endTile) {
+		for (int i = 0; i < currentMission.width; i++)
+			for (int j = 0; j < currentMission.height; j++)
+				currentMission.mapTiles [i,j].parent = null;
+		
+		List<Tile> possibleTiles;
+		startTile.pathCost = 0;
+		possibleTiles.Add (startTile);
+		Tile cheapestTile;
+		List<Tile> surroundingTiles;
+		while (endTile.parent == null && possibleTiles.Count < 0) {
+			cheapestTile = possibleTiles [0];
+			for (int i = 1; i < possibleTiles.Count; i++)
+				if (possibleTiles [i].pathCost < cheapestTile.pathCost)
+					cheapestTile = possibleTiles [i];
+			possibleTiles.Remove (cheapestTile);
+			
+			surroundingTiles.Clear ();
+			if (cheapestTile.x < 0)
+				if (currentMission.mapTiles [cheapestTile.x - 1, cheapestTile.y] != null)
+					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x - 1, cheapestTile.y]);
+			if (cheapestTile.x > currentMission.width - 1)
+				if (currentMission.mapTiles [cheapestTile.x + 1, cheapestTile.y] != null)
+					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x + 1, cheapestTile.y]);
+			if (cheapestTile.y < 0)
+				if (currentMission.mapTiles [cheapestTile.x, cheapestTile.y - 1] != null)
+					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x, cheapestTile.y - 1]);
+			if (cheapestTile.y > currentMission.height - 1)
+				if (currentMission.mapTiles [cheapestTile.x, cheapestTile.y + 1] != null)
+					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x, cheapestTile.y + 1]);
+			
+			foreach (Tile t in surroundingTiles)
+				if (t.parent == null) {
+					t.parent = cheapestTile;
+					t.pathCost = cheapestTile.pathCost + 1;
+					possibleTiles.Add (t);
+				}
+		}
+		
+		List<Tile> path = new List<Tile> ();
+		Tile backTrackTile = endTile;
+		while (backTrackTile != null) {
+			path.Add (backTrackTile);
+			backTrackTile = backTrackTile.parent;
+		}
+		return path;
+	}
 }
 
 public enum ManagerMapState {

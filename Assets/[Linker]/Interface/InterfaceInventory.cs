@@ -73,7 +73,7 @@ public class InterfaceInventory : Interface {
 		
 		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.powers.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			Power p = managerPlayer.playerInventory.powers [i].GetComponent<Power> ();
 			GUILayout.Label (p.ToString ());
 			
@@ -98,7 +98,7 @@ public class InterfaceInventory : Interface {
 		GUILayout.EndScrollView ();
 	}
 	public void BottomRightSelectedPower () {
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal ("box");
 		foreach (GameObject go in managerPlayer.selected.powers) {
 			Power p = go.GetComponent<Power> ();
 			GUILayout.Label (p.ToString ());
@@ -114,7 +114,7 @@ public class InterfaceInventory : Interface {
 		
 		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.firearms.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			Firearm f = managerPlayer.playerInventory.firearms [i].GetComponent<Firearm> ();
 			GUILayout.Label (f.ToString ());
 			
@@ -135,7 +135,7 @@ public class InterfaceInventory : Interface {
 		GUILayout.EndScrollView ();
 	}
 	public void BottomRightSelectedFirearm () {
-		GUILayout.BeginHorizontal ();
+		GUILayout.BeginHorizontal ("box");
 		foreach (GameObject go in managerPlayer.selected.firearms) {
 			Firearm f = go.GetComponent<Firearm> ();
 			GUILayout.Label (f.ToString ());
@@ -151,7 +151,7 @@ public class InterfaceInventory : Interface {
 		
 		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.bodies.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			Controller c = managerPlayer.playerInventory.bodies [i].GetComponent<Controller> ();
 			GUILayout.Label (c.ToString ());
 			
@@ -166,7 +166,11 @@ public class InterfaceInventory : Interface {
 		GUILayout.EndScrollView ();
 	}
 	public void BottomRightSelectedBody () {
-		GUILayout.Label (managerPlayer.selected.bodies [0].GetComponent <Controller> ().ToString ());
+		GUILayout.BeginHorizontal ("box");
+		foreach (GameObject go in managerPlayer.selected.firearms) {
+			GUILayout.Label (go.GetComponent <Controller> ().ToString ());
+		}
+		GUILayout.EndHorizontal ();
 	}
 	
 	void Swap (List<GameObject> toList, int to, List<GameObject> fromList, int fro) {

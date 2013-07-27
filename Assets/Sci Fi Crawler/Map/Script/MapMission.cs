@@ -18,6 +18,8 @@ public class MapMission : Map {
 	public MissionType missionType;
 	public Mission mission;
 	
+	public Tile[,] mapTiles;
+	
 	public int credits;
 	
 	public GameObject warning3D;
@@ -48,4 +50,28 @@ public class MapMission : Map {
 			warningMap.transform.position = solarBody.transform.position;
 		}
 	}
+	/*
+	public string MapSting () {
+		string returnString = "";
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
+				if (mapTiles [i,j] == null)
+					returnString += "n";
+				else 
+					switch (mapTiles [i,j].mapTileType) {
+					case MapTileType.Wall:
+					returnString += "W";
+						break;
+					case MapTileType.Floor:
+					returnString += "F";
+						break;
+					case MapTileType.Door:
+					returnString += "D";
+						break;
+					}
+			}
+			returnString+="\n";
+		}
+		return returnString;
+	}*/
 }

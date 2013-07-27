@@ -6,7 +6,14 @@ public class SunGenerator : MonoBehaviour {
 	public List<GameObject> suns;
 	
 	void Start () {
-		Color c = new Color (Random.Range (0.0f, 1.0f), Random.Range (0.0f, 1.0f), Random.Range (0.0f, 1.0f));
+		float i = Random.Range (0.0f, 1.0f);
+		float j = Random.Range (0.0f, 1.0f - i);
+		
+		Color c = new Color (i, j, 1.0f - i - j);
+		
+		
+		
+		
 		float sunRadius;
 		if (suns.Count == 2)
 			sunRadius = Random.Range (7.5f, 10.0f);

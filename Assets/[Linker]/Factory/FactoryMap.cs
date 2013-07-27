@@ -119,7 +119,7 @@ public class FactoryMap : Factory {
 		mission.compressedMap.compressedX = 2 + xMap*4;
 		mission.compressedMap.compressedY = 2 + yMap*4;
 		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
-		
+		mission.mapTiles = new Tile [mission.width, mission.height];
 		int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;
 		
 		int tier1 = 0;
