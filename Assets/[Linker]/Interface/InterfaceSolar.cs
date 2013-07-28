@@ -39,6 +39,7 @@ public class InterfaceSolar : Interface {
 			pa = managerPlayer.ship.currentPlanetArm;
 			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
 			managerPlayer.ship.moveDirection = Vector3.zero;
+			managerPlayer.ship.rotationDirection = 0.0f;
 			managerPlayer.ship.rigidbody.velocity = Vector3.zero;
 			managerPlayer.ship.SetParent (pa.shipPosition, true);
 			managerPlayer.ship.graphic.rotation = Quaternion.identity;
@@ -60,7 +61,8 @@ public class InterfaceSolar : Interface {
 	SolarBody selectedSolarBody;
 	void KeyboardMouse () {
 		if (pa == null) {
-			managerPlayer.ship.moveDirection = new Vector3 (Input.GetAxis("Vertical"), 0.0f, -Input.GetAxis("Horizontal"));
+			managerPlayer.ship.rotationDirection = Input.GetAxis ("Horizontal");
+			managerPlayer.ship.moveDirection = managerPlayer.ship.graphic.transform.forward * Input.GetAxis ("Vertical");
 		} else {
 			if (Input.GetButtonDown ("Fire1")) {
 				foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.mainCamera.ScreenPointToRay (Input.mousePosition))) {
