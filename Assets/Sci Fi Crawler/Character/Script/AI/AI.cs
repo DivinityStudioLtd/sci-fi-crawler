@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-abstract public class AI : MonoBehaviour {
+abstract public class AI : Entity {
 	public List<GameObject> possibleFirearms;
 	public List<GameObject> possiblePowers;
 	
@@ -78,8 +78,8 @@ abstract public class AI : MonoBehaviour {
 				None (); break;
 			case AIState.Idle :	
 				Idle (); break;
-			case AIState.Movement :	
-				Movement (); break;
+			case AIState.Move :	
+				Move (); break;
 			case AIState.Attack :	
 				Attack (); break;
 		}
@@ -101,6 +101,9 @@ abstract public class AI : MonoBehaviour {
 	}
 	
 	virtual protected void Idle () {
+	}
+	
+	virtual protected void Move () {
 	}
 	
 	virtual protected void Movement () {

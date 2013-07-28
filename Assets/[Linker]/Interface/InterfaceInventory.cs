@@ -167,7 +167,7 @@ public class InterfaceInventory : Interface {
 	}
 	public void BottomRightSelectedBody () {
 		GUILayout.BeginHorizontal ("box");
-		foreach (GameObject go in managerPlayer.selected.firearms) {
+		foreach (GameObject go in managerPlayer.selected.bodies) {
 			GUILayout.Label (go.GetComponent <Controller> ().ToString ());
 		}
 		GUILayout.EndHorizontal ();

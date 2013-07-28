@@ -89,7 +89,7 @@ public class InterfaceShop : Interface {
 		buyScroll = GUILayout.BeginScrollView (buyScroll, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		
 		for (int i = 0; i < list.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			switch (itemBucketState) {
 			case ItemBucketState.Body:
 				GUILayout.Label (list [i].GetComponent<Controller> ().ToString ());
@@ -189,7 +189,7 @@ public class InterfaceShop : Interface {
 		
 		
 		for (int i = 0; i < preList.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			switch (itemBucketState) {
 			case ItemBucketState.Body:
 				GUILayout.Label (preList [i].GetComponent<Controller> ().ToString ());
@@ -240,7 +240,7 @@ public class InterfaceShop : Interface {
 		}
 		
 		for (int i = 0; i < list.Count; i++) {
-			GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ("box");
 			switch (itemBucketState) {
 			case ItemBucketState.Body:
 				GUILayout.Label (list [i].GetComponent<Controller> ().ToString ());

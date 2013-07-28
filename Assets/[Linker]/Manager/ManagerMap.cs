@@ -119,11 +119,11 @@ public class ManagerMap : Manager {
 			for (int j = 0; j < currentMission.height; j++)
 				currentMission.mapTiles [i,j].parent = null;
 		
-		List<Tile> possibleTiles;
+		List<Tile> possibleTiles = new List<Tile> ();
 		startTile.pathCost = 0;
 		possibleTiles.Add (startTile);
 		Tile cheapestTile;
-		List<Tile> surroundingTiles;
+		List<Tile> surroundingTiles = new List<Tile> ();
 		while (endTile.parent == null && possibleTiles.Count < 0) {
 			cheapestTile = possibleTiles [0];
 			for (int i = 1; i < possibleTiles.Count; i++)

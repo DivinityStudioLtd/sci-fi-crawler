@@ -56,7 +56,7 @@ public enum AIState {
 	Wander,
 	Attack,
 	Chase, 
-	Movement, 
+	Move, 
 	Defend, 
 	Flee, 
 	Avoid, 
