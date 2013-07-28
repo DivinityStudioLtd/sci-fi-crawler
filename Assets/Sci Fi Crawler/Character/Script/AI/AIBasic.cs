@@ -40,7 +40,7 @@ public class AIBasic : AI {
 		}
 			controller.transform.LookAt (new Vector3 (CurrentTarget().transform.position.x, controller.transform.position.y, CurrentTarget().transform.position.z));
 		if (Vector3.Distance (transform.position, CurrentTarget ().transform.position) > 6) {
-			controller.characterMotor.moveDirection = transform.forwardd;
+			controller.characterMotor.moveDirection = transform.forward;
 		} else {
 			controller.characterMotor.moveDirection = Vector3.zero;
 		}
