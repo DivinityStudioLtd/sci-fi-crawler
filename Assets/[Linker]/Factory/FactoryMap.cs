@@ -113,11 +113,11 @@ public class FactoryMap : Factory {
 	public void GenerateRectRooms (MapMission mission) { // completed
 		int xMap;
 		int yMap;
-		int spread = Random.Range (0, mission.level + 1);
+		int spread = Random.Range (0, (mission.level + 1));
 		xMap = 1 + spread;
 		yMap = 1 + (mission.level - spread);
-		mission.compressedMap.compressedX = 2 + xMap*4;
-		mission.compressedMap.compressedY = 2 + yMap*4;
+		mission.compressedMap.compressedX = 2 + xMap * 4;
+		mission.compressedMap.compressedY = 2 + yMap * 4;
 		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
 		mission.mapTiles = new Tile [mission.width, mission.height];
 		int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;
@@ -125,8 +125,12 @@ public class FactoryMap : Factory {
 		int tier1 = 0;
 		int tier2 = 0;
 		int tier3 = 0;
-		for (int i = 0; i < rectGenerationUnits; i++) {
-			switch (Random.Range (0,2)) {
+		tier2++;
+		tier1++;
+		tier1++;
+		
+		for (int i = 1; i < rectGenerationUnits; i++) {
+			switch (Random.Range (0,3)) {
 			case 0:
 				tier3++;
 				break;
@@ -138,26 +142,24 @@ public class FactoryMap : Factory {
 			}
 		}
 		
-		int totalTries = 100;
-		while (totalTries > 0) {
+		//int totalTries = 100;
+		while (true){//totalTries > 0) {
 			if (tier3 > 0) {
 				if (AddRectRoom (new RectRoom (Random.Range (1, mission.compressedMap.compressedX - 2), Random.Range (1, mission.compressedMap.compressedY - 2), 2, 2), mission))
 					tier3--;
-				totalTries--;
 			} else if (tier2 > 0) {
 				int ran = Random.Range (0, 2);
 				int x = ran == 0? 1:2;
 				int y = ran == 0? 2:1;
 				if (AddRectRoom (new RectRoom (Random.Range (1, mission.compressedMap.compressedX - x), Random.Range (1, mission.compressedMap.compressedY - y), x, y), mission))
 					tier2--;
-				totalTries--;
 			} else if (tier1 > 0) {
 				if (AddRectRoom (new RectRoom (Random.Range (1, mission.compressedMap.compressedX - 1), Random.Range (1, mission.compressedMap.compressedY - 1), 1, 1), mission))
 					tier1--;
-				totalTries--;
 			} else {
 				break;	
 			}
+			//totalTries--;
 		}
 		
 		mission.compressedMap.rectRooms [mission.compressedMap.rectRooms.Count - 1].startingRoom = true;
@@ -170,7 +172,7 @@ public class FactoryMap : Factory {
 		return true;
 	}
 	public void HallwaysFromRectRooms (MapMission mission) {
-		if (mission.compressedMap.rectRooms.Count > 2)
+		if (mission.compressedMap.rectRooms.Count > 1)
 			foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 				//get a unique other room
 				RectRoom o_rr;
@@ -211,33 +213,30 @@ public class FactoryMap : Factory {
 					}
 				}
 				mission.compressedMap.compressedTiles [startX,startY] = TileType.Hallway;
-				
 				while (!(startX == endX && startY == endY)) {
 					if (startX != endX && startY != endY) {
 						if (Random.Range (0, 2) ==0) {
-						if (startX > endX)
-							startX--;
-						else
-							startX++;
-							
+							if (startX < endX)
+								startX++;
+							else
+								startX--;
 						} else {
-						if (startY > endY)
-							startY--;
-						else
-							startY++;
-							
+							if (startY < endY)
+								startY++;
+							else
+								startY--;
 						}
 						
 					} else if (startX != endX) {
-						if (startX > endX)
-							startX--;
-						else
+						if (startX < endX)
 							startX++;
-					} else if (startY != endY) {
-						if (startY > endY)
-							startY--;
 						else
+							startX--;
+					} else if (startY != endY) {
+						if (startY < endY)
 							startY++;
+						else
+							startY--;
 					}
 				mission.compressedMap.compressedTiles [startX,startY] = TileType.Hallway;
 				}
@@ -261,7 +260,6 @@ public class FactoryMap : Factory {
 	}
 	public Challenge GenerateChallenge (int difficulty) {
 		Challenge c = new Challenge ();
-		//c.difficulty = difficulty;
 		
 		int level1 = 0;
 		int level2 = 0;
@@ -539,28 +537,32 @@ public class FactoryMap : Factory {
 	}
 	
 	public bool SpawnRewards (MapMission mission) {
-		GameObject go = Instantiate (managerPrefab.containers [Random.Range (0, managerPrefab.containers.Count)], MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room), Quaternion.identity) as GameObject;
+		if (!(staggerSpawnCounter < mission.rewards.Count)) {
+			staggerSpawnCounter = 0;
+			return true;
+		}
+			
+		GameObject go = Instantiate (managerPrefab.containers [Random.Range (0, managerPrefab.containers.Count)], MapMission.RandomPositionInRoom (mission.rewards [staggerSpawnCounter].room), Quaternion.identity) as GameObject;
 		
 		go.GetComponent<Container> ().reward = mission.rewards [staggerSpawnCounter].reward;
 		
 		staggerSpawnCounter++;
-		if (staggerSpawnCounter < mission.rewards.Count)
 			return false;
-		staggerSpawnCounter = 0;
-		return true;
 	}
 	
 	public bool SpawnChallenges (MapMission mission) {
+		if (!(staggerSpawnCounter < mission.challenges.Count)) {
+			staggerSpawnCounter = 0;
+			return true;
+		}
+			
 		RectRoom rr = mission.challenges [staggerSpawnCounter].room;
 		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
 			
 			factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
 		}
 		staggerSpawnCounter++;
-		if (staggerSpawnCounter < mission.challenges.Count)
-			return false;
-		staggerSpawnCounter = 0;
-		return true;
+		return false;
 	}
 	
 	public void SpawnRoaming (MapMission mission) {

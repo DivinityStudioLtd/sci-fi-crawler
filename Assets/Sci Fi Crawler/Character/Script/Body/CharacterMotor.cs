@@ -8,6 +8,10 @@ public class CharacterMotor : MonoBehaviour {
 	
 	public float maxSpeed;
 	
+	public void Start () {
+		characterController.Move (transform.forward);	
+	}
+	
 	public void Update () {
 		characterController.Move (moveDirection.normalized * maxSpeed * Time.deltaTime);
 	}

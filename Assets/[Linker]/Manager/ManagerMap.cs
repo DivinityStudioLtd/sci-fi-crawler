@@ -29,7 +29,7 @@ public class ManagerMap : Manager {
 			break;
 		case ManagerMapState.GeneratePlaceHolderMissions :
 			if (missions.Count == 0)
-				GeneratePlaceHolderMissions (10);//(Random.Range (5,10));
+				GeneratePlaceHolderMissions (100);//(Random.Range (5,10));
 			if (ungeneratedMissions > 0) {
 				ungeneratedMissions--;
 				factoryMap.GeneratePlaceHolderMission (universe);
@@ -69,8 +69,10 @@ public class ManagerMap : Manager {
 			break;
 			
 		case ManagerMapState.SpawnTiles :
-			if (factoryMap.SpawnTiles (currentMission))
+			if (factoryMap.SpawnTiles (currentMission)) {
 				managerMapState = ManagerMapState.GenerateSpawnMission;
+				//print (currentMission.MapSting ());
+			}
 			break;
 		case ManagerMapState.GenerateSpawnMission :
 			factoryMap.GenerateSpawnMission (currentMission);
@@ -113,50 +115,75 @@ public class ManagerMap : Manager {
 	public void UnspawnCurrentMapMission () {
 		Destroy (currentMission.gameObject);
 	}
-
+	 
 	public List<Tile> Path (Tile startTile, Tile endTile) {
+		if (currentMission == null || startTile == null || endTile == null)
+			return new List<Tile> ();
+		
 		for (int i = 0; i < currentMission.width; i++)
 			for (int j = 0; j < currentMission.height; j++)
-				currentMission.mapTiles [i,j].parent = null;
+				if (currentMission.mapTiles [i, j] != null)
+					{currentMission.mapTiles [i, j].PathReset ();}
+		
 		
 		List<Tile> possibleTiles = new List<Tile> ();
 		startTile.pathCost = 0;
 		possibleTiles.Add (startTile);
-		Tile cheapestTile;
+		
+		Tile cheapestTile = null;
 		List<Tile> surroundingTiles = new List<Tile> ();
-		while (endTile.parent == null && possibleTiles.Count < 0) {
+		int tries = 1000;
+		
+		while (
+			endTile.parent == null &&
+			possibleTiles.Count > 0 &&
+			tries > 0) {
 			cheapestTile = possibleTiles [0];
+			
 			for (int i = 1; i < possibleTiles.Count; i++)
 				if (possibleTiles [i].pathCost < cheapestTile.pathCost)
 					cheapestTile = possibleTiles [i];
 			possibleTiles.Remove (cheapestTile);
 			
-			surroundingTiles.Clear ();
-			if (cheapestTile.x < 0)
-				if (currentMission.mapTiles [cheapestTile.x - 1, cheapestTile.y] != null)
-					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x - 1, cheapestTile.y]);
-			if (cheapestTile.x > currentMission.width - 1)
-				if (currentMission.mapTiles [cheapestTile.x + 1, cheapestTile.y] != null)
-					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x + 1, cheapestTile.y]);
-			if (cheapestTile.y < 0)
-				if (currentMission.mapTiles [cheapestTile.x, cheapestTile.y - 1] != null)
-					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x, cheapestTile.y - 1]);
-			if (cheapestTile.y > currentMission.height - 1)
-				if (currentMission.mapTiles [cheapestTile.x, cheapestTile.y + 1] != null)
-					surroundingTiles.Add (currentMission.mapTiles [cheapestTile.x, cheapestTile.y + 1]);
-			
-			foreach (Tile t in surroundingTiles)
-				if (t.parent == null) {
+			surroundingTiles = new List<Tile> ();
+			if (cheapestTile.x > 0) {
+				Tile t = currentMission.mapTiles [cheapestTile.x - 1, cheapestTile.y];
+				if (t != null && t.mapTileType != MapTileType.Wall)
+					surroundingTiles.Add (t);
+			}
+			if (cheapestTile.x < currentMission.width - 1) {
+				Tile t = currentMission.mapTiles [cheapestTile.x + 1, cheapestTile.y];
+				if (t != null && t.mapTileType != MapTileType.Wall)
+					surroundingTiles.Add (t);
+			}
+			if (cheapestTile.y > 0) {
+				Tile t = currentMission.mapTiles [cheapestTile.x, cheapestTile.y - 1];
+				if (t != null && t.mapTileType != MapTileType.Wall)
+					surroundingTiles.Add (t);
+			}
+			if (cheapestTile.y < currentMission.height - 1) {
+				Tile t = currentMission.mapTiles [cheapestTile.x, cheapestTile.y + 1];
+				if (t != null && t.mapTileType != MapTileType.Wall)
+					surroundingTiles.Add (t);
+			}
+			foreach (Tile t in surroundingTiles) 
+				if (t.parent == null && t != startTile) {
 					t.parent = cheapestTile;
 					t.pathCost = cheapestTile.pathCost + 1;
 					possibleTiles.Add (t);
 				}
+			tries--;
+		}
+		
+		if (endTile.parent == null || !(tries > 0)) {
+			Debug.LogError ("No path found");
+			return new List<Tile> ();
 		}
 		
 		List<Tile> path = new List<Tile> ();
 		Tile backTrackTile = endTile;
 		while (backTrackTile != null) {
-			path.Add (backTrackTile);
+			path.Insert (0, backTrackTile);
 			backTrackTile = backTrackTile.parent;
 		}
 		return path;

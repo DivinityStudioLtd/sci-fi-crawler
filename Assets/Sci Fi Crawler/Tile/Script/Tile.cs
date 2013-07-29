@@ -16,6 +16,11 @@ public class Tile : Entity {
 	}
 	
 	public MapTileType mapTileType;
+	
+	public void PathReset () {
+		parent = null;
+		pathCost = 0;
+	}
 }
 
 public enum MapTileType {

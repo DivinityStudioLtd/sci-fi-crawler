@@ -27,13 +27,13 @@ public class MapMission : Map {
 	
 	public int width {
 		get {
-			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedX; 	
+			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedX + 1; 	
 		}
 	}
 	
 	public int height {
 		get {
-			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedY;	
+			return CompressedMap.COMPRESSION_RATIO * compressedMap.compressedY + 1;	
 		}
 	}
 	
@@ -50,7 +50,7 @@ public class MapMission : Map {
 			warningMap.transform.position = solarBody.transform.position;
 		}
 	}
-	/*
+	
 	public string MapSting () {
 		string returnString = "";
 		for (int i = 0; i < width; i++) {
@@ -73,5 +73,5 @@ public class MapMission : Map {
 			returnString+="\n";
 		}
 		return returnString;
-	}*/
+	}
 }

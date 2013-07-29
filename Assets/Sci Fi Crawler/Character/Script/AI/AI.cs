@@ -7,6 +7,7 @@ abstract public class AI : Entity {
 	public List<GameObject> possiblePowers;
 	
 	public void Start () {
+		controller.characterMotor.characterController.Move (Vector3.forward);	
 		aIState = AIState.Idle;	
 	}
 	
@@ -37,8 +38,8 @@ abstract public class AI : Entity {
 	#endregion
 	
 	#region Target Tile
-	protected List<Tile> path = new List<Tile> ();
-	protected int currentTileI = 0;
+	public List<Tile> path = new List<Tile> ();
+	public int currentTileI = 0;
 	protected Tile targetCurrentTile; 
 	public float movementStateThreshold; 
 	protected bool TargetMoved () {
@@ -78,7 +79,7 @@ abstract public class AI : Entity {
 				None (); break;
 			case AIState.Idle :	
 				Idle (); break;
-			case AIState.Move :	
+			case AIState.Move :
 				Move (); break;
 			case AIState.Attack :	
 				Attack (); break;
@@ -106,9 +107,30 @@ abstract public class AI : Entity {
 	virtual protected void Move () {
 	}
 	
-	virtual protected void Movement () {
-	}
-	
 	virtual protected void Attack () {
 	}
+	/*
+	public bool TileBlockingTarget () {
+		if (targets.Count == 0)
+			return false;
+		
+		RaycastHit[] hits = Physics.RaycastAll (
+			controller.transform.position, 
+			CurrentTarget ().transform.position - controller.transform.position, 
+			Vector3.Distance (controller.transform.position, CurrentTarget ().transform.position)
+			);
+		foreach (RaycastHit hit in hits) {
+			if (hit.collider.isTrigger)
+				continue;
+			Entity e = FindUtility.FindEntity (hit.collider);
+			
+			if (e == null)
+				continue;
+			
+			if (e as Tile != null)
+				if ((e as Tile).mapTileType == MapTileType.Wall)
+					return true;
+		}
+		return false;
+	}*/
 }
