@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class ManagerGame : Manager {
 	public string gameName;
+	public bool developBuild;
 	
 	public Camera main;
 	public Camera gUI3D;

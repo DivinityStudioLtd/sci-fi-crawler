@@ -7,7 +7,8 @@ public class Rotate : MonoBehaviour {
 	
 	public void SetRotationTime (float newTime) {
 		rotationTime = newTime;
-		currentRotationTime = Random.Range (0, rotationTime);
+		if (!Linker.managerGame.developBuild)
+			currentRotationTime = Random.Range (0, rotationTime);
 	}
 	
 	void FixedUpdate () {
@@ -17,6 +18,5 @@ public class Rotate : MonoBehaviour {
 		if (currentRotationTime > rotationTime)
 			currentRotationTime -= rotationTime;
 		transform.rotation = Quaternion.Euler (new Vector3 (0.0f, currentRotationTime / rotationTime * 360.0f, 0.0f));
-		
 	}
 }

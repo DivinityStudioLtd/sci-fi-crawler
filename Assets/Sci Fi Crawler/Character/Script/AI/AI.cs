@@ -25,12 +25,16 @@ abstract public class AI : Entity {
 			return targets [0];
 		return null;
 	}
-	protected void AddTarget (Controller c) {
-		if (!targets.Contains (c))
+	protected bool AddTarget (Controller c) {
+		if (!targets.Contains (c)) {
 			targets.Insert (0, c);	
+			return true;
+		}
+		return false;
 	}
-	protected void RemoveTarget (Controller c) {
+	protected bool RemoveTarget (Controller c) {
 		targets.Remove (c);	
+		return true;
 	}
 	protected void RemoveAllTargets () {
 		targets = new List<Controller> ();	
@@ -39,11 +43,14 @@ abstract public class AI : Entity {
 	
 	#region Target Tile
 	public List<Tile> path = new List<Tile> ();
-	public int currentTileI = 0;
-	protected Tile targetCurrentTile; 
+	protected int currentTileI = 0; 
 	public float movementStateThreshold; 
 	protected bool TargetMoved () {
-		targetCurrentTile = CurrentTarget ().currentTile.currentTile;
+		if (CurrentTarget () == null)
+			return false;
+		if (path.Count == 0)
+			return true;
+		Tile targetCurrentTile = CurrentTarget ().currentTile.currentTile;
 		return path [path.Count - 1].x != targetCurrentTile.x || path[path.Count - 1].y != targetCurrentTile.y;
 	}
 	#endregion
