@@ -29,7 +29,7 @@ public class ManagerMap : Manager {
 			break;
 		case ManagerMapState.GeneratePlaceHolderMissions :
 			if (missions.Count == 0)
-				GeneratePlaceHolderMissions (100);//(Random.Range (5,10));
+				GeneratePlaceHolderMissions (Random.Range (5,10));
 			if (ungeneratedMissions > 0) {
 				ungeneratedMissions--;
 				factoryMap.GeneratePlaceHolderMission (universe);
