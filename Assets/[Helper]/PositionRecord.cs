@@ -14,7 +14,7 @@ public class PositionRecord : MonoBehaviour {
 		currentTime -= Time.deltaTime;
 		
 		if (currentTime <= 0.0f) {
-			currentTime += 0.25f;
+			currentTime += 0.125f;
 			positionRecords.Insert (0, transform.position);
 			positionRecords.RemoveAt (positionRecords.Count - 1);
 		}
@@ -22,6 +22,6 @@ public class PositionRecord : MonoBehaviour {
 	
 	public Vector3 TargetPosition (int level) {
 		level = Mathf.Clamp (level, 0, positionRecords.Count - 2);
-		return Vector3.Lerp (positionRecords [level], positionRecords [level+1], Mathf.Clamp (currentTime * 4, 0.0f, 1.0f));
+		return Vector3.Lerp (positionRecords [level], positionRecords [level+1], Mathf.Clamp (currentTime * 8, 0.0f, 1.0f));
 	}
 }

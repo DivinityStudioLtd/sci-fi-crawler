@@ -4,6 +4,10 @@ using System.Collections;
 public class Firearm : Entity {
 	public string description;
 	
+	void Start () {
+		firingTransform.renderer.enabled = false;	
+	}
+	
 	public int credits;
 	
 	public Controller controller;
