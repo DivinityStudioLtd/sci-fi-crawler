@@ -106,7 +106,7 @@ public class InterfaceSolar : Interface {
 	}
 	
 	public void MenuGame () {
-        GUILayout.BeginArea (new Rect (10,10,Screen.width - 20,100), "box");
+        GUILayout.BeginArea (new Rect (10,10,Screen.width - 20,100));
 		GUILayout.BeginHorizontal ("box");
 		if (GUILayout.Button ("Solar View", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceSolar);

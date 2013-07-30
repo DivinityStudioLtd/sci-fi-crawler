@@ -12,23 +12,23 @@ public class Character : Entity {
 	#region Health Energy
 	public float maxHealth {
 		get {
-			return (stats.endurance + (stats.strength / 0.5f));	
+			return (stats.endurance + (stats.strength / 0.5f) * 4);	
 		}
 	}
 	public float currentHealth;
-	public void ChangeHealth (int change, DamageType damageType) {
+	public void ChangeHealth (float change, DamageType damageType) {
 		if (change < 0)
-			change = (int) ((float) change * TotalResistance (damageType)); 
+			change =  change * TotalResistance (damageType); 
 		currentHealth += change;
 		currentHealth = Mathf.Clamp (currentHealth, 0.0f, maxHealth);	
 	}
 	public float maxEnergy {
 		get {
-			return (stats.resolve + (stats.intelligence / 0.5f));	
+			return (stats.resolve + (stats.intelligence / 0.5f) * 2);	
 		}
 	}
 	public float currentEnergy;
-	public void ChangeEnergy (int change) {
+	public void ChangeEnergy (float change) {
 		currentEnergy += change;
 		currentEnergy = Mathf.Clamp (currentEnergy, 0.0f, maxEnergy);
 	}

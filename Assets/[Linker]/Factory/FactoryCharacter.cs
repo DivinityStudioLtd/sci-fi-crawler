@@ -8,19 +8,22 @@ public class FactoryCharacter : Factory {
 		Controller ec = e.GetComponent<Controller> ();
 		AI ai = e.GetComponent<AI> ();
 		ec.firearms.Add ((Instantiate (ai.possibleFirearms [Random.Range (0, ai.possibleFirearms.Count)]) as GameObject).GetComponent<Firearm> ());
+		ec.firearms [0].RandomizeStats ();
 		ec.SetupFirearms ();
 	}
 	public void SpawnPlayerCharacter (Vector3 spawnPosition) {
 		managerPlayer.currentBody = (Instantiate (managerPlayer.selected.bodies[0], spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
-	
+		managerPlayer.currentBody.gameObject.SetActive (true);
 		foreach (GameObject go in managerPlayer.selected.firearms) {
 			Firearm f = (Instantiate (go) as GameObject).GetComponent<Firearm> ();
+			f.gameObject.SetActive (true);
 			managerPlayer.currentBody.firearms.Add (f);
 		}
 		managerPlayer.currentBody.SetupFirearms ();
 		
 		foreach (GameObject go in managerPlayer.selected.powers) {
 			Power p = (Instantiate (go) as GameObject).GetComponent<Power> ();
+			p.gameObject.SetActive (true);
 			managerPlayer.currentBody.powers.Add (p);
 		}
 		managerPlayer.currentBody.SetupPowers ();
@@ -37,11 +40,23 @@ public class FactoryCharacter : Factory {
 	
 	public void SetupPlayer () {
 		ItemBucket ib = new ItemBucket ();
-		ib.bodies.Add (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]);
-		for (int i = 0; i < 2; i++)
-			ib.firearms.Add (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]);
-		for (int i = 0; i < 3; i++)
-			ib.powers.Add (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]);
+		GameObject go = Instantiate (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]) as GameObject;
+		go.SetActive (false);
+		ib.bodies.Add (go);
+		go.transform.parent = managerPlayer.transform;
+		for (int i = 0; i < 2; i++) {
+			go = Instantiate (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]) as GameObject;
+			go.GetComponent<Firearm> ().RandomizeStats ();
+			go.SetActive (false);
+			ib.firearms.Add (go);
+			go.transform.parent = managerPlayer.transform;
+		}
+		for (int i = 0; i < 3; i++) {
+			go = Instantiate (managerPrefab.powers [Random.Range (0, managerPrefab.powers.Count)]) as GameObject;
+			go.SetActive (false);
+			ib.powers.Add (go);
+			go.transform.parent = managerPlayer.transform;
+		}
 		managerPlayer.selected = ib;
 	}
 	
@@ -49,34 +64,38 @@ public class FactoryCharacter : Factory {
 		GameObject go;
 		
 		go = (Instantiate (managerPlayer.selected.bodies [0]) as GameObject);
+		go.SetActive (true);
 		go.GetComponent<Entity> ().SetParent (ip.bodyPosition, true);
 		go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
 		
 		for (int i = 0; i < managerPlayer.selected.firearms.Count; i++) {
 			go = (Instantiate (managerPlayer.selected.firearms [i]) as GameObject);
+			go.SetActive (true);
 			go.GetComponent<Entity> ().SetParent (ip.firearmPositions [i], true);
 		}
 		
 		for (int i = 0; i < managerPlayer.selected.powers.Count; i++) {
 			go = (Instantiate (managerPlayer.selected.powers [i]) as GameObject);
+			go.SetActive (true);
 			go.GetComponent<Entity> ().SetParent (ip.powerPositions [i], true);
 		}
 	}
 	
 	public void SpawnShop (ShopPositions shopPosition, GameObject buy, GameObject sell) {
-		
 		GameObject go;
 		if (buy != null) {
-			go = (Instantiate (buy) as GameObject);
+			go = (Instantiate (buy, Vector3.zero, Quaternion.identity) as GameObject);
 			go.GetComponent <Entity> ().SetParent (shopPosition.buy, true);
 			if (go.GetComponent<Controller> () != null)
 				go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
+			go.SetActive (true);
 		}
 		if (sell != null) {
-			go = (Instantiate (sell) as GameObject);
+			go = (Instantiate (sell, Vector3.zero, Quaternion.identity) as GameObject);
 			go.GetComponent <Entity> ().SetParent (shopPosition.sell, true);
 			if (go.GetComponent<Controller> () != null)
 				go.GetComponent<Controller> ().hUD3D.gameObject.SetActive (false);
+			go.SetActive (true);
 		}
 	}
 }

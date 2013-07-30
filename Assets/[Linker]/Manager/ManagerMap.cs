@@ -126,7 +126,7 @@ public class ManagerMap : Manager {
 		for (int i = 0; i < currentMission.width; i++)
 			for (int j = 0; j < currentMission.height; j++)
 				if (currentMission.mapTiles [i, j] != null)
-					{currentMission.mapTiles [i, j].PathReset ();}
+					currentMission.mapTiles [i, j].PathReset ();
 		
 		
 		List<Tile> possibleTiles = new List<Tile> ();

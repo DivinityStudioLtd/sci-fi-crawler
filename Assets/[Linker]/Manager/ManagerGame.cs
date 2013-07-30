@@ -50,9 +50,9 @@ public class ManagerGame : Manager {
 	public void MissionToUniverse () {
 		if (managerMap.currentMission.mission.Completed ()) {
 			managerPlayer.playerInventory.credit += managerMap.currentMission.credits;
-			managerMap.GeneratePlaceHolderMissions (2);	
+			//managerMap.GeneratePlaceHolderMissions (2);	
 		} else {
-			managerMap.GeneratePlaceHolderMissions (1);	
+			//managerMap.GeneratePlaceHolderMissions (1);	
 		}
 		managerMap.universe.shop.Shuffle ();
 		managerMap.UnspawnCurrentMapMission ();

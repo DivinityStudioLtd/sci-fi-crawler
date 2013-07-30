@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Attack : MonoBehaviour {
-	public int damage;
+	public float damage;
 	public DamageType damageType;
 	public float pushPower;
 	public float range;
@@ -42,8 +42,6 @@ public class Attack : MonoBehaviour {
 		Controller c = e as Controller;
 		if (c != null && c.team != team) {
 			c.character.ChangeHealth (damage, damageType);
-		    //if (e.gameObject.rigidbody != null && !e.gameObject.rigidbody.isKinematic)
-		    //    e.rigidbody.AddForce (transform.forward * pushPower);
 			lastAttackHit = true;
 			lastHitEntertainer = c.entityName;
 			return true;

@@ -25,15 +25,28 @@ public class Shop : Entity {
 	}
 			
 	void ShuffleAid (int targetAmount, int shuffleAmount, List<GameObject> shopList, List<GameObject> resourceList) {
-		while (shopList.Count > targetAmount)
-			shopList.RemoveAt (Random.Range (0, shopList.Count));
+		while (shopList.Count > targetAmount) {
+			int i = Random.Range (0, shopList.Count);
+			GameObject temp = shopList [i];
+			shopList.RemoveAt (i);
+			Destroy (temp);
+		}
 	
-		for (int i = 0; i < shuffleAmount; i++) {
+		for (int j = 0; j < shuffleAmount; j++) {
 			if (shopList.Count == 0)
 				break;
-			shopList.RemoveAt (Random.Range (0, shopList.Count));
+			int i = Random.Range (0, shopList.Count);
+			GameObject temp = shopList [i];
+			shopList.RemoveAt (i);
+			Destroy (temp);
 		}
-		while (shopList.Count < targetAmount)
-			shopList.Add (resourceList [Random.Range (0, resourceList.Count)]);
+		while (shopList.Count < targetAmount) {
+			GameObject go = Instantiate (resourceList [Random.Range (0, resourceList.Count)]) as GameObject;
+			shopList.Add (go);
+			go.transform.parent = this.transform;
+			go.SetActive (false);
+			if (go.GetComponent<Firearm> () != null)
+				go.GetComponent<Firearm> ().RandomizeStats ();
+		}
 	}
 }

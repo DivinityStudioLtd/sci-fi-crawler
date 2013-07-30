@@ -12,12 +12,26 @@ public class ManagerCharacter : Manager {
 	}
 	public void PlayerCleanUp () {
 		foreach (ItemBucket p_ib in managerPlayer.currentBody.missionsInventory) {
-			foreach (GameObject go in p_ib.firearms)
+			GameObject go;
+			foreach (GameObject f in p_ib.firearms) {
+				go = Instantiate (f) as GameObject;
+				go.GetComponent<Firearm> ().RandomizeStats ();
+				go.transform.parent = managerPlayer.transform;
+				go.SetActive (false);
 				managerPlayer.playerInventory.firearms.Add (go);
-			foreach (GameObject go in p_ib.powers)
+			}
+			foreach (GameObject p in p_ib.powers) {
+				go = Instantiate (p) as GameObject;
+				go.transform.parent = managerPlayer.transform;
+				go.SetActive (false);
 				managerPlayer.playerInventory.powers.Add (go);
-			foreach (GameObject go in p_ib.bodies)
+			}
+			foreach (GameObject b in p_ib.bodies) {
+				go = Instantiate (b) as GameObject;
+				go.transform.parent = managerPlayer.transform;
+				go.SetActive (false);
 				managerPlayer.playerInventory.bodies.Add (go);
+			}
 			managerPlayer.playerInventory.credit += p_ib.credit;
 		}
 		Destroy (managerPlayer.currentBody.gameObject);
