@@ -115,6 +115,12 @@ public class ManagerPrefab : Manager {
 		}
 	}
 	
+	public GameObject jumpGate {
+		get {
+			return GameObjectResource ("Solar Body/Jump Gate");
+		}
+	}
+	
 	public GameObject planet {
 		get {
 			return GameObjectResource ("Solar Body/Planet/Planet");

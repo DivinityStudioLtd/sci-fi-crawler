@@ -126,15 +126,29 @@ public class InterfaceSolar : Interface {
 	void MenuSolarBody () {
         GUILayout.BeginArea (new Rect (Screen.width-210,40,200,140));
 		GUILayout.BeginVertical ("box");
-	        GUILayout.Label("Location: " + selectedSolarBody.solarBodyType.ToString ());
-			if (selectedSolarBody.mapMission == null) {
-				GUILayout.Label("No mission at this location");
-			} else {
-		        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
-		        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
-		        GUILayout.Label("Reward: " + selectedSolarBody.mapMission.credits);
-		        if (GUILayout.Button ("Take Mission"))
-					managerGame.UniverseToMission (selectedSolarBody.mapMission);
+		    GUILayout.Label("Location: " + selectedSolarBody.solarBodyType.ToString ());
+			switch (selectedSolarBody.solarBodyType) {
+			case SolarBodyType.Moon:
+			case SolarBodyType.Station:
+			case SolarBodyType.Planet:
+				if (selectedSolarBody.mapMission == null) {
+					GUILayout.Label("No mission at this location");
+				} else {
+			        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
+			        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
+			        GUILayout.Label("Reward: " + selectedSolarBody.mapMission.credits);
+			        if (GUILayout.Button ("Take Mission"))
+						managerGame.UniverseToMission (selectedSolarBody.mapMission);
+				}
+				break;
+			case SolarBodyType.JumpGate:
+				if (managerPlayer.hasArtefact) {
+					GUILayout.Label("Artefact Collected");
+			        if (GUILayout.Button ("Make Jump")) {}
+				} else {
+					GUILayout.Label("Artefact Not Collected");
+				}
+				break;
 			}
 		GUILayout.EndVertical ();
         GUILayout.EndArea ();

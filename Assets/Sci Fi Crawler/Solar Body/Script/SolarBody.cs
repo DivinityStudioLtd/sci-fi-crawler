@@ -14,5 +14,6 @@ public enum SolarBodyType {
 	Sun,
 	Planet,
 	Moon,
-	Station
+	Station,
+	JumpGate
 }

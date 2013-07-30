@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FactoryCharacter : Factory {
-	public void SpawnCharacter (GameObject prefab, Vector3 spawnPosition) {
+	public Controller SpawnCharacter (GameObject prefab, Vector3 spawnPosition) {
 		GameObject e = Instantiate (prefab, spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject;
 		Controller ec = e.GetComponent<Controller> ();
 		AI ai = e.GetComponent<AI> ();
 		ec.firearms.Add ((Instantiate (ai.possibleFirearms [Random.Range (0, ai.possibleFirearms.Count)]) as GameObject).GetComponent<Firearm> ());
 		ec.firearms [0].RandomizeStats ();
 		ec.SetupFirearms ();
+		return ec;
 	}
 	public void SpawnPlayerCharacter (Vector3 spawnPosition) {
 		managerPlayer.currentBody = (Instantiate (managerPlayer.selected.bodies[0], spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();

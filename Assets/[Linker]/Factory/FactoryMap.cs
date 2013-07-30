@@ -29,8 +29,6 @@ public class FactoryMap : Factory {
 			sun.transform.localPosition = Vector3.zero;
 			sun.transform.localRotation = Quaternion.identity;
 			sun.solarBodyType = SolarBodyType.Sun;
-			
-			
 		} else {
 			PlanetArm pa = (Instantiate (managerPrefab.planetArm) as GameObject).GetComponent<PlanetArm> ();
 			pa.SetParent (universe.transform, true);
@@ -50,10 +48,19 @@ public class FactoryMap : Factory {
 			planet.solarBodyType = SolarBodyType.Planet;
 			
 			foreach (Transform sbp in pa.planetSolarBodyPositions) {
+				SolarBody sb;
+				if (staggerSpawnCounter == universe.numberOfSolarBodies - 1 && pa.planetSolarBodyPositions.IndexOf (sbp) == 0) {
+					sb = (Instantiate (managerPrefab.jumpGate) as GameObject).GetComponent<SolarBody> ();
+					
+					sbp.GetComponent<Rotate> ().SetRotationTime (0.0f);
+					sb.solarBodyType = SolarBodyType.JumpGate;
+					sb.SetParent (sbp, true);
+					continue;
+				}
+				
 				if (Random.Range (0, 3) == 0)
 					continue;
 				
-				SolarBody sb;
 				if (Random.Range (0, 3) == 0) {
 					sb = (Instantiate (managerPrefab.planet) as GameObject).GetComponent<SolarBody> ();
 					planetRadius = Random.Range (1.5f, 2.5f);
@@ -83,7 +90,7 @@ public class FactoryMap : Factory {
 	
 	public void GeneratePlaceHolderMission (MapUniverse universe) {
 		MapMission mm = (Instantiate (managerPrefab.missionMap, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
-		mm.missionType = MissionType.Steal;//(MissionType) Random.Range (0, (int) MissionType.Capture);
+		mm.missionType = MissionType.Recover;//(MissionType) Random.Range (0, (int) MissionType.Capture);
 		mm.generated = false;
 		mm.level = Random.Range (1, 5);
 		
@@ -94,7 +101,7 @@ public class FactoryMap : Factory {
 		int numberOfTries = 10;
 		while (numberOfTries > 0) {
 			SolarBody sb = universe.solarbodies [Random.Range (0, universe.solarbodies.Count)];
-			if (sb.solarBodyType == SolarBodyType.Sun || sb.mapMission != null) {
+			if (sb.solarBodyType == SolarBodyType.Sun || sb.solarBodyType == SolarBodyType.JumpGate || sb.mapMission != null) {
 				numberOfTries--;
 				continue;
 			}
@@ -526,14 +533,22 @@ public class FactoryMap : Factory {
 		
 	}
 	void GenerateSpawnMissionRecover (MapMission mission) {
+		MissionRecover miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionRecover> ();
+		
+		for (int j = 0; j < mission.level; j++) {
+			Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
+			miss.intel.Add (i);
+		}
 		
 	}
 	void GenerateSpawnMissionSteal (MapMission mission) {
 		MissionSteal miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionSteal> ();
-		
+		RectRoom rr = NotSpawnRoom (mission);
 		Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
-		
 		miss.intel = i;
+		
+		Controller kh = factoryCharacter.SpawnCharacter (managerPrefab.enemies (mission.level) [Random.Range (0, managerPrefab.enemies (mission.level).Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)));
+		miss.keyHolder = kh;
 	}
 	
 	public bool SpawnRewards (MapMission mission) {
