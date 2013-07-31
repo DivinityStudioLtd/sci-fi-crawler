@@ -39,7 +39,8 @@ public class FactoryMap : Factory {
 			SolarBody planet = (Instantiate (managerPrefab.planet) as GameObject).GetComponent<SolarBody> ();
 			planet.SetParent (pa.planetPosition, true);
 			pa.planetPosition.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.50f, 2.50f + staggerSpawnCounter));
-			
+			planet.mapTileSetName = "Temp";
+				
 			float planetRadius = Random.Range (5.0f, 10.0f);
 			planet.transform.localScale = new Vector3 (planetRadius, planetRadius, planetRadius);
 			
@@ -55,6 +56,7 @@ public class FactoryMap : Factory {
 					sbp.GetComponent<Rotate> ().SetRotationTime (0.0f);
 					sb.solarBodyType = SolarBodyType.JumpGate;
 					sb.SetParent (sbp, true);
+					sb.mapTileSetName = "Temp";
 					continue;
 				}
 				
@@ -70,13 +72,14 @@ public class FactoryMap : Factory {
 					
 					sbp.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.00f, 1.50f));
 					sb.solarBodyType = SolarBodyType.Moon;
+					sb.mapTileSetName = "Temp";
 				} else {
 					sb = (Instantiate (managerPrefab.stations [Random.Range (0, managerPrefab.stations.Count)]) as GameObject).GetComponent<SolarBody> ();
 					
 					sbp.GetComponent<Rotate> ().SetRotationTime (0.0f);
 					sb.solarBodyType = SolarBodyType.Station;
+					sb.mapTileSetName = "Temp";
 				}
-				
 				sb.SetParent (sbp, true);
 			}
 		}
@@ -387,19 +390,14 @@ public class FactoryMap : Factory {
 	
 	int currentCompressedX;
 	int currentCompressedY;
-	public GameObject wall;
-	public GameObject open;
-	public GameObject door;
 	public bool SpawnTiles (MapMission mission) {
 		if (mission.generated == false) {
 			currentCompressedX = 0;
 			currentCompressedY = 0;
 			mission.generated = true;
-			wall = Resources.Load ("Tile/Temp Wall") as GameObject;
-			open = Resources.Load ("Tile/Temp Open") as GameObject;
-			door = Resources.Load ("Tile/Temp Door") as GameObject;
+			mission.mapTileSet = managerPrefab.mapTileSet (mission.solarBody.mapTileSetName);
 		} else {
-			SpawnTile (mission.compressedMap, currentCompressedX, currentCompressedY);
+			SpawnTile (mission.compressedMap, currentCompressedX, currentCompressedY, mission.mapTileSet);
 			currentCompressedX++;
 			if (currentCompressedX >= mission.compressedMap.compressedX) {
 				currentCompressedX = 0;
@@ -410,75 +408,94 @@ public class FactoryMap : Factory {
 		}
 		return false;
 	}
-	void SpawnTile (CompressedMap cm, int x, int y) {
+	void SpawnTile (CompressedMap cm, int x, int y, TileSet mapTileSet) {
 		MapTileSurrounding mts = GetSurrounding (cm, currentCompressedX, currentCompressedY);
 		int worldX = x * CompressedMap.TILE_SIZE * CompressedMap.COMPRESSION_RATIO;
 		int worldY = y * CompressedMap.TILE_SIZE * CompressedMap.COMPRESSION_RATIO;
-		
+		List<Tile> graphicsPainter = new List<Tile> ();
 		switch (cm.compressedTiles [x,y]) {
 			case TileType.Room :
 				for (int i = -1; i <= 1; i++)
 					for (int j = -1; j <= 1; j++) 
-						Instantiate (open, new Vector3 (worldX + (i * CompressedMap.TILE_SIZE), 0.0f, worldY + (j * CompressedMap.TILE_SIZE)), Quaternion.identity);
+						graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX + (i * CompressedMap.TILE_SIZE), 0.0f, worldY + (j * CompressedMap.TILE_SIZE)), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				break;
 			case TileType.Hallway :
-				Instantiate (open, new Vector3 (worldX, 0.0f, worldY), Quaternion.identity);
-				GameObject temp;
+				graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.above == TileType.Hallway)
-					Instantiate (open, new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				else if (mts.above == TileType.Room)
-					Instantiate (door, new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomDoor (), new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				else 
-					Instantiate (wall, new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 			
 				if (mts.below == TileType.Hallway)
-					Instantiate (open, new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				else if (mts.below == TileType.Room)
-					Instantiate (door, new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomDoor (), new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				else 
-					Instantiate (wall, new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 			
 				if (mts.left == TileType.Hallway)
-					Instantiate (open, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
-				else if (mts.left == TileType.Room)
-					Instantiate (door, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.Euler (new Vector3 (0.0f, 90.0f, 0.0f)));
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				else if (mts.left == TileType.Room) {
+					Tile temp = (Instantiate (mapTileSet.RandomDoor (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ();
+				
+					temp.door.transform.rotation = Quaternion.Euler (new Vector3 (0.0f, 90.0f, 0.0f));
+					graphicsPainter.Add (temp);
+				}
 				else 
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 			
 				if (mts.right == TileType.Hallway)
-					Instantiate (open, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
-				else if (mts.right == TileType.Room)
-					Instantiate (door, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.Euler (new Vector3 (0.0f, 90.0f, 0.0f)));
-				else 
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomOpen (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				else if (mts.right == TileType.Room) {
+					Tile temp = (Instantiate (mapTileSet.RandomDoor (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ();
 				
-				Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
-				Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
-				Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					temp.door.transform.rotation = Quaternion.Euler (new Vector3 (0.0f, 90.0f, 0.0f));
+					graphicsPainter.Add (temp);
+				}
+				else 
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				
+				graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
+				graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 			
 				break;
 			
 			case TileType.None :
 				if (mts.left == TileType.Room || mts.above == TileType.Room || mts.leftAbove == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.left == TileType.Room || mts.below == TileType.Room || mts.leftBelow == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.right == TileType.Room || mts.above == TileType.Room || mts.rightAbove == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.right == TileType.Room || mts.below == TileType.Room || mts.rightBelow == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				
 			
 				if (mts.left == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX - CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.right == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX + CompressedMap.TILE_SIZE, 0.0f, worldY), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.above == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX, 0.0f, worldY - CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				if (mts.below == TileType.Room)
-					Instantiate (wall, new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity);
+					graphicsPainter.Add ((Instantiate (mapTileSet.RandomWall (), new Vector3 (worldX, 0.0f, worldY + CompressedMap.TILE_SIZE), Quaternion.identity) as GameObject).GetComponent<Tile> ());
 				break;
+			
+			}
+			foreach (Tile t in graphicsPainter) {
+				switch (t.mapTileType) {
+				case MapTileType.Door:
+				case MapTileType.Floor:
+					t.graphic.renderer.materials [0].mainTexture = mapTileSet.RandomOpenTexture ();
+					break;	
+			case MapTileType.Wall:
+					t.graphic.renderer.materials [0].mainTexture = mapTileSet.RandomWallTexture ();
+					break;	
+				}
 		}
 	}
 	MapTileSurrounding GetSurrounding (CompressedMap cm, int x, int y) {
@@ -696,6 +713,7 @@ public enum MissionType {
 	Capture
 }
 
+[System.Serializable]
 public class MapTileSurrounding {
 	public TileType	above;
 	public TileType below;

@@ -107,15 +107,15 @@ public class ManagerMap : Manager {
 	
 	public void SpawnMapMission (MapMission mission) {
 		currentMission = mission;
-		missions.Remove (currentMission);
-		mission.solarBody.mapMission = null;
-		mission.solarBody = null;
 		managerMapState = ManagerMapState.RoomRects;
 		Destroy (currentMission.warning3D);
 		Destroy (currentMission.warningMap);
 	}
 	
 	public void UnspawnCurrentMapMission () {
+		missions.Remove (currentMission);
+		currentMission.solarBody.mapMission = null;
+		currentMission.solarBody = null;
 		Destroy (currentMission.gameObject);
 	}
 	 

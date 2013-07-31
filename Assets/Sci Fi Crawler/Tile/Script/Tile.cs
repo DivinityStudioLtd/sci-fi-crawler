@@ -8,6 +8,9 @@ public class Tile : Entity {
 	public Tile parent;
 	public int pathCost;
 	
+	public GameObject graphic;
+	public GameObject door;
+	
 	public void Start () {
 		transform.parent = managerMap.currentMission.transform;
 		x = Mathf.RoundToInt (transform.position.x / CompressedMap.TILE_SIZE);

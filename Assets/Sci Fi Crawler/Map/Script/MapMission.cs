@@ -8,6 +8,8 @@ public class MapMission : Map {
 		SetParent (managerMap.transform, false);
 	}
 	
+	public TileSet mapTileSet;
+	
 	public int level;
 	
 	public CompressedMap compressedMap;
@@ -45,10 +47,10 @@ public class MapMission : Map {
 	}
 	
 	public void Update () {
-		if (solarBody != null) {
+		if (warning3D != null)
 			warning3D.transform.position = solarBody.transform.position;
+		if (warningMap != null)
 			warningMap.transform.position = solarBody.transform.position;
-		}
 	}
 	
 	public string MapSting () {
@@ -73,5 +75,31 @@ public class MapMission : Map {
 			returnString+="\n";
 		}
 		return returnString;
+	}
+}
+
+[System.Serializable]
+public class TileSet {
+	public List<GameObject> walls;
+	public List<GameObject> opens;
+	public List<GameObject> doors;
+	
+	public List<Texture2D> openTextures;
+	public List<Texture2D> wallTextures;
+	
+	public GameObject RandomWall () {
+		return walls [Random.Range (0, walls.Count)];	
+	}
+	public GameObject RandomDoor () {
+		return doors [Random.Range (0, doors.Count)];	
+	}
+	public GameObject RandomOpen () {
+		return opens [Random.Range (0, opens.Count)];	
+	}
+	public Texture2D RandomOpenTexture () {
+		return openTextures [Random.Range (0, openTextures.Count)];	
+	}
+	public Texture2D RandomWallTexture () {
+		return wallTextures [Random.Range (0, wallTextures.Count)];	
 	}
 }

@@ -139,6 +139,15 @@ public class ManagerPrefab : Manager {
 	#endregion
 	
 	#region Tile
+	public TileSet mapTileSet (string tileSetName) {
+		TileSet ts = new TileSet ();
+		ts.doors = ListedGameObjectResourceFolder ("Tile/" + tileSetName + "/Door");
+		ts.opens = ListedGameObjectResourceFolder ("Tile/" + tileSetName + "/Open");
+		ts.walls = ListedGameObjectResourceFolder ("Tile/" + tileSetName + "/Wall");
+		ts.openTextures = ListedTexture2DResourceFolder ("Tile/" + tileSetName + "/Open Texture");
+		ts.wallTextures = ListedTexture2DResourceFolder ("Tile/" + tileSetName + "/Wall Texture");
+		return ts;
+	}
 	#endregion
 	
 	List<GameObject> ListedGameObjectResourceFolder (string folder) {
