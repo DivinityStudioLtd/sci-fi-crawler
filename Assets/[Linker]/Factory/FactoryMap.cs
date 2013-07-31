@@ -39,7 +39,7 @@ public class FactoryMap : Factory {
 			SolarBody planet = (Instantiate (managerPrefab.planet) as GameObject).GetComponent<SolarBody> ();
 			planet.SetParent (pa.planetPosition, true);
 			pa.planetPosition.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.50f, 2.50f + staggerSpawnCounter));
-			planet.mapTileSetName = "Temp";
+			planet.mapTileSetName = "Default";
 				
 			float planetRadius = Random.Range (5.0f, 10.0f);
 			planet.transform.localScale = new Vector3 (planetRadius, planetRadius, planetRadius);
@@ -56,7 +56,7 @@ public class FactoryMap : Factory {
 					sbp.GetComponent<Rotate> ().SetRotationTime (0.0f);
 					sb.solarBodyType = SolarBodyType.JumpGate;
 					sb.SetParent (sbp, true);
-					sb.mapTileSetName = "Temp";
+					sb.mapTileSetName = "Default";
 					continue;
 				}
 				
@@ -72,13 +72,13 @@ public class FactoryMap : Factory {
 					
 					sbp.GetComponent<Rotate> ().SetRotationTime (Random.Range (1.00f, 1.50f));
 					sb.solarBodyType = SolarBodyType.Moon;
-					sb.mapTileSetName = "Temp";
+					sb.mapTileSetName = "Default";
 				} else {
 					sb = (Instantiate (managerPrefab.stations [Random.Range (0, managerPrefab.stations.Count)]) as GameObject).GetComponent<SolarBody> ();
 					
 					sbp.GetComponent<Rotate> ().SetRotationTime (0.0f);
 					sb.solarBodyType = SolarBodyType.Station;
-					sb.mapTileSetName = "Temp";
+					sb.mapTileSetName = "Default";
 				}
 				sb.SetParent (sbp, true);
 			}
