@@ -42,8 +42,8 @@ public class Controller : Entity {
 	
 	public void SetupFirearms () {
 		foreach (Firearm f in firearms) {
-			f.SetActive (false, firearmTransform);
 			f.controller = this;
+			f.SetActive (false, firearmTransform);
 		}
 		if (firearms.Count > 0)
 			firearms[0].SetActive (true, firearmTransform);
@@ -92,6 +92,7 @@ public class Controller : Entity {
 	}
 	
 	public string ToString () {
+		string returnString = "";
 		return "";
 	}
 }

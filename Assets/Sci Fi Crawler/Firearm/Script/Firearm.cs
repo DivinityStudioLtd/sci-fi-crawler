@@ -13,9 +13,9 @@ public class Firearm : Entity {
 	public Controller controller;
 	public void SetActive (bool active, Transform parent = null) {
 		gameObject.SetActive (active);
+		
 		transform.parent = parent;
 		transform.position = parent.position;
-		transform.rotation = parent.rotation;
 	} 
 	
 	public FiringMode baseStats;
@@ -38,6 +38,8 @@ public class Firearm : Entity {
 	}
 	
 	void Update () {
+		if (controller != null)
+			transform.rotation = controller.animationController.transform.rotation;
 		UpdateFiringMode (stats);
 	}
 	
