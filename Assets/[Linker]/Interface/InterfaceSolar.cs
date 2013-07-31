@@ -65,7 +65,7 @@ public class InterfaceSolar : Interface {
 			managerPlayer.ship.moveDirection = managerPlayer.ship.graphic.transform.forward * Input.GetAxis ("Vertical");
 		} else {
 			if (Input.GetButtonDown ("Fire1")) {
-				foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.mainCamera.ScreenPointToRay (Input.mousePosition))) {
+				foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.main.ScreenPointToRay (Input.mousePosition))) {
 					Entity e = FindUtility.FindEntity (r_c_h.collider);
 					
 					if (e == null)
@@ -96,7 +96,7 @@ public class InterfaceSolar : Interface {
 	
 	}
 	
-	void OnGUI () {
+	new void OnGUI () {
 		if (!display) 
 			return;
 		MenuGame ();

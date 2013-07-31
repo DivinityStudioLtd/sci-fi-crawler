@@ -91,8 +91,19 @@ public class Controller : Entity {
 		hUD3D.SetEnergyBar (character.currentEnergy, character.maxEnergy);
 	}
 	
-	public string ToString () {
+	public override string ToString () {
 		string returnString = "";
-		return "";
+		
+		returnString += "s" + character.stats.strength + "/";
+		returnString += "a" + character.stats.agility + "/";
+		returnString += "e" + character.stats.endurance + "/";
+		returnString += "i" + character.stats.intelligence + "/";
+		returnString += "w" + character.stats.wisdom + "/";
+		returnString += "r" + character.stats.resolve + "\n";
+		
+		returnString += "H: " + character.maxHealth + " ";
+		returnString += "E: " + character.maxEnergy + " ";
+		returnString += "S: " + character.maxSpeed;
+		return returnString;
 	}
 }

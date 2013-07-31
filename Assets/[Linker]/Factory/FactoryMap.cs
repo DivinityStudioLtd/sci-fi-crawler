@@ -12,7 +12,7 @@ public class FactoryMap : Factory {
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
 		universe.numberOfSolarBodies = Random.Range (8, 12);
 		RenderSettings.skybox = managerPrefab.skybox [Random.Range (0, managerPrefab.skybox.Count)];
-		Shop s = (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
+		/*Shop s =*/ (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
 	}
 	
 	static public float PLANET_SPACING = 15.0f;
@@ -189,8 +189,6 @@ public class FactoryMap : Factory {
 				do {
 					o_rr = mission.compressedMap.rectRooms [Random.Range (0, mission.compressedMap.rectRooms.Count)];
 				} while (rr == o_rr);
-				
-				RectRoom startEndPoints;
 				
 				int startX;
 				int startY;
@@ -560,7 +558,7 @@ public class FactoryMap : Factory {
 	}
 	void GenerateSpawnMissionSteal (MapMission mission) {
 		MissionSteal miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionSteal> ();
-		RectRoom rr = NotSpawnRoom (mission);
+		//RectRoom rr = NotSpawnRoom (mission);
 		Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
 		miss.intel = i;
 		
@@ -588,7 +586,6 @@ public class FactoryMap : Factory {
 			return true;
 		}
 			
-		RectRoom rr = mission.challenges [staggerSpawnCounter].room;
 		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
 			
 			factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
@@ -674,7 +671,7 @@ public class RectRoom {
 		startingRoom = false;
 	}
 	
-	public string ToString () {
+	public override string ToString () {
 		return "left|"+left+" top|"+top+" width|"+width+" height|"+height;
 	}
 }

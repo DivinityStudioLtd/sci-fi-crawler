@@ -343,19 +343,19 @@ public class InterfaceShop : Interface {
 	}
 	
 	void CleanUp () {
-		if (bodyShopPositions.buy.GetChildCount () > 0)
+		if (bodyShopPositions.buy.childCount > 0)
 			Destroy (bodyShopPositions.buy.GetChild(0).gameObject);
-		if (bodyShopPositions.sell.GetChildCount () > 0)
+		if (bodyShopPositions.sell.childCount > 0)
 			Destroy (bodyShopPositions.sell.GetChild(0).gameObject);
 		
-		if (powerShopPositions.buy.GetChildCount () > 0)
+		if (powerShopPositions.buy.childCount > 0)
 			Destroy (powerShopPositions.buy.GetChild(0).gameObject);
-		if (powerShopPositions.sell.GetChildCount () > 0)
+		if (powerShopPositions.sell.childCount > 0)
 			Destroy (powerShopPositions.sell.GetChild(0).gameObject);
 		
-		if (firearmShopPositions.buy.GetChildCount () > 0)
+		if (firearmShopPositions.buy.childCount > 0)
 			Destroy (firearmShopPositions.buy.GetChild(0).gameObject);
-		if (firearmShopPositions.sell.GetChildCount () > 0)
+		if (firearmShopPositions.sell.childCount > 0)
 			Destroy (firearmShopPositions.sell.GetChild(0).gameObject);
 	}
 }

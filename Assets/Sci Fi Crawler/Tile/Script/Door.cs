@@ -6,7 +6,7 @@ public class Door : MonoBehaviour {
 	public Transform rightDoor;
 	
 	float closed = 1.25f;
-	float open = 3.75f;
+	float open = 3.7f;
 	
 	public float transitionTime;
 	float currentTransitionTime;

@@ -64,7 +64,7 @@ public class Firearm : Entity {
 			}
 		}
 	}
-	public string ToString () {
+	public override string ToString () {
 		string returnString = "";
 		returnString += "Name: " + entityName + "\n";
 		returnString += "Fire Rate: " + string.Format("{0:0.00}", stats.fireRate) + "\n";
@@ -89,5 +89,9 @@ public class FiringMode {
 	
 	public float damage;
 	public DamageType damageType;
+	
+}
+
+public enum FirearmType {
 	
 }

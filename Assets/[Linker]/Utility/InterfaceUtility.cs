@@ -34,12 +34,12 @@ public class InterfaceUtility : Utility {
 	
 	static public void SetCameraToTransform (Transform newParent, bool align) {
 		if (newParent == null) {
-			Camera.mainCamera.transform.parent = null;
+			Camera.main.transform.parent = null;
 		} else {
-			Camera.mainCamera.transform.parent = newParent;
+			Camera.main.transform.parent = newParent;
 			if (align) {
-				Camera.mainCamera.transform.localPosition = Vector3.zero;
-				Camera.mainCamera.transform.localRotation = Quaternion.identity;
+				Camera.main.transform.localPosition = Vector3.zero;
+				Camera.main.transform.localRotation = Quaternion.identity;
 			}
 		}
 	}

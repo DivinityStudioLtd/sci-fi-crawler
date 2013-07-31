@@ -48,7 +48,7 @@ abstract public class Power : Entity {
 			SetUsed (user);
 	}
 	public abstract bool Effect (Controller user);
-	public string ToString () {
+	public override string ToString () {
 		string returnString ="";
 		returnString += "Name: " + entityName + "\n";
 		returnString += "Description: " + description + "\n";

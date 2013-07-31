@@ -32,12 +32,12 @@ abstract public class Interface : Linker {
 	virtual public bool SetDisplay (bool newDisplay) {
 		if (newDisplay) {
 			if (cameraPosition != null) {
-				Camera.mainCamera.transform.parent = cameraPosition;
-				Camera.mainCamera.transform.position = cameraPosition.position;
-				Camera.mainCamera.transform.rotation = cameraPosition.rotation;
+				Camera.main.transform.parent = cameraPosition;
+				Camera.main.transform.position = cameraPosition.position;
+				Camera.main.transform.rotation = cameraPosition.rotation;
 			}
-			Camera.mainCamera.farClipPlane = farClipPlane;
-			Camera.mainCamera.transform.GetChild (0).camera.farClipPlane = farClipPlane;
+			Camera.main.farClipPlane = farClipPlane;
+			Camera.main.transform.GetChild (0).camera.farClipPlane = farClipPlane;
 		}
 		display = newDisplay; 
 		return display; 

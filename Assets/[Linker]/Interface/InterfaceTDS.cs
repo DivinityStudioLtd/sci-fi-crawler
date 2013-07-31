@@ -106,7 +106,7 @@ public class InterfaceTDS : Interface {
 		
 	}
 	
-	void OnGUI () {
+	new void OnGUI () {
 		if (!display) 
 			return;
 		GUILayout.BeginArea (new Rect (10, 10, 200,100));
