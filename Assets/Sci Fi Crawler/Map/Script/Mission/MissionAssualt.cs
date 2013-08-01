@@ -23,7 +23,8 @@ public class MissionAssualt : Mission {
 			returnString += "Enemies" + "\n";
 			int counter = 0; 
 			foreach (Controller e in enemies)
-				returnString += (++counter) + ": " + string.Format("{0:0.00}", Vector3.Distance (managerPlayer.currentBody.transform.position, e.transform.position)) + "\n";
+				if (e != null)
+					returnString += (++counter) + ": " + string.Format("{0:0.00}", Vector3.Distance (managerPlayer.currentBody.transform.position, e.transform.position)) + "\n";
 		} else {
 			returnString += "No Enemies Remaining" + "\n";
 		}

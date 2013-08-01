@@ -40,6 +40,17 @@ public class Character : Entity {
 		}
 	}
 	
+	#region Weapon Proficiency
+	public List<FirearmType> weaponProficiency;
+	
+	public bool HasWeaponProficiency (FirearmType weaponProficiencyCheck) {
+		foreach (FirearmType ft in weaponProficiency)
+			if (ft == weaponProficiencyCheck)
+				return true;
+		return false;
+	}
+	#endregion
+	
 	public void Start () {
 		currentHealth = maxHealth;
 		currentEnergy = maxEnergy;

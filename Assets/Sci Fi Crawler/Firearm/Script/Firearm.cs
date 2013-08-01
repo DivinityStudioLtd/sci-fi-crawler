@@ -4,6 +4,8 @@ using System.Collections;
 public class Firearm : Entity {
 	public string description;
 	
+	public FirearmType firearmType;
+	
 	void Start () {
 		firingTransform.renderer.enabled = false;	
 	}
@@ -29,7 +31,7 @@ public class Firearm : Entity {
 		stats.fireRate = Random.Range (baseStats.fireRate - variation.fireRate, baseStats.fireRate + variation.fireRate);
 		stats.burstSize = Random.Range (baseStats.burstSize - variation.burstSize, baseStats.burstSize + variation.burstSize + 1);
 		stats.accuracy = Random.Range (baseStats.accuracy - variation.accuracy, baseStats.accuracy + variation.accuracy);
-		stats.damage = Random.Range (baseStats.damage - variation.damage, baseStats.damage + variation.damage + 1);
+		stats.damage = Random.Range (baseStats.damage - variation.damage, baseStats.damage + variation.damage);
 		stats.damageType = baseStats.damageType;
 	}
 	
@@ -52,11 +54,26 @@ public class Firearm : Entity {
 		
 		if (currentFireRate <= 0.0f) {
 			currentFireRate += firingMode.fireRate;
+			
+			float accuracyModifier = 1.0f;
+			
+			if (controller.characterMotor.characterController.velocity != Vector3.zero)
+				accuracyModifier += 0.33f;
+			
+			if (controller.characterMotor.isAiming)
+				accuracyModifier -= 0.33f;
+			
+			if (controller.character.HasWeaponProficiency (firearmType))
+				accuracyModifier -= 0.33f;
+			else
+				accuracyModifier += 0.33f;
+			print (accuracyModifier);
+			
 			for (int i = 0; i < firingMode.burstSize; i++) {
 				Projectile p = ((GameObject) Instantiate (
 					projectile, 
 					firingTransform.position, 
-					Quaternion.Euler (firingTransform.eulerAngles + new Vector3 (0.0f, Random.Range(-firingMode.accuracy, firingMode.accuracy),0.0f)))
+					Quaternion.Euler (firingTransform.eulerAngles + new Vector3 (0.0f, Random.Range(-firingMode.accuracy, firingMode.accuracy) * accuracyModifier,0.0f)))
 					).GetComponent<Projectile> ();
 				p.team = controller.team;
 				p.attack.damage = stats.damage;
@@ -93,5 +110,14 @@ public class FiringMode {
 }
 
 public enum FirearmType {
-	
+	Pistol,
+	SMG,
+	Rifle,
+	Sniper,
+	Shotgun,
+	LMG,
+	Explosive,
+	Chemical,
+	AR,
+	Laser
 }

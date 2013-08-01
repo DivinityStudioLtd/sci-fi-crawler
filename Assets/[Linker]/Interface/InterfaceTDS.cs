@@ -25,35 +25,33 @@ public class InterfaceTDS : Interface {
 	public void KeyboardMouse () {
 		managerPlayer.currentBody.characterMotor.moveDirection = new Vector3 (Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
 		
-		//if (managerPlayer.controller.characterMotor.moveDirection != Vector3.zero)
-		//	managerPlayer.controller.animationController.LookRotation (managerPlayer.controller.characterMotor.moveDirection);
-		
 		if (Input.GetButtonDown ("Fire1"))
-			managerPlayer.currentBody.CurrentFirearm.SetTrigger (true);//, true);
+			managerPlayer.currentBody.CurrentFirearm.SetTrigger (true);
 		if (Input.GetButtonUp ("Fire1"))
-			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);//, true);
+			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);
 		
-		/*
-		if (Input.GetButtonDown ("Fire2"))
-			managerPlayer.controller.CurrentFirearm.SetTrigger (true);//, false);
-		if (Input.GetButtonUp ("Fire2"))
-			managerPlayer.controller.CurrentFirearm.SetTrigger (false);//, false);
-		*/
-		//if (Input.GetButton ("Fire1") || Input.GetButton ("Fire2"))
-			foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.main.ScreenPointToRay (Input.mousePosition)))
-				if (r_c_h.collider.CompareTag ("Mouse Plane")) {
-					managerPlayer.currentBody.animationController.LookAt (r_c_h.point);
-			
-					Camera.main.transform.localPosition = new Vector3 (
+		Vector3 targetPosition = Vector3.zero;
+		foreach (RaycastHit r_c_h in Physics.RaycastAll (Camera.main.ScreenPointToRay (Input.mousePosition)))
+			if (r_c_h.collider.CompareTag ("Mouse Plane")) {
+				managerPlayer.currentBody.animationController.LookAt (r_c_h.point);
+				
+			if (Input.GetButton ("Aim")) {
+				managerPlayer.currentBody.characterMotor.isAiming = true;
+			 		targetPosition = new Vector3 (
 						(Input.mousePosition.x - (Screen.width / 2)) / (Screen.width / 2) * maxCameraOffset,
 						(Input.mousePosition.y - (Screen.height / 2)) / (Screen.height / 2) * maxCameraOffset,
 						0.0f
 						);
-					}
+			} else {
+				managerPlayer.currentBody.characterMotor.isAiming = false;
+			}
+		}
+		
+		Camera.main.transform.localPosition = Vector3.Lerp (Camera.main.transform.localPosition, targetPosition, 0.25f);
 		
 		if (Input.GetButtonUp ("Swap Weapon")) {
-			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);//, true);
-			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);//, false);
+			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);
+			managerPlayer.currentBody.CurrentFirearm.SetTrigger (false);
 			managerPlayer.currentBody.NextWeapon ();
 		}
 		
@@ -63,40 +61,6 @@ public class InterfaceTDS : Interface {
 			managerPlayer.currentBody.CyclePower (false);
 		if (Input.GetButton ("Fire2"))
 			managerPlayer.currentBody.CurrentPower.Use (managerPlayer.currentBody);
-		/*
-		if (currentPopUpDelay > 0.0f) {
-			currentPopUpDelay -= Time.deltaTime;
-		}
-		*/
-		/*
-		if (playerManager.movementController.characterMotor.moveDirection != Vector3.zero) {
-			if (Input.GetButtonDown ("Run") && playerManager.character.canRun) {
-				playerManager.firearmController.CurrentFirearm ().animationController.ControlAnimation (AnimationType.Animate, "run");
-				playerManager.movementController.characterMotor.Run ();
-			}
-			if (Input.GetButton ("Run") && playerManager.character.canRun) {
-				playerManager.character.DrainStamina ();
-			}
-			if (Input.GetButtonUp ("Run") || !playerManager.character.canRun) {
-				playerManager.firearmController.CurrentFirearm ().animationController.ControlAnimation (AnimationType.Animate, "idle");
-				playerManager.movementController.characterMotor.Walk ();
-			}
-		} else {
-			playerManager.firearmController.CurrentFirearm ().animationController.ControlAnimation (AnimationType.Animate, "idle");
-		}
-		
-		if (Input.GetButtonDown ("Interact")) {
-			playerManager.movementController.fpsInteractor.Interact ();
-		}
-		
-		if (Input.GetButtonDown ("Flashlight")) {
-			//playerManager.controller.flashlight.Toggle ();
-		}
-		
-		
-		if (Input.GetButtonDown ("Reload")) {
-			playerManager.firearmController.CurrentFirearm ().Reload ();
-		}*/
 		
 		if (Input.GetKeyDown (KeyCode.Backspace))
 			managerGame.MissionToUniverse ();

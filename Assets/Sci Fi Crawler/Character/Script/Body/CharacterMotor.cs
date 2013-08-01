@@ -8,11 +8,10 @@ public class CharacterMotor : MonoBehaviour {
 	
 	public float maxSpeed;
 	
-	public void Start () {
-		//characterController.Move (transform.forward);	
-	}
+	public bool isAiming;
 	
 	public void Update () {
-		characterController.Move (moveDirection.normalized * maxSpeed * Time.deltaTime);
+		float speed = !isAiming ? maxSpeed : maxSpeed / 2.0f;
+		characterController.Move (moveDirection.normalized * speed * Time.deltaTime);
 	}
 }

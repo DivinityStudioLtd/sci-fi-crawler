@@ -17,9 +17,11 @@ public class ManagerGame : Manager {
 	
 	public override void ManagerWorking () {
 		if (managerMap.managerMapState == ManagerMapState.Waiting) {
+			if (managerMap.universe == null) {
+			}
 			if (!managerPlayer.setup) {
 				if (managerMap.universe == null) 
-					managerMap.GenerateUniverse ();
+					UniverseEnterance ();
 				
 				if (managerMap.universe != null && managerPlayer.ship == null) {
 					factoryCharacter.SpawnPlayerShip ();
@@ -38,6 +40,10 @@ public class ManagerGame : Manager {
 				managerInterface.SetInterface (interfaceTDS);
 			}
 		}
+	}
+	
+	public void UniverseEnterance () {
+		managerMap.GenerateUniverse ();
 	}
 	
 	public void UniverseToMission (MapMission mission) {

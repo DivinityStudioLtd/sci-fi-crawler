@@ -23,7 +23,8 @@ public class MissionDestroy : Mission {
 			returnString += "Targets" + "\n";
 			int counter = 0; 
 			foreach (Target p in targets)
-				returnString += (++counter) + ": " + string.Format("{0:0.00}", Vector3.Distance (managerPlayer.currentBody.transform.position, p.transform.position)) + "\n";
+				if (p != null)
+					returnString += (++counter) + ": " + string.Format("{0:0.00}", Vector3.Distance (managerPlayer.currentBody.transform.position, p.transform.position)) + "\n";
 		} else {
 			returnString += "No Targets Remaining";
 		}
