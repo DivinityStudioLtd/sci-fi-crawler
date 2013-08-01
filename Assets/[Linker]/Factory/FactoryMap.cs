@@ -93,9 +93,9 @@ public class FactoryMap : Factory {
 	
 	public void GeneratePlaceHolderMission (MapUniverse universe) {
 		MapMission mm = (Instantiate (managerPrefab.missionMap, Vector3.zero, Quaternion.identity) as GameObject).GetComponent<MapMission> ();
-		mm.missionType = MissionType.Recover;//(MissionType) Random.Range (0, (int) MissionType.Capture);
+		mm.missionType = (MissionType) Random.Range (0, 4);
 		mm.generated = false;
-		mm.level = Random.Range (1, 5);
+		mm.level = Random.Range (1, 3);
 		
 		mm.credits = 0;
 		for (int i = 0; i < mm.level; i++)
@@ -538,31 +538,53 @@ public class FactoryMap : Factory {
 			break;
 		}
 	}
+	
 	void GenerateSpawnMissionAssualt (MapMission mission) {
+		MissionAssualt miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionAssualt> ();
+		Challenge c = GenerateChallenge (mission.level);
 		
+		foreach (GameObject go in c.enemies) {
+			Controller e = factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)));
+			e.team = 1;
+			miss.enemies.Add (e);
+		}
+		
+		Target t = factoryCharacter.SpawnTarget (managerPrefab.targets [Random.Range (0, managerPrefab.targets.Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)));
+		t.team = 1;
+		miss.target = t;
 	}
+	
 	void GenerateSpawnMissionCapture (MapMission mission) {
 		
 	}
+	
 	void GenerateSpawnMissionDestroy (MapMission mission) {
+		MissionDestroy miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionDestroy> ();
 		
+		for (int j = 0; j < mission.level + 1; j++) {
+			Target t = factoryCharacter.SpawnTarget (managerPrefab.targets [Random.Range (0, managerPrefab.targets.Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)));
+			t.team = 1;
+			miss.targets.Add (t);
+		}
 	}
+	
 	void GenerateSpawnMissionRecover (MapMission mission) {
 		MissionRecover miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionRecover> ();
 		
-		for (int j = 0; j < mission.level; j++) {
-			Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
+		for (int j = 0; j < mission.level + 1; j++) {
+			Intel i = (Instantiate (managerPrefab.intels [Random.Range (0, managerPrefab.intels.Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
 			miss.intel.Add (i);
 		}
-		
 	}
+	
 	void GenerateSpawnMissionSteal (MapMission mission) {
 		MissionSteal miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionSteal> ();
 		//RectRoom rr = NotSpawnRoom (mission);
-		Intel i = (Instantiate (managerPrefab.intel, MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
+		Intel i = (Instantiate (managerPrefab.intels [Random.Range (0, managerPrefab.intels.Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)), Quaternion.identity) as GameObject).GetComponent<Intel> ();
 		miss.intel = i;
 		
 		Controller kh = factoryCharacter.SpawnCharacter (managerPrefab.enemies (mission.level) [Random.Range (0, managerPrefab.enemies (mission.level).Count)], MapMission.RandomPositionInRoom (NotSpawnRoom (mission)));
+		kh.team = 1;
 		miss.keyHolder = kh;
 	}
 	
@@ -588,7 +610,8 @@ public class FactoryMap : Factory {
 			
 		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
 			
-			factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
+			Controller c = factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
+			c.team = 1;
 		}
 		staggerSpawnCounter++;
 		return false;

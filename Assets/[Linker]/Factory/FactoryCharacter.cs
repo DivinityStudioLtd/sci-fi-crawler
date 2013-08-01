@@ -12,6 +12,7 @@ public class FactoryCharacter : Factory {
 		ec.SetupFirearms ();
 		return ec;
 	}
+	
 	public void SpawnPlayerCharacter (Vector3 spawnPosition) {
 		managerPlayer.currentBody = (Instantiate (managerPlayer.selected.bodies[0], spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.identity) as GameObject).GetComponent<Controller> ();
 		managerPlayer.currentBody.gameObject.SetActive (true);
@@ -99,6 +100,20 @@ public class FactoryCharacter : Factory {
 			go.SetActive (true);
 		}
 	}
+	
+	public Target SpawnTarget (GameObject prop, Vector3 spawnPosition) {
+		GameObject go = Instantiate (prop, spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.Euler (new Vector3 (0, Random.Range (0.0f, 360.0f), 0))) as GameObject;
+		Target p = go.GetComponent<Target> ();
+		p.SetParent (managerMap.currentMission.transform, false);
+		return p;
+	}
+	
+	public Intel SpawnIntel (GameObject intel, Vector3 spawnPosition) {
+		GameObject go = Instantiate (intel, spawnPosition + new Vector3 (0.0f, 1.0f, 0.0f), Quaternion.Euler (new Vector3 (0, Random.Range (0.0f, 360.0f), 0))) as GameObject;
+		Intel i = go.GetComponent<Intel> ();
+		i.SetParent (managerMap.currentMission.transform, false);
+		return i;
+	} 
 }
 
 [System.Serializable]

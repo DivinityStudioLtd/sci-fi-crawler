@@ -47,6 +47,13 @@ public class Attack : MonoBehaviour {
 			return true;
 		}
 		
+		Target target = e as Target;
+		if (target != null && target.team != team) {
+			target.ChangeHealth (damage);
+			lastAttackHit = true;
+			lastHitEntertainer = target.entityName;
+			return true;
+		}
 		Tile t = e as Tile;
 		if (t != null) {
 			lastAttackHit = true;

@@ -49,15 +49,21 @@ public class ManagerPrefab : Manager {
 		}
 	}
 	
-	public GameObject intel {
+	public List<GameObject> intels {
 		get {
-			return GameObjectResource ("Prop/Intel/Intel");
+			return ListedGameObjectResourceFolder ("Prop/Intel");
 		}
 	}
 	
 	public List<GameObject> containers {
 		get {
-			return ListedGameObjectResourceFolder ("Map/Container");
+			return ListedGameObjectResourceFolder ("Prop/Container");
+		}
+	}
+	
+	public List<GameObject> targets {
+		get {
+			return ListedGameObjectResourceFolder ("Prop/Target");
 		}
 	}
 	#endregion

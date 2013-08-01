@@ -12,7 +12,7 @@ public class Character : Entity {
 	#region Health Energy
 	public float maxHealth {
 		get {
-			return (stats.endurance + (stats.strength / 0.5f) * 4);	
+			return (stats.endurance + (stats.strength / 2.0f)) * 4.0f;	
 		}
 	}
 	public float currentHealth;
@@ -24,7 +24,7 @@ public class Character : Entity {
 	}
 	public float maxEnergy {
 		get {
-			return (stats.resolve + (stats.intelligence / 0.5f) * 2);	
+			return (stats.resolve + (stats.intelligence / 2.0f)) * 2.0f;	
 		}
 	}
 	public float currentEnergy;
@@ -36,7 +36,7 @@ public class Character : Entity {
 	
 	public int maxSpeed {
 		get {
-			return stats.agility + 5;	
+			return Mathf.RoundToInt (stats.agility) + 5;	
 		}
 	}
 	
@@ -138,12 +138,12 @@ public class Character : Entity {
 }
 [System.Serializable]
 public class StatBlock {
-	public int strength;
-	public int agility;
-	public int endurance;
-	public int intelligence;
-	public int wisdom;
-	public int resolve;
+	public float strength;
+	public float agility;
+	public float endurance;
+	public float intelligence;
+	public float wisdom;
+	public float resolve;
 }
 
 [System.Serializable]
@@ -164,8 +164,8 @@ public class ResistanceBlock {
 [System.Serializable]
 public class ChangeOverTimeBlock {
 	public string name;
-	public int healthChange;
-	public int energyChange;
+	public float healthChange;
+	public float energyChange;
 	public float tickTime;
 	public float currentTickTime;
 	public bool isPermenant;
