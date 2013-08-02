@@ -7,7 +7,7 @@ public class Shop : Entity {
 	
 	void Start () {
 		managerMap.universe.shop = this;
-		
+		SetParent (managerMap.universe.shop.transform, true);
 		Shuffle ();
 	}
 	
@@ -40,6 +40,7 @@ public class Shop : Entity {
 			shopList.RemoveAt (i);
 			Destroy (temp);
 		}
+		
 		while (shopList.Count < targetAmount) {
 			GameObject go = Instantiate (resourceList [Random.Range (0, resourceList.Count)]) as GameObject;
 			shopList.Add (go);

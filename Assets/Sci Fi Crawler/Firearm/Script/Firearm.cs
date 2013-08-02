@@ -28,10 +28,27 @@ public class Firearm : Entity {
 	public Transform firingTransform;
 	
 	public void RandomizeStats () {
-		stats.fireRate = Random.Range (baseStats.fireRate - variation.fireRate, baseStats.fireRate + variation.fireRate);
-		stats.burstSize = Random.Range (baseStats.burstSize - variation.burstSize, baseStats.burstSize + variation.burstSize + 1);
-		stats.accuracy = Random.Range (baseStats.accuracy - variation.accuracy, baseStats.accuracy + variation.accuracy);
-		stats.damage = Random.Range (baseStats.damage - variation.damage, baseStats.damage + variation.damage);
+		stats.fireRate = Mathf.Clamp (
+			Random.Range (
+				baseStats.fireRate - (variation.fireRate * managerMap.universe.level), 
+				baseStats.fireRate + variation.fireRate
+			), 
+			0.0f, 
+			float.PositiveInfinity
+		);
+		
+		stats.burstSize = Random.Range (baseStats.burstSize - variation.burstSize, baseStats.burstSize + (variation.burstSize * managerMap.universe.level)+ 1);
+		
+		stats.accuracy = Mathf.Clamp (
+			Random.Range (
+				baseStats.accuracy - (variation.accuracy * managerMap.universe.level), 
+				baseStats.accuracy + variation.accuracy
+			), 
+			0.0f, 
+			float.PositiveInfinity
+		);
+		
+		stats.damage = Random.Range (baseStats.damage - (variation.damage * managerMap.universe.level), baseStats.damage + variation.damage);
 		stats.damageType = baseStats.damageType;
 	}
 	
@@ -67,7 +84,6 @@ public class Firearm : Entity {
 				accuracyModifier -= 0.33f;
 			else
 				accuracyModifier += 0.33f;
-			print (accuracyModifier);
 			
 			for (int i = 0; i < firingMode.burstSize; i++) {
 				Projectile p = ((GameObject) Instantiate (
@@ -91,6 +107,7 @@ public class Firearm : Entity {
 		returnString += "Damage Type: " + stats.damageType.ToString ();
 		return returnString;
 	}
+	
 	public bool triggerPulled;
 	
 	public float currentFireRate;

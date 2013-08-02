@@ -32,11 +32,16 @@ public class FactoryCharacter : Factory {
 	}
 	
 	public void SpawnPlayerShip () {
-		Vector3 spawnPosition = new Vector3 (0.0f, 0.0f, (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 2) * FactoryMap.PLANET_SPACING);
-		Ship s = (Instantiate (managerPrefab.ship, spawnPosition, Quaternion.identity) as GameObject).GetComponent<Ship> ();
+		Ship s = (Instantiate (managerPrefab.ship) as GameObject).GetComponent<Ship> ();
 		GameObject shipGraphics = Instantiate (managerPrefab.shipGraphics [Random.Range (0, managerPrefab.shipGraphics.Count)], s.transform.position, Quaternion.identity) as GameObject;
 		shipGraphics.transform.parent = s.graphic.transform;
-		s.trailRenderer.material = managerPrefab.shipsTrails [Random.Range (0, managerPrefab.shipsTrails.Count)];
+		float i = Random.Range (0.0f, 1.0f);
+		float j = Random.Range (0.0f, 1.0f - i);
+		
+		Color c = new Color (i, j, 1.0f - i - j);
+		s.trailRenderer.materials [0].color = c;
+		
+		//= managerPrefab.shipsTrails [Random.Range (0, managerPrefab.shipsTrails.Count)];
 		managerPlayer.ship = s;
 	}
 	

@@ -3,10 +3,12 @@ using System.Collections;
 
 public class InterfaceSolar : Interface {
 	public override bool SetDisplay (bool newDisplay) {
-		if (pa != null)
+		
+		if (pa != null) {
 			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
-		else
-			managerPlayer.ship.SetMainCameraToCP ();
+		} else {
+			managerPlayer.ship.SetMainCameraToCP (true);
+		}
 		managerPlayer.ship.moveDirection = Vector3.zero;
 		managerGame.mapGUI.gameObject.SetActive (newDisplay);
 		return base.SetDisplay (newDisplay);
@@ -15,6 +17,7 @@ public class InterfaceSolar : Interface {
 	public PlanetArm pa;
 	
 	int buttonBar;
+	
 	public void Update () {
 		buttonBar = (Screen.width - 60) / 5;
 		if (!display)
@@ -24,38 +27,58 @@ public class InterfaceSolar : Interface {
 		
 		SolerViewPositioning ();
 		
-		if (Vector3.Distance (managerPlayer.ship.transform.position, managerMap.universe.transform.position) > (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING)
-			managerPlayer.ship.transform.position = (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING * (managerPlayer.ship.transform.position - managerMap.universe.transform.position).normalized;
+		if (managerMap.universe == null)
+			return;
+		if (managerMap.managerMapState != ManagerMapState.Waiting)
+			return;
+		
+		if (Vector3.Distance (managerPlayer.ship.transform.position, managerMap.universe.transform.position) > (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING) {
+			Vector3 position = (managerMap.universe.SolarBodiesOfType (SolarBodyType.Planet) + 3) * FactoryMap.PLANET_SPACING * (managerPlayer.ship.transform.position - managerMap.universe.transform.position).normalized;
+			managerPlayer.ship.transform.position = position;
+		}
 		
 		if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.OSXPlayer || Application.platform == RuntimePlatform.LinuxPlayer
 			|| Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.OSXEditor)
 			KeyboardMouse ();
 		if (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
 			TouchScreen ();
+		
+		Camera.main.transform.localPosition = Vector3.Lerp (Camera.main.transform.localPosition, Vector3.zero, 0.1f);
+		Camera.main.transform.localRotation = Quaternion.Lerp (Camera.main.transform.localRotation, Quaternion.identity, 0.1f);
 	}
 	
 	void SolerViewPositioning () {
 		if (pa == null && managerPlayer.ship.currentPlanetArm != null) {
-			pa = managerPlayer.ship.currentPlanetArm;
-			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
-			managerPlayer.ship.moveDirection = Vector3.zero;
-			managerPlayer.ship.rotationDirection = 0.0f;
-			managerPlayer.ship.rigidbody.velocity = Vector3.zero;
-			managerPlayer.ship.SetParent (pa.shipPosition, true);
-			managerPlayer.ship.graphic.rotation = Quaternion.identity;
-			
-			managerPlayer.ship.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
-			managerPlayer.ship.trailRenderer.time = 0.0f;
+			PlanetArmPosition ();
 		}
 		if (pa != null && managerPlayer.ship.currentPlanetArm == null) {
-			pa = null;
-			managerPlayer.ship.SetMainCameraToCP ();
-			managerPlayer.ship.SetParent (null, true);
-			managerPlayer.ship.transform.position = new Vector3 (managerPlayer.ship.transform.position.x, 0.0f, managerPlayer.ship.transform.position.z);
-			
-			managerPlayer.ship.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
-			managerPlayer.ship.trailRenderer.time = Ship.TRAIL_LENGTH;
+			SolarPosition ();
 		}
+	}
+	
+	void PlanetArmPosition () {
+		pa = managerPlayer.ship.currentPlanetArm;
+		InterfaceUtility.SetCameraToTransform (pa.cameraPosition, false);
+		
+		managerPlayer.ship.moveDirection = Vector3.zero;
+		managerPlayer.ship.rotationDirection = 0.0f;
+		managerPlayer.ship.rigidbody.velocity = Vector3.zero;
+		managerPlayer.ship.SetParent (pa.shipPosition, true);
+		managerPlayer.ship.graphic.rotation = Quaternion.identity;
+		
+		managerPlayer.ship.transform.localScale = new Vector3 (0.5f, 0.5f, 0.5f);
+		managerPlayer.ship.trailRenderer.time = 0.0f;
+	}
+	void SolarPosition () {
+		pa = null;
+		
+		managerPlayer.ship.SetMainCameraToCP (false);
+		
+		managerPlayer.ship.SetParent (null, true);
+		managerPlayer.ship.transform.position = new Vector3 (managerPlayer.ship.transform.position.x, 0.0f, managerPlayer.ship.transform.position.z);
+		
+		managerPlayer.ship.transform.localScale = new Vector3 (1.0f, 1.0f, 1.0f);
+		managerPlayer.ship.trailRenderer.time = Ship.TRAIL_LENGTH;
 	}
 	
 	SolarBody selectedSolarBody;
@@ -118,8 +141,10 @@ public class InterfaceSolar : Interface {
 		GUILayout.FlexibleSpace ();
         if (GUILayout.Button ("Shop", GUILayout.Width (buttonBar)))
 			managerInterface.SetInterface (interfaceShop);
-        if (GUILayout.Button ("Option", GUILayout.Width (buttonBar)))
+        if (GUILayout.Button ("Option", GUILayout.Width (buttonBar))) {
+			interfaceMainMenu.mainMenuEnum = MainMenuEnum.MainMenu;
 			managerInterface.SetInterface (interfaceMainMenu);
+		}
 		GUILayout.EndHorizontal ();
         GUILayout.EndArea ();
 	}
@@ -142,12 +167,17 @@ public class InterfaceSolar : Interface {
 				}
 				break;
 			case SolarBodyType.JumpGate:
-				if (managerPlayer.hasArtefact) {
+				//if (managerPlayer.hasArtefact) {
 					GUILayout.Label("Artefact Collected");
-			        if (GUILayout.Button ("Make Jump")) {}
-				} else {
+			        if (GUILayout.Button ("Make Jump")) {
+						SolarPosition ();
+						managerPlayer.ship.currentPlanetArm = null;
+						managerPlayer.ship.transform.position = new Vector3 (managerPlayer.ship.transform.position.x, 100.0f, managerPlayer.ship.transform.position.z);
+						managerGame.UniverseExit ();
+					}
+				//} else {
 					GUILayout.Label("Artefact Not Collected");
-				}
+				//}
 				break;
 			}
 		GUILayout.EndVertical ();

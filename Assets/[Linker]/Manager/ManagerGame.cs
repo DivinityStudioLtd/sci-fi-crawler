@@ -6,31 +6,38 @@ public class ManagerGame : Manager {
 	public string gameName;
 	public bool developBuild;
 	
+	public int level;
+	
 	public Camera main;
 	public Camera gUI3D;
 	public Camera mapGUI;
 	
+	public void Start () {
+		level = 1;	
+	}
+	
 	public override void ManagerStart () {
-		managerInterface.SetInterface (interfaceLogin);
-		base.ManagerStart ();
 	}
 	
 	public override void ManagerWorking () {
+		if (!managerPlayer.playerSetup) {
+			factoryCharacter.SetupPlayer ();
+			managerPlayer.playerSetup = true;
+		}
+		
+		if (managerPlayer.ship == null) {
+			factoryCharacter.SpawnPlayerShip ();
+		}
+		
 		if (managerMap.managerMapState == ManagerMapState.Waiting) {
 			if (managerMap.universe == null) {
+				UniverseEnterance ();
 			}
-			if (!managerPlayer.setup) {
-				if (managerMap.universe == null) 
-					UniverseEnterance ();
-				
-				if (managerMap.universe != null && managerPlayer.ship == null) {
-					factoryCharacter.SpawnPlayerShip ();
-					managerInterface.SetInterface (interfaceSolar);
-				}
-				if (managerPlayer.ship != null && !managerPlayer.setup) {
-					factoryCharacter.SetupPlayer ();
-					managerPlayer.setup = true;
-				}
+			
+			if (managerMap.universe != null && !managerPlayer.shipSetup) {
+				managerPlayer.PositionShip ();
+				managerInterface.SetInterface (interfaceSolar);
+				return;
 			}
 			
 			if (managerMap.currentMission != null && managerPlayer.currentBody == null) {
@@ -38,12 +45,16 @@ public class ManagerGame : Manager {
 				Vector3 spawnPosition = new Vector3 (startingRoom.left, 0, startingRoom.top) * CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
 				factoryCharacter.SpawnPlayerCharacter (spawnPosition);
 				managerInterface.SetInterface (interfaceTDS);
+				return;
 			}
 		}
 	}
 	
 	public void UniverseEnterance () {
 		managerMap.GenerateUniverse ();
+	}
+	public void UniverseExit () {
+		managerMap.UngenerateUniverse ();
 	}
 	
 	public void UniverseToMission (MapMission mission) {

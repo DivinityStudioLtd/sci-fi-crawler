@@ -7,6 +7,8 @@ public class MapUniverse : Map {
 		managerMap.universe = this;
 	}
 	
+	public int level;
+	
 	public Shop shop;
 	
 	public List<SolarBody> solarbodies;

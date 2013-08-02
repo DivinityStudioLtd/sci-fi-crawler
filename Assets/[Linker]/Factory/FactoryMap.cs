@@ -7,12 +7,14 @@ public class FactoryMap : Factory {
 	int staggerSpawnCounter = 0;
 	
 	#region Universe Map Generation
-	public void SpawnUniverse () {
+	public void SpawnUniverse (int level) {
 		GameObject uni = Instantiate (managerPrefab.universeMap, Vector3.zero, Quaternion.identity) as GameObject;
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
-		universe.numberOfSolarBodies = Random.Range (8, 12);
+		universe.level = level;
+		universe.numberOfSolarBodies = Random.Range (1 + level, 1 + (level * 2));
 		RenderSettings.skybox = managerPrefab.skybox [Random.Range (0, managerPrefab.skybox.Count)];
-		/*Shop s =*/ (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
+		Shop s = (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
+		s.SetParent (uni.transform, true);
 	}
 	
 	static public float PLANET_SPACING = 15.0f;
@@ -153,7 +155,7 @@ public class FactoryMap : Factory {
 		}
 		
 		//int totalTries = 100;
-		while (true){//totalTries > 0) {
+		while (true) {//totalTries > 0) {
 			if (tier3 > 0) {
 				if (AddRectRoom (new RectRoom (Random.Range (1, mission.compressedMap.compressedX - 2), Random.Range (1, mission.compressedMap.compressedY - 2), 2, 2), mission))
 					tier3--;
@@ -609,7 +611,6 @@ public class FactoryMap : Factory {
 		}
 			
 		foreach (GameObject go in mission.challenges [staggerSpawnCounter].enemies) {
-			
 			Controller c = factoryCharacter.SpawnCharacter (go, MapMission.RandomPositionInRoom (mission.challenges [staggerSpawnCounter].room));
 			c.team = 1;
 		}

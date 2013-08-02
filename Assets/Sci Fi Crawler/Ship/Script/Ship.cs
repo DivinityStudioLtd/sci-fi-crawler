@@ -7,8 +7,8 @@ public class Ship : Entity {
 	public TrailRenderer trailRenderer;
 	
 	public Transform cameraPosition;
-	public void SetMainCameraToCP () {
-		InterfaceUtility.SetCameraToTransform (cameraPosition, true);
+	public void SetMainCameraToCP (bool align) {
+		InterfaceUtility.SetCameraToTransform (cameraPosition, align);
 	}
 	
 	public Transform graphic;

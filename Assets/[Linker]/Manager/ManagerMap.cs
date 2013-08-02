@@ -19,7 +19,7 @@ public class ManagerMap : Manager {
 		switch (managerMapState) {
 		#region ManagerWorking Universe Map Generation
 		case ManagerMapState.SpawnUniverse :
-			factoryMap.SpawnUniverse ();
+			factoryMap.SpawnUniverse (managerGame.level++);
 			if (universe != null)
 				managerMapState = ManagerMapState.GenerateSpawnSolarBody ;
 			break;
@@ -98,6 +98,17 @@ public class ManagerMap : Manager {
 	
 	public void GenerateUniverse () {
 		managerMapState = ManagerMapState.SpawnUniverse;
+	}
+	
+	public void UngenerateUniverse () {
+		managerPlayer.shipSetup = false;
+		managerPlayer.ship.graphic.gameObject.SetActive (false);
+		Destroy (managerMap.universe.gameObject);
+		
+		foreach (MapMission m in managerMap.missions)
+			Destroy (m.gameObject);	
+		
+		managerMap.missions.Clear ();
 	}
 	
 	public void GeneratePlaceHolderMissions (int missionToBeGenerated) {

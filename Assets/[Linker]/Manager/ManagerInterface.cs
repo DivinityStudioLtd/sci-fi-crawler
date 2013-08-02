@@ -8,6 +8,8 @@ public class ManagerInterface : Manager {
 	public bool changed;
 	
 	public override void ManagerStart () {
+		managerInterface.SetInterface (interfaceMainMenu);
+		interfaceMainMenu.mainMenuEnum = MainMenuEnum.MainMenu;
 		base.ManagerStart ();
 	}
 	public override void ManagerWorking () {
