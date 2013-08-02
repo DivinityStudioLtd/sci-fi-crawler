@@ -122,7 +122,7 @@ public class FactoryMap : Factory {
 	
 	#region Mission Map Generation
 	static int ROOM_BORDER = 1;
-	public void GenerateRectRooms (MapMission mission) { // completed
+	public void GenerateRectRooms (MapMission mission) {
 		int xMap;
 		int yMap;
 		int spread = Random.Range (0, (mission.level + 1));
@@ -154,8 +154,7 @@ public class FactoryMap : Factory {
 			}
 		}
 		
-		//int totalTries = 100;
-		while (true) {//totalTries > 0) {
+		while (true) {
 			if (tier3 > 0) {
 				if (AddRectRoom (new RectRoom (Random.Range (1, mission.compressedMap.compressedX - 2), Random.Range (1, mission.compressedMap.compressedY - 2), 2, 2), mission))
 					tier3--;
@@ -171,7 +170,6 @@ public class FactoryMap : Factory {
 			} else {
 				break;	
 			}
-			//totalTries--;
 		}
 		
 		mission.compressedMap.rectRooms [mission.compressedMap.rectRooms.Count - 1].startingRoom = true;

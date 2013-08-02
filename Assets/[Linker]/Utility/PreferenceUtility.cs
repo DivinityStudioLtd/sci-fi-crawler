@@ -126,6 +126,7 @@ public class PreferenceUtility : Utility {
 		
 		if (!PlayerPrefs.HasKey (PreferenceUtility.playerName))
 			PlayerName = "Woodland Wander";
+			*/
 		
 		if (!PlayerPrefs.HasKey (PreferenceUtility.gameVolume))
 			GameVolume = 1.0f;
@@ -133,6 +134,5 @@ public class PreferenceUtility : Utility {
 			AmbienceVolume = 1.0f;
 		if (!PlayerPrefs.HasKey (PreferenceUtility.musicVolume))
 			MusicVolume = 1.0f;
-			*/
 	}
 }

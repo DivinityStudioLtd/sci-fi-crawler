@@ -3,7 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ManagerPrefab : Manager {
-	#region Container
+	#region Helper
+	public GameObject playClipAtPoint {
+		get {
+			return GameObjectResource ("Helper/Play Clip At Point"); 	
+		}
+	}
 	#endregion
 	
 	#region Enemy

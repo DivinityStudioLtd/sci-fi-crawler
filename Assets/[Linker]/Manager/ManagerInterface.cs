@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class ManagerInterface : Manager {
+public class ManagerInterface : Manager {	
 	public Interface previousInterface;
 	public Interface currentInterface;
 	

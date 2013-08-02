@@ -3,6 +3,7 @@ using System.Collections;
 
 public class InterfaceSolar : Interface {
 	public override bool SetDisplay (bool newDisplay) {
+		managerGame.listener.GetComponent<PositionSelf> ().target = managerPlayer.ship.transform;
 		
 		if (pa != null) {
 			InterfaceUtility.SetCameraToTransform (pa.cameraPosition, true);
@@ -167,7 +168,7 @@ public class InterfaceSolar : Interface {
 				}
 				break;
 			case SolarBodyType.JumpGate:
-				//if (managerPlayer.hasArtefact) {
+				if (managerPlayer.hasArtefact) {
 					GUILayout.Label("Artefact Collected");
 			        if (GUILayout.Button ("Make Jump")) {
 						SolarPosition ();
@@ -175,9 +176,9 @@ public class InterfaceSolar : Interface {
 						managerPlayer.ship.transform.position = new Vector3 (managerPlayer.ship.transform.position.x, 100.0f, managerPlayer.ship.transform.position.z);
 						managerGame.UniverseExit ();
 					}
-				//} else {
+				} else {
 					GUILayout.Label("Artefact Not Collected");
-				//}
+				}
 				break;
 			}
 		GUILayout.EndVertical ();

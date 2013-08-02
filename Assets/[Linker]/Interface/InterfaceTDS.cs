@@ -4,6 +4,7 @@ using System.Collections;
 public class InterfaceTDS : Interface {
 	public override bool SetDisplay (bool newDisplay) {
 		managerPlayer.currentBody.SetMainCameraToTDS  ();
+		managerGame.listener.GetComponent<PositionSelf> ().target = managerPlayer.currentBody.transform;
 		return base.SetDisplay (newDisplay);
 	}
 	public float maxCameraOffset;

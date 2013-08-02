@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Firearm : Entity {
 	public string description;
+	public AudioClip firingSound;
+	public AudioSource firingFeedback;
 	
 	public FirearmType firearmType;
 	
@@ -95,6 +97,10 @@ public class Firearm : Entity {
 				p.attack.damage = stats.damage;
 				p.attack.damageType = stats.damageType;
 			}
+			firingFeedback.clip = firingSound;
+			firingFeedback.Play ();
+			//AudioSource.PlayClipAtPoint (firingSound, firingTransform.position, 0.5f);
+			//SoundUtility.SpawnPlayClipAtPoint (firingSound, firingTransform.position);
 		}
 	}
 	public override string ToString () {

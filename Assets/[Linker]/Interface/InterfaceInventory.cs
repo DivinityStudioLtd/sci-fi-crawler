@@ -14,12 +14,17 @@ public class InterfaceInventory : Interface {
 		}
 		return base.SetDisplay (newDisplay);
 	}
+	public void Start () {
+		scrollPositions.Add (Vector2.zero);
+		scrollPositions.Add (Vector2.zero);
+	}
+	
 	Rect bottomLeft;
 	int scrollBlockHeight;
 	
 	public InventoryPosition inventoryPosition;
 	new public void OnGUI () {
-		bottomLeft = new Rect (10,40,Screen.width / 3,Screen.height - 40);
+		bottomLeft = new Rect (10,40, InterfaceUtility.ScreenWidthDivided (2.5f),Screen.height - 40);
 		scrollBlockHeight = (Screen.height - 60) / 3;
 		if (!display) 
 			return;
@@ -53,25 +58,25 @@ public class InterfaceInventory : Interface {
 
 	void InventoryMain () {
 		if (GUILayout.Button ("Body",GUILayout.Height (scrollBlockHeight))) {
-			scrollPosition = Vector2.zero;
+			scrollPositions [0] = Vector2.zero;
 			itemBucketState = ItemBucketState.Body;
 		}
         if (GUILayout.Button ("Firearm",GUILayout.Height (scrollBlockHeight))) {
-			scrollPosition = Vector2.zero;
+			scrollPositions [0] = Vector2.zero;
 			itemBucketState = ItemBucketState.Firearm;
 		}
         if (GUILayout.Button ("Power",GUILayout.Height (scrollBlockHeight))) {
-			scrollPosition = Vector2.zero;
+			scrollPositions [0] = Vector2.zero;
 			itemBucketState = ItemBucketState.Power;
 		}
 	}
-	Vector2 scrollPosition = Vector2.zero;
+	
 	void PowerSelect () {
 		if (GUILayout.Button ("Back"))
 			itemBucketState = ItemBucketState.Main;
 		BottomRightSelectedPower ();
 		
-		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
+		scrollPositions [0] = GUILayout.BeginScrollView (scrollPositions [0], false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.powers.Count; i++) {
 			GUILayout.BeginHorizontal ("box");
 			Power p = managerPlayer.playerInventory.powers [i].GetComponent<Power> ();
@@ -104,7 +109,6 @@ public class InterfaceInventory : Interface {
 			GUILayout.Label (p.ToString ());
 		}
 		GUILayout.EndHorizontal ();
-		
 	}
 	
 	void FirearmSelect () {
@@ -112,7 +116,7 @@ public class InterfaceInventory : Interface {
 			itemBucketState = ItemBucketState.Main;
 		BottomRightSelectedFirearm ();
 		
-		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
+		scrollPositions [0] = GUILayout.BeginScrollView (scrollPositions [0], false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.firearms.Count; i++) {
 			GUILayout.BeginHorizontal ("box");
 			Firearm f = managerPlayer.playerInventory.firearms [i].GetComponent<Firearm> ();
@@ -149,7 +153,7 @@ public class InterfaceInventory : Interface {
 		
 		BottomRightSelectedBody ();
 		
-		scrollPosition = GUILayout.BeginScrollView (scrollPosition, false, true);//, GUILayout.Height (scrollBlockHeight * 2));
+		scrollPositions [0] = GUILayout.BeginScrollView (scrollPositions [0], false, true);//, GUILayout.Height (scrollBlockHeight * 2));
 		for (int i = 0; i < managerPlayer.playerInventory.bodies.Count; i++) {
 			GUILayout.BeginHorizontal ("box");
 			Controller c = managerPlayer.playerInventory.bodies [i].GetComponent<Controller> ();

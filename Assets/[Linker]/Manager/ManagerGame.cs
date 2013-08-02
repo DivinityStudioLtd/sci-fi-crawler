@@ -11,6 +11,7 @@ public class ManagerGame : Manager {
 	public Camera main;
 	public Camera gUI3D;
 	public Camera mapGUI;
+	public AudioListener listener;
 	
 	public void Start () {
 		level = 1;	

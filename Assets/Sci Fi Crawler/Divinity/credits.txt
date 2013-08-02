@@ -1,0 +1,21 @@
+Divinity Studio Ltd.
+
+Modeling
+Daniel
+
+Sound
+Matt
+
+Music
+Lukas
+
+Programming
+Thomas
+
+
+Thank to
+Unity3D : http://unity3d.com/
+Unity3D Asset Store : http://unity3d.com/asset-store/
+Turbo Squid : http://www.turbosquid.com/
+CG Textures : http://www.cgtextures.com/
+Free Bitmaps : http://freebitmaps.blogspot.ca/
