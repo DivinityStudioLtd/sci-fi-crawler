@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class Shop : Entity {
 	public ItemBucket itemBucket;
+	public MapUniverse universe;
 	
 	void Start () {
-		managerMap.universe.shop = this;
-		SetParent (managerMap.universe.shop.transform, true);
+		universe = managerMap.universe;
+		universe.shop = this;
+		SetParent (universe.shop.transform, true);
 		Shuffle ();
 	}
 	
@@ -47,7 +49,7 @@ public class Shop : Entity {
 			go.transform.parent = this.transform;
 			go.SetActive (false);
 			if (go.GetComponent<Firearm> () != null)
-				go.GetComponent<Firearm> ().RandomizeStats ();
+				go.GetComponent<Firearm> ().RandomizeStats (universe.level);
 		}
 	}
 }

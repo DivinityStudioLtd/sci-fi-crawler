@@ -10,12 +10,12 @@ public class ManagerCharacter : Manager {
 			}
 		}
 	}
-	public void PlayerCleanUp () {
+	public void PlayerCleanUp (int level) {
 		foreach (ItemBucket p_ib in managerPlayer.currentBody.missionsInventory) {
 			GameObject go;
 			foreach (GameObject f in p_ib.firearms) {
 				go = Instantiate (f) as GameObject;
-				go.GetComponent<Firearm> ().RandomizeStats ();
+				go.GetComponent<Firearm> ().RandomizeStats (level);
 				go.transform.parent = managerPlayer.transform;
 				go.SetActive (false);
 				managerPlayer.playerInventory.firearms.Add (go);

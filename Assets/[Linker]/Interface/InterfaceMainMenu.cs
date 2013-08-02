@@ -9,7 +9,7 @@ public class InterfaceMainMenu : Interface {
 	
 	public MainMenuEnum mainMenuEnum; 
 	
-	public void OnGUI () {
+	new public void OnGUI () {
 		if (!display) 
 			return;
 		GUILayout.BeginArea (InterfaceUtility.CenteredRect (InterfaceUtility.ScreenWidthDivided (1.5f), InterfaceUtility.ScreenHeightDivided (1.5f)));

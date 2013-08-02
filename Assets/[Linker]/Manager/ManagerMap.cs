@@ -19,7 +19,7 @@ public class ManagerMap : Manager {
 		switch (managerMapState) {
 		#region ManagerWorking Universe Map Generation
 		case ManagerMapState.SpawnUniverse :
-			factoryMap.SpawnUniverse (managerGame.level++);
+			factoryMap.SpawnUniverse (managerGame.level);
 			if (universe != null)
 				managerMapState = ManagerMapState.GenerateSpawnSolarBody ;
 			break;

@@ -27,28 +27,28 @@ public class Firearm : Entity {
 	
 	public Transform firingTransform;
 	
-	public void RandomizeStats () {
+	public void RandomizeStats (int level) {
 		stats.fireRate = Mathf.Clamp (
 			Random.Range (
-				baseStats.fireRate - (variation.fireRate * managerMap.universe.level), 
+				baseStats.fireRate - (variation.fireRate * level), 
 				baseStats.fireRate + variation.fireRate
 			), 
 			0.0f, 
 			float.PositiveInfinity
 		);
 		
-		stats.burstSize = Random.Range (baseStats.burstSize - variation.burstSize, baseStats.burstSize + (variation.burstSize * managerMap.universe.level)+ 1);
+		stats.burstSize = Random.Range (baseStats.burstSize - variation.burstSize, baseStats.burstSize + (variation.burstSize * level)+ 1);
 		
 		stats.accuracy = Mathf.Clamp (
 			Random.Range (
-				baseStats.accuracy - (variation.accuracy * managerMap.universe.level), 
+				baseStats.accuracy - (variation.accuracy * level), 
 				baseStats.accuracy + variation.accuracy
 			), 
 			0.0f, 
 			float.PositiveInfinity
 		);
 		
-		stats.damage = Random.Range (baseStats.damage - (variation.damage * managerMap.universe.level), baseStats.damage + variation.damage);
+		stats.damage = Random.Range (baseStats.damage - (variation.damage * level), baseStats.damage + variation.damage);
 		stats.damageType = baseStats.damageType;
 	}
 	

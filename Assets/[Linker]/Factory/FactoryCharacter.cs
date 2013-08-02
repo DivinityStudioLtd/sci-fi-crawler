@@ -8,7 +8,7 @@ public class FactoryCharacter : Factory {
 		Controller ec = e.GetComponent<Controller> ();
 		AI ai = e.GetComponent<AI> ();
 		ec.firearms.Add ((Instantiate (ai.possibleFirearms [Random.Range (0, ai.possibleFirearms.Count)]) as GameObject).GetComponent<Firearm> ());
-		ec.firearms [0].RandomizeStats ();
+		ec.firearms [0].RandomizeStats (managerMap.universe.level);
 		ec.SetupFirearms ();
 		return ec;
 	}
@@ -45,7 +45,7 @@ public class FactoryCharacter : Factory {
 		managerPlayer.ship = s;
 	}
 	
-	public void SetupPlayer () {
+	public void SetupPlayer (int level) {
 		ItemBucket ib = new ItemBucket ();
 		GameObject go = Instantiate (managerPrefab.bodies [Random.Range (0, managerPrefab.bodies.Count)]) as GameObject;
 		go.SetActive (false);
@@ -53,7 +53,7 @@ public class FactoryCharacter : Factory {
 		go.transform.parent = managerPlayer.transform;
 		for (int i = 0; i < 2; i++) {
 			go = Instantiate (managerPrefab.firearms [Random.Range (0, managerPrefab.firearms.Count)]) as GameObject;
-			go.GetComponent<Firearm> ().RandomizeStats ();
+			go.GetComponent<Firearm> ().RandomizeStats (level);
 			go.SetActive (false);
 			ib.firearms.Add (go);
 			go.transform.parent = managerPlayer.transform;

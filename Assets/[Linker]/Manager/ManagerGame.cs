@@ -21,7 +21,7 @@ public class ManagerGame : Manager {
 	
 	public override void ManagerWorking () {
 		if (!managerPlayer.playerSetup) {
-			factoryCharacter.SetupPlayer ();
+			factoryCharacter.SetupPlayer (level);
 			managerPlayer.playerSetup = true;
 		}
 		
@@ -54,6 +54,7 @@ public class ManagerGame : Manager {
 		managerMap.GenerateUniverse ();
 	}
 	public void UniverseExit () {
+		level++;
 		managerMap.UngenerateUniverse ();
 	}
 	
@@ -75,7 +76,7 @@ public class ManagerGame : Manager {
 		managerMap.UnspawnCurrentMapMission ();
 		managerMap.universe.transform.position = new Vector3 (0, 0, 0);
 		managerCharacter.DestoryNonPlayer ();
-		managerCharacter.PlayerCleanUp ();
+		managerCharacter.PlayerCleanUp (level);
 		managerInterface.SetInterface (interfaceSolar);
 	}
 }
