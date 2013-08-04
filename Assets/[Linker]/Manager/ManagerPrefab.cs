@@ -71,6 +71,12 @@ public class ManagerPrefab : Manager {
 			return ListedGameObjectResourceFolder ("Prop/Target");
 		}
 	}
+	
+	public List<GameObject> artifacts {
+		get {
+			return ListedGameObjectResourceFolder ("Prop/Artifact");
+		}
+	}
 	#endregion
 	
 	#region Obstacle

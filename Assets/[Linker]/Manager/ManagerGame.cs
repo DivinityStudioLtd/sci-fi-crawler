@@ -56,6 +56,7 @@ public class ManagerGame : Manager {
 	}
 	public void UniverseExit () {
 		level++;
+		managerPlayer.hasArtifact = false;
 		managerMap.UngenerateUniverse ();
 	}
 	
@@ -69,9 +70,11 @@ public class ManagerGame : Manager {
 	public void MissionToUniverse () {
 		if (managerMap.currentMission.mission.Completed ()) {
 			managerPlayer.playerInventory.credit += managerMap.currentMission.credits;
-			//managerMap.GeneratePlaceHolderMissions (2);	
-		} else {
-			//managerMap.GeneratePlaceHolderMissions (1);	
+			if (managerMap.currentMission.missionType == MissionType.Artifact)
+				managerPlayer.hasArtifact = true;
+			if (managerMap.currentMission.missionType == MissionType.Boss)
+				managerPlayer.currentBody.missionsInventory.Add (factoryMap.GenerateReward (8 + level).reward);	
+		} else {	
 		}
 		managerMap.universe.shop.Shuffle ();
 		managerMap.UnspawnCurrentMapMission ();

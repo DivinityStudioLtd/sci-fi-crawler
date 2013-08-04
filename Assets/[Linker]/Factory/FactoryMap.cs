@@ -11,7 +11,7 @@ public class FactoryMap : Factory {
 		GameObject uni = Instantiate (managerPrefab.universeMap, Vector3.zero, Quaternion.identity) as GameObject;
 		MapUniverse universe = uni.GetComponent<MapUniverse> ();
 		universe.level = level;
-		universe.numberOfSolarBodies = Random.Range (1 + level, 1 + (level * 2));
+		universe.numberOfSolarBodies = Random.Range (2 + level, 2 + (level * 2));
 		RenderSettings.skybox = managerPrefab.skybox [Random.Range (0, managerPrefab.skybox.Count)];
 		Shop s = (Instantiate (managerPrefab.shop) as GameObject).GetComponent<Shop> ();
 		s.SetParent (uni.transform, true);
@@ -117,6 +117,19 @@ public class FactoryMap : Factory {
 		
 		if (numberOfTries == 0)
 			Destroy (mm.gameObject);
+	}
+	
+	public void GenerateArtifactMissions (MapUniverse universe) {
+		MapMission artifact;
+		MapMission boss;
+		
+		artifact = managerMap.missions [Random.Range (0, managerMap.missions.Count)];
+		do {
+			boss = managerMap.missions [Random.Range (0, managerMap.missions.Count)];
+		} while (artifact == boss);
+		
+		artifact.missionType = MissionType.Artifact;
+		boss.missionType = MissionType.Boss;
 	}
 	#endregion
 	
@@ -261,7 +274,7 @@ public class FactoryMap : Factory {
 		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 			if (rr.startingRoom)
 				continue;
-			Challenge c = GenerateChallenge (rr.width * rr.height * mission.level);
+			Challenge c = GenerateChallenge ((rr.width * mission.level) + (mission.level * rr.height) );
 			c.room = rr;
 			mission.challenges.Add (c);
 		}
@@ -314,7 +327,7 @@ public class FactoryMap : Factory {
 		foreach (RectRoom rr in mission.compressedMap.rectRooms) {
 			if (rr.startingRoom)
 				continue;
-			Reward r = GenerateReward (rr.width * rr.height + mission.level);
+			Reward r = GenerateReward (rr.width + rr.height + mission.level);
 			r.room = rr;
 			mission.rewards.Add (r);
 		}
@@ -536,6 +549,12 @@ public class FactoryMap : Factory {
 		case MissionType.Steal:
 			GenerateSpawnMissionSteal (mission);
 			break;
+		case MissionType.Artifact:
+			GenerateSpawnMissionArtifact (mission);
+			break;
+		case MissionType.Boss:
+			GenerateSpawnMissionSteal (mission);
+			break;
 		}
 	}
 	
@@ -556,6 +575,23 @@ public class FactoryMap : Factory {
 	
 	void GenerateSpawnMissionCapture (MapMission mission) {
 		
+	}
+	
+	void GenerateSpawnMissionArtifact (MapMission mission) {
+		MissionArtifact miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionArtifact> ();
+		RectRoom artifactRoom = NotSpawnRoom (mission);
+	
+		Artifact a = factoryCharacter.SpawnIntel (managerPrefab.artifacts [Random.Range (0, managerPrefab.artifacts.Count)], MapMission.RandomPositionInRoom (artifactRoom)) as Artifact;
+		
+		miss.artifact = a;
+		
+		Challenge c = GenerateChallenge (mission.level * managerMap.universe.level);
+		c.room = artifactRoom;
+		mission.challenges.Add (c);
+	}
+	
+	void GenerateSpawnMissionBoss (MapMission mission) {
+		MissionBoss miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionBoss> ();
 	}
 	
 	void GenerateSpawnMissionDestroy (MapMission mission) {
@@ -722,14 +758,6 @@ public class Reward {
 		reward = new ItemBucket ();
 		room = new RectRoom (0,0,1,1);
 	}
-}
-
-public enum MissionType {
-	Destroy,
-	Steal,
-	Recover,
-	Assualt,
-	Capture
 }
 
 [System.Serializable]

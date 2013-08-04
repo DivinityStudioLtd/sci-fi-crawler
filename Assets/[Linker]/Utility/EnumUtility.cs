@@ -107,3 +107,13 @@ public enum TileType {
 	Room,
 	Door
 }
+
+public enum MissionType {
+	Destroy,
+	Steal,
+	Recover,
+	Assualt,
+	Capture,
+	Artifact,
+	Boss
+}

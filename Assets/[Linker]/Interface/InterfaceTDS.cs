@@ -64,7 +64,11 @@ public class InterfaceTDS : Interface {
 			managerPlayer.currentBody.CurrentPower.Use (managerPlayer.currentBody);
 		
 		if (Input.GetKeyDown (KeyCode.Backspace))
-			managerGame.MissionToUniverse ();
+			if (managerMap.currentMission.missionType == MissionType.Artifact && !managerMap.currentMission.mission.Completed ()) {
+			
+			} else {
+				managerGame.MissionToUniverse ();
+			}
 	}
 	
 	public void TouchScreen () {

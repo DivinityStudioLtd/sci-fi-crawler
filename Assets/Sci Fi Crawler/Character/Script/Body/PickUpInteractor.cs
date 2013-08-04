@@ -17,6 +17,9 @@ public class PickUpInteractor : MonoBehaviour {
 			Intel i = e.GetComponent<Intel> ();
 			if (i != null)
 				i.Collect ();
+			Artifact a = e.GetComponent<Artifact> ();
+			if (a != null)
+				a.Collect ();
 		}
 	}
 }

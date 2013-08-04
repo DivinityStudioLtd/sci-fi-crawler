@@ -47,6 +47,11 @@ public class MapMission : Map {
 	}
 	
 	public void Update () {
+		if (missionType == MissionType.Boss) {
+			warning3D.SetActive (managerPlayer.hasArtifact);
+			warningMap.SetActive (managerPlayer.hasArtifact);
+		}
+		
 		if (warning3D != null)
 			warning3D.transform.position = solarBody.transform.position;
 		if (warningMap != null)

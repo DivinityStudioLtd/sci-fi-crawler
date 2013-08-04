@@ -157,19 +157,23 @@ public class InterfaceSolar : Interface {
 			case SolarBodyType.Moon:
 			case SolarBodyType.Station:
 			case SolarBodyType.Planet:
-				if (selectedSolarBody.mapMission == null) {
+				if (selectedSolarBody.mapMission == null ||
+					(selectedSolarBody.mapMission.missionType == MissionType.Boss && !managerPlayer.hasArtifact)) {
 					GUILayout.Label("No mission at this location");
 				} else {
 			        GUILayout.Label("Mission: " + selectedSolarBody.mapMission.missionType.ToString ());
 			        GUILayout.Label("Level: " + selectedSolarBody.mapMission.level);
-			        GUILayout.Label("Reward: " + selectedSolarBody.mapMission.credits);
+					if (selectedSolarBody.mapMission.missionType == MissionType.Boss)
+						GUILayout.Label("Reward: Technology Stockpile");	
+					else 
+				        GUILayout.Label("Credits: " + selectedSolarBody.mapMission.credits);
 			        if (GUILayout.Button ("Take Mission"))
 						managerGame.UniverseToMission (selectedSolarBody.mapMission);
 				}
 				break;
 			case SolarBodyType.JumpGate:
-				if (managerPlayer.hasArtefact) {
-					GUILayout.Label("Artefact Collected");
+				if (managerPlayer.hasArtifact) {
+					GUILayout.Label("Artifact Collected");
 			        if (GUILayout.Button ("Make Jump")) {
 						SolarPosition ();
 						managerPlayer.ship.currentPlanetArm = null;
@@ -177,7 +181,7 @@ public class InterfaceSolar : Interface {
 						managerGame.UniverseExit ();
 					}
 				} else {
-					GUILayout.Label("Artefact Not Collected");
+					GUILayout.Label("Artifact Not Collected");
 				}
 				break;
 			}

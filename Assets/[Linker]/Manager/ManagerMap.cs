@@ -32,11 +32,12 @@ public class ManagerMap : Manager {
 				if (Linker.managerGame.developBuild)
 					GeneratePlaceHolderMissions (100);		
 				else
-					GeneratePlaceHolderMissions (Random.Range (5,10));
+					GeneratePlaceHolderMissions (Random.Range (2 + (universe.level * 2), 3 + (universe.level * 3)));
 			if (ungeneratedMissions > 0) {
 				ungeneratedMissions--;
 				factoryMap.GeneratePlaceHolderMission (universe);
 			} else {
+				factoryMap.GenerateArtifactMissions (universe);
 				managerMapState = ManagerMapState.Waiting;
 			}
 			break;
