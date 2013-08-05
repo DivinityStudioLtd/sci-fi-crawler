@@ -136,13 +136,25 @@ public class FactoryMap : Factory {
 	#region Mission Map Generation
 	static int ROOM_BORDER = 1;
 	public void GenerateRectRooms (MapMission mission) {
+		if (mission.missionType == MissionType.Boss) {
+			GenerateBossRectRooms (mission);
+		} else {
+			GenerateStationRectRooms (mission);	
+		}
+	} 	
+	
+	void GenerateSurfaceRectRooms (MapMission mission) {
+		
+	}
+	
+	void GenerateStationRectRooms (MapMission mission) {
 		int xMap;
 		int yMap;
 		int spread = Random.Range (0, (mission.level + 1));
 		xMap = 1 + spread;
 		yMap = 1 + (mission.level - spread);
-		mission.compressedMap.compressedX = 2 + xMap * 4;
-		mission.compressedMap.compressedY = 2 + yMap * 4;
+		mission.compressedMap.compressedX = 2 + (xMap * 4);
+		mission.compressedMap.compressedY = 2 + (yMap * 4);
 		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
 		mission.mapTiles = new Tile [mission.width, mission.height];
 		int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;
@@ -186,7 +198,21 @@ public class FactoryMap : Factory {
 		}
 		
 		mission.compressedMap.rectRooms [mission.compressedMap.rectRooms.Count - 1].startingRoom = true;
-	} 	
+	}
+	
+	void GenerateBossRectRooms (MapMission mission) {
+		mission.compressedMap.compressedX = 6;
+		mission.compressedMap.compressedY = 6;
+		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
+		mission.mapTiles = new Tile [mission.width, mission.height];
+		//int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;
+		
+		AddRectRoom (new RectRoom (1, 1, mission.compressedMap.compressedX - 3, mission.compressedMap.compressedY - 3), mission);
+		
+		mission.compressedMap.rectRooms [mission.compressedMap.rectRooms.Count - 1].startingRoom = true;
+	}
+	
+	
 	bool AddRectRoom (RectRoom n_rr, MapMission mm) {
 		foreach (RectRoom rr in mm.compressedMap.rectRooms)
 			if (rr.Collides (n_rr, ROOM_BORDER))
@@ -553,7 +579,7 @@ public class FactoryMap : Factory {
 			GenerateSpawnMissionArtifact (mission);
 			break;
 		case MissionType.Boss:
-			GenerateSpawnMissionSteal (mission);
+			GenerateSpawnMissionBoss (mission);
 			break;
 		}
 	}
@@ -592,6 +618,12 @@ public class FactoryMap : Factory {
 	
 	void GenerateSpawnMissionBoss (MapMission mission) {
 		MissionBoss miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionBoss> ();
+		
+		Controller boss = (Instantiate (managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3.0f)) [Random.Range (0, managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3)).Count)], MapMission.CenterPositionInRoom (mission.compressedMap.rectRooms [0]), Quaternion.identity) as GameObject).GetComponent<Controller> ();
+		
+		boss.team = 1;
+		
+		miss.boss = boss;
 	}
 	
 	void GenerateSpawnMissionDestroy (MapMission mission) {

@@ -46,16 +46,24 @@ public class MapMission : Map {
 		return spawnPosition;
 	}
 	
+	public static Vector3 CenterPositionInRoom (RectRoom rr) {
+		float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
+		float tileOffset = CompressedMap.TILE_SIZE;
+		Vector3 spawnPosition = new Vector3 ((rr.left + (rr.width  / 2)) * scale, 0, (rr.top + (rr.height  / 2)) * scale);
+		return spawnPosition;
+	}
+	
 	public void Update () {
-		if (missionType == MissionType.Boss) {
-			warning3D.SetActive (managerPlayer.hasArtifact);
-			warningMap.SetActive (managerPlayer.hasArtifact);
-		}
-		
-		if (warning3D != null)
+		if (warning3D != null) {
 			warning3D.transform.position = solarBody.transform.position;
-		if (warningMap != null)
+			if (missionType == MissionType.Boss)
+				warning3D.SetActive (managerPlayer.hasArtifact);
+		}
+		if (warningMap != null) {
 			warningMap.transform.position = solarBody.transform.position;
+			if (missionType == MissionType.Boss)
+				warning3D.SetActive (managerPlayer.hasArtifact);
+		}
 	}
 	
 	public string MapSting () {

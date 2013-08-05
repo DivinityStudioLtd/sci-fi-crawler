@@ -15,6 +15,10 @@ public class ManagerPrefab : Manager {
 	public List<GameObject> enemies (int level) {
 		return ListedGameObjectResourceFolder ("Enemy/"+level);
 	}
+	
+	public List<GameObject> bosses (int level) {
+		return ListedGameObjectResourceFolder ("Boss/"+level);
+	}
 	#endregion
 	
 	#region Firearm
