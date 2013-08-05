@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 public class Firearm : Entity {
+	public bool isRanged;
+	
 	public string description;
 	public AudioClip firingSound;
 	public AudioSource firingFeedback;
@@ -94,7 +96,7 @@ public class Firearm : Entity {
 					Quaternion.Euler (firingTransform.eulerAngles + new Vector3 (0.0f, Random.Range(-firingMode.accuracy, firingMode.accuracy) * accuracyModifier,0.0f)))
 					).GetComponent<Projectile> ();
 				p.team = controller.team;
-				p.attack.damage = stats.damage;
+				p.attack.damage = stats.damage + (isRanged ? controller.character.stats.agility : controller.character.stats.strength);
 				p.attack.damageType = stats.damageType;
 			}
 			firingFeedback.clip = firingSound;
@@ -130,17 +132,4 @@ public class FiringMode {
 	public float damage;
 	public DamageType damageType;
 	
-}
-
-public enum FirearmType {
-	Pistol,
-	SMG,
-	Rifle,
-	Sniper,
-	Shotgun,
-	LMG,
-	Explosive,
-	Chemical,
-	AR,
-	Laser
 }

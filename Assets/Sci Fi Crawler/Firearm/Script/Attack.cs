@@ -21,7 +21,7 @@ public class Attack : MonoBehaviour {
 			
 			for (; i >= 0 && i < raycastHits.Length;) {
 				RaycastHit raycastHit = raycastHits[i];
-				if (raycastHit.collider != null&& !raycastHit.collider.isTrigger) {
+				if (raycastHit.collider != null && !raycastHit.collider.isTrigger) {
 					Entity e = FindUtility.FindEntity (raycastHit.collider);
 					if (e == origin) {
 						i += change;

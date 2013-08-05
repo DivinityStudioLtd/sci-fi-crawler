@@ -18,6 +18,8 @@ public class Controller : Entity {
 	public PickUpInteractor pickUpInteractor;
 	public PositionRecord positionRecord;
 	
+	public GameObject graphics;
+	
 	public List<ItemBucket> missionsInventory;
 	
 	public List<Power> powers;
@@ -41,6 +43,8 @@ public class Controller : Entity {
 	}
 	
 	public void SetupFirearms () {
+		if (!(firearms.Count > 0))
+			return;
 		foreach (Firearm f in firearms) {
 			f.controller = this;
 			f.SetActive (false, firearmTransform);
@@ -51,6 +55,8 @@ public class Controller : Entity {
 	}
 	
 	public void SetupPowers () {
+		if (!(powers.Count > 0))
+			return;
 		foreach (Power p in powers) {
 			p.transform.parent = hUD3D.transform;	
 		}

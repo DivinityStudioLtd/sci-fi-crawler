@@ -95,10 +95,24 @@ public enum SlidingAreaState {
 	Raised
 }
 
+public enum FirearmType {
+	Pistol,
+	SMG,
+	Rifle,
+	Sniper,
+	Shotgun,
+	LMG,
+	Explosive,
+	Chemical,
+	AR,
+	Laser
+}
+
 public enum DamageType {
 	Pierce,
 	Energy,
-	Fire
+	Fire,
+	Acid
 }
 
 public enum TileType {

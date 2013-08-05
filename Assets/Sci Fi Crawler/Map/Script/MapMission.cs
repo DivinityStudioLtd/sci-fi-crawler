@@ -48,7 +48,7 @@ public class MapMission : Map {
 	
 	public static Vector3 CenterPositionInRoom (RectRoom rr) {
 		float scale = CompressedMap.COMPRESSION_RATIO * CompressedMap.TILE_SIZE;
-		float tileOffset = CompressedMap.TILE_SIZE;
+		//float tileOffset = CompressedMap.TILE_SIZE;
 		Vector3 spawnPosition = new Vector3 ((rr.left + (rr.width  / 2)) * scale, 0, (rr.top + (rr.height  / 2)) * scale);
 		return spawnPosition;
 	}

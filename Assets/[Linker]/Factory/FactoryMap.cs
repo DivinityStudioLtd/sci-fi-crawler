@@ -201,8 +201,8 @@ public class FactoryMap : Factory {
 	}
 	
 	void GenerateBossRectRooms (MapMission mission) {
-		mission.compressedMap.compressedX = 6;
-		mission.compressedMap.compressedY = 6;
+		mission.compressedMap.compressedX = 5;
+		mission.compressedMap.compressedY = 5;
 		mission.compressedMap.compressedTiles = new TileType[mission.compressedMap.compressedX, mission.compressedMap.compressedY];
 		mission.mapTiles = new Tile [mission.width, mission.height];
 		//int rectGenerationUnits = ((mission.compressedMap.compressedX - 2) / 2) * ((mission.compressedMap.compressedY - 2) / 2) / 4;
@@ -619,7 +619,10 @@ public class FactoryMap : Factory {
 	void GenerateSpawnMissionBoss (MapMission mission) {
 		MissionBoss miss = (Instantiate (managerPrefab.mission (mission.missionType)) as GameObject).GetComponent<MissionBoss> ();
 		
-		Controller boss = (Instantiate (managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3.0f)) [Random.Range (0, managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3)).Count)], MapMission.CenterPositionInRoom (mission.compressedMap.rectRooms [0]), Quaternion.identity) as GameObject).GetComponent<Controller> ();
+		Controller boss = factoryCharacter.SpawnCharacter (
+			managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3.0f)) [Random.Range (0, managerPrefab.bosses (Mathf.CeilToInt (managerMap.universe.level / 3)).Count)], 
+			MapMission.CenterPositionInRoom (mission.compressedMap.rectRooms [0])
+			);
 		
 		boss.team = 1;
 		
